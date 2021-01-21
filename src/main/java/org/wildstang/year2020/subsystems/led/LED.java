@@ -18,6 +18,7 @@ import org.wildstang.year2020.subsystems.climb.Climb;
 import org.wildstang.year2020.subsystems.launching.Shooter;
 
 // TODO: implement better exception catcher when the arduino isn't detected
+// 111B was here
 
 public class LED implements Subsystem
 {

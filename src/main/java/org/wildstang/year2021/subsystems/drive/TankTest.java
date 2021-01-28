@@ -29,7 +29,7 @@ public class TankTest implements Subsystem {
 
     // states
     private double speed;
-    private double multiplier = 20; // for 20 MPH
+    private double multiplier = 35; // for 35 MPH
 
     // initializes the subsystem
     public void init() {

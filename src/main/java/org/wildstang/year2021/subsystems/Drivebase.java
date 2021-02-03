@@ -30,7 +30,7 @@ public class TestSubsystem implements Subsystem {
     // outputs
     private TalonSRX motorLeftFront;
     private TalonSRX motorLeftBack;
-    private TalonSRX motorRigtFront;
+    private TalonSRX motorRightFront;
     private TalonSRX motorRightBack;
 
     // Commanded values
@@ -45,7 +45,10 @@ public class TestSubsystem implements Subsystem {
     // initializes the subsystem
     public void init() {
         // register button and attach input listener with WS Input
-        joystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());
+        throttleInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());
+        joystick.addInputListener(this);
+
+        headingInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_X.getName());
         joystick.addInputListener(this);
 
         // create motor controller object with CAN Constant
@@ -53,15 +56,27 @@ public class TestSubsystem implements Subsystem {
         motorLeftBack = new TalonSRX(CANConstants.LEFT_BACK_DRIVE_TALON);
         motorRightFront = new TalonSRX(CANConstants.RIGHT_FRONT_DRIVE_TALON);
         motorRightBack = new TalonSRX(CANConstants.RIGHT_BACK_DRIVE_TALON);
-        initMotorControllers();
-        initInputs();
+       
         
         resetState();
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        motor.set(ControlMode.PercentOutput, speed);
+        int leftSpeed = -throttleInput;
+        int rightSpeed =  throttleInput;
+
+       
+
+
+        motorRightFront.set(ControlMode.PercentOutput, rightSpeed);
+        motorRightBack.set(ControlMode.PercentOutput, rightSpeed);
+        motorLeftBack.set(ControlMode.PercentOutput, leftSpeed);
+        motorLeftFront.set(ControlMode.PercentOutput, leftSpeed);
+
+
+
+        //left motor throttle times heading, 
     }
 
     // respond to input updates

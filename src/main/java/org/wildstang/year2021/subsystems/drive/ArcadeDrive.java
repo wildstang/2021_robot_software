@@ -19,8 +19,8 @@ import org.wildstang.framework.subsystems.Subsystem;
 public class ArcadeDrive implements Subsystem {
 
     // inputs
-    private AnalogInput joystickLeftX;
     private AnalogInput joystickLeftY;
+    private AnalogInput joystickLeftX;
 
     // outputs
     private TalonSRX motorLeft;

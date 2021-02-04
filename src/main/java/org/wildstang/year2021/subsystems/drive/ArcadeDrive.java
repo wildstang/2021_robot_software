@@ -27,10 +27,10 @@ public class ArcadeDrive implements Subsystem {
     private TalonSRX motorRight;
 
     // states
-    private double speedModifier = 20;
-
     private double leftSpeed;
     private double rightSpeed;
+
+    private double speedMult = 20;
 
     // initializes the subsystem
     public void init() {
@@ -40,10 +40,10 @@ public class ArcadeDrive implements Subsystem {
     }
 
     public void initInputs() {
-        joystickLeftY = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());
-        joystickLeftY.addInputListener(this);
         joystickLeftX = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_X.getName());
         joystickLeftX.addInputListener(this);
+        joystickLeftY = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());
+        joystickLeftY.addInputListener(this);
     }
 
     public void initOutputs() {
@@ -59,9 +59,9 @@ public class ArcadeDrive implements Subsystem {
 
     // respond to input updates
     public void inputUpdate(Input signal) {
-        if (signal == joystickLeftY || signal == joystickLeftX){
-            leftSpeed = (joystickLeftY.getValue() + joystickLeftX.getValue()) * speedModifier;
-            rightSpeed = (joystickLeftY.getValue() - joystickLeftX.getValue()) * speedModifier;
+        if (signal == joystickLeftX || signal == joystickLeftY) {
+            leftSpeed = (joystickLeftY.getValue() + joystickLeftX.getValue()) * speedMult;
+            rightSpeed = (joystickLeftY.getValue() - joystickLeftX.getValue()) * speedMult;
         }
     }
 

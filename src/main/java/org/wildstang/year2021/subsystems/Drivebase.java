@@ -19,7 +19,7 @@ import org.wildstang.framework.subsystems.Subsystem;
  * Outputs:     1 talon
  * Description: This is a testing subsystem that controls a single motor with a joystick.
  */
-public class TestSubsystem implements Subsystem {
+public class Drivebase implements Subsystem {
 
     // inputs
     //private AnalogInput joystick;
@@ -27,6 +27,9 @@ public class TestSubsystem implements Subsystem {
     private AnalogInput headingInput;
     /** Input to control forward-backward movement */
     private AnalogInput throttleInput;
+
+    private AnalogInput countClockInput;
+    private AnalogInput clockInput;
     // outputs
     private TalonSRX motorLeftFront;
     private TalonSRX motorLeftBack;
@@ -39,6 +42,7 @@ public class TestSubsystem implements Subsystem {
     /** The heading value currently being commanded. */
     private double commandHeading;
     
+    private double commandRotation;
     // states
     private double speed;
 
@@ -46,10 +50,16 @@ public class TestSubsystem implements Subsystem {
     public void init() {
         // register button and attach input listener with WS Input
         throttleInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());
-        joystick.addInputListener(this);
+        throttleInput.addInputListener(this);
 
         headingInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_X.getName());
-        joystick.addInputListener(this);
+        headingInput.addInputListener(this);
+
+        countClockInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_LEFT.getName());
+        countClockInput.addInputListener(this);
+
+        clockInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_RIGHT.getName());
+        clockInput.addInputListener(this);
 
         // create motor controller object with CAN Constant
         motorLeftFront = new TalonSRX(CANConstants.LEFT_FRONT_DRIVE_TALON);
@@ -63,16 +73,31 @@ public class TestSubsystem implements Subsystem {
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        int leftSpeed = -throttleInput;
-        int rightSpeed =  throttleInput;
+        //double leftSpeed = -throttleInput;
+        //double rightSpeed =  throttleInput;
+        double hypot = Math.pow(commandHeading, 2) + Math.pow(commandThrottle, 2);
+        hypot = Math.sqrt(hypot);
 
-       
+        double thetaX = Math.asin(commandThrottle/hypot);
 
+        double leftSpeed = commandThrottle + commandThrottle * commandHeading;
+        double rightSpeed = commandThrottle - commandThrottle * commandHeading;
+        leftSpeed = -leftSpeed;
 
-        motorRightFront.set(ControlMode.PercentOutput, rightSpeed);
-        motorRightBack.set(ControlMode.PercentOutput, rightSpeed);
-        motorLeftBack.set(ControlMode.PercentOutput, leftSpeed);
-        motorLeftFront.set(ControlMode.PercentOutput, leftSpeed);
+        double lfSpeed = leftSpeed;
+        double lbSpeed = leftSpeed;
+        double rfSpeed = rightSpeed;
+        double rbSpeed = rightSpeed;
+
+        lfSpeed = hypot * Math.cos(thetaX) + commandRotation;
+        rbSpeed = hypot * Math.cos(thetaX) - commandRotation;
+        lbSpeed = hypot * Math.sin(thetaX) + commandRotation;
+        rbSpeed = hypot * Math.sin(thetaX) - commandRotation;
+
+        motorRightFront.set(ControlMode.PercentOutput, rfSpeed);
+        motorRightBack.set(ControlMode.PercentOutput, rbSpeed);
+        motorLeftBack.set(ControlMode.PercentOutput, lbSpeed);
+        motorLeftFront.set(ControlMode.PercentOutput, lfSpeed);
 
 
 
@@ -89,7 +114,9 @@ public class TestSubsystem implements Subsystem {
             setThrottle(-throttleInput.getValue());
         } else if (source == headingInput) {
             setHeading(-headingInput.getValue());
-        } 
+        } else if(source == countClockInput || source ==clockInput ){
+            commandRotation = clockInput.getValue() - countClockInput.getValue();
+        }
     }
 
     // used for testing

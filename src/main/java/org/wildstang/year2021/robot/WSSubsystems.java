@@ -11,6 +11,7 @@ public enum WSSubsystems implements Subsystems {
 
     // enumerate subsystems
     TEST("Test Subsystem", TestSubsystem.class);
+    DRIVE("Arcade Drivetrain", ArcadeDrive.class);
     
     private String name;
     private Class<?> subsystemClass;

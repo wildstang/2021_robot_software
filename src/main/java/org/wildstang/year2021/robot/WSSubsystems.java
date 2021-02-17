@@ -1,6 +1,8 @@
 package org.wildstang.year2021.robot;
 
 import org.wildstang.year2021.subsystems.Drivebase;
+import org.wildstang.year2021.subsystems.Intake;
+import org.wildstang.year2021.subsystems.Hopper;
 import org.wildstang.framework.core.Subsystems;
 
 /**
@@ -10,7 +12,9 @@ import org.wildstang.framework.core.Subsystems;
 public enum WSSubsystems implements Subsystems {
 
     // enumerate subsystems
-    DRIVEBASE("Drive Base", Drivebase.class);
+    DRIVEBASE("Drive Base", Drivebase.class),
+    INTAKE("Intake", Intake.class),
+    HOPPER("Hopper", Hopper.class);
     
     private String name;
     private Class<?> subsystemClass;

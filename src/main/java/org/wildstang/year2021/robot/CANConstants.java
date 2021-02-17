@@ -16,6 +16,8 @@ public final class CANConstants {
     public static final int LEFT_FRONT_DRIVE_TALON = 2;
     public static final int RIGHT_BACK_DRIVE_TALON = 3;
     public static final int RIGHT_FRONT_DRIVE_TALON = 4;
+    public static final int INTAKE_TALON = 5;
+    public static final int HOPPER_TALON = 6;
     //Define motors here
     
 }

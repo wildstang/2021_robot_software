@@ -142,13 +142,13 @@ public enum WSInputs implements Inputs {
     // ---------------------------------
     // Manipulator Buttons
     // ---------------------------------
-    MANIPULATOR_FACE_DOWN             ("Open",
+    MANIPULATOR_FACE_DOWN             ("Intake Forward",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(1, 0),                                 false), 
-    MANIPULATOR_FACE_RIGHT            ("Open",
+    MANIPULATOR_FACE_RIGHT            ("Intake Reverse",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(1, 1),                                 false), 
-    MANIPULATOR_FACE_LEFT             ("Open",
+    MANIPULATOR_FACE_LEFT             ("Hopper Forward",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(1, 2),                                 false), 
-    MANIPULATOR_FACE_UP               ("Open",
+    MANIPULATOR_FACE_UP               ("Hopper Reverse",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(1, 3),                                 false), 
     MANIPULATOR_SHOULDER_LEFT         ("Open",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(1, 4),                                 false), 

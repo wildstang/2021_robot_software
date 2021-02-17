@@ -6,7 +6,7 @@ import org.wildstang.year2021.robot.WSInputs;
 import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
@@ -31,10 +31,10 @@ public class Drivebase implements Subsystem {
     private AnalogInput countClockInput;
     private AnalogInput clockInput;
     // outputs
-    private TalonSRX motorLeftFront;
-    private TalonSRX motorLeftBack;
-    private TalonSRX motorRightFront;
-    private TalonSRX motorRightBack;
+    private VictorSPX motorLeftFront;
+    private VictorSPX motorLeftBack;
+    private VictorSPX motorRightFront;
+    private VictorSPX motorRightBack;
 
     // Commanded values
     /** The throttle value currently being commanded. */
@@ -62,10 +62,10 @@ public class Drivebase implements Subsystem {
         clockInput.addInputListener(this);
 
         // create motor controller object with CAN Constant
-        motorLeftFront = new TalonSRX(CANConstants.LEFT_FRONT_DRIVE_TALON);
-        motorLeftBack = new TalonSRX(CANConstants.LEFT_BACK_DRIVE_TALON);
-        motorRightFront = new TalonSRX(CANConstants.RIGHT_FRONT_DRIVE_TALON);
-        motorRightBack = new TalonSRX(CANConstants.RIGHT_BACK_DRIVE_TALON);
+        motorLeftFront = new VictorSPX(CANConstants.LEFT_FRONT_DRIVE_TALON);
+        motorLeftBack = new VictorSPX(CANConstants.LEFT_BACK_DRIVE_TALON);
+        motorRightFront = new VictorSPX(CANConstants.RIGHT_FRONT_DRIVE_TALON);
+        motorRightBack = new VictorSPX(CANConstants.RIGHT_BACK_DRIVE_TALON);
        
         
         resetState();

@@ -60,8 +60,12 @@ public class ArcadeDrive implements Subsystem {
     // respond to input updates
     public void inputUpdate(Input signal) {
         if (signal == joystickLeftX || signal == joystickLeftY) {
+            if(Math.abs(joystickLeftY.getValue())>0.1&&Math.abs(joystickLeftX.getValue())>0.1){
             leftSpeed = (joystickLeftY.getValue() + joystickLeftX.getValue()) * speedMult;
-            rightSpeed = (joystickLeftY.getValue() - joystickLeftX.getValue()) * speedMult;
+            rightSpeed = (joystickLeftY.getValue() - joystickLeftX.getValue()) * speedMult;}
+        }
+        else {
+            resetState();
         }
     }
 

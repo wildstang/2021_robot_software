@@ -46,6 +46,10 @@ public class Intake implements Subsystem {
         resetState();
     }
 
+    public void turnOnIntake(){
+        isRunning = true;
+    }
+
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
         motor.set(intakeSpeed);

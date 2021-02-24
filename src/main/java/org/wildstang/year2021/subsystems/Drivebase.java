@@ -75,13 +75,22 @@ public class Drivebase implements Subsystem {
     public void update() {
         //double leftSpeed = -throttleInput;
         //double rightSpeed =  throttleInput;
+  //System.out.println("drive");
+
         double hypot = Math.pow(commandHeading, 2) + Math.pow(commandThrottle, 2);
+        
+        
         hypot = Math.sqrt(hypot);
+        System.out.println(hypot);
 
         double thetaX = Math.asin(commandThrottle/hypot);
+        if(commandHeading < 0){
+            thetaX = Math.PI-thetaX;
+        }
+        System.out.println(thetaX);
 
-        double leftSpeed = commandThrottle + commandThrottle * commandHeading;
-        double rightSpeed = commandThrottle - commandThrottle * commandHeading;
+        double leftSpeed = commandThrottle - commandThrottle * commandHeading;
+        double rightSpeed = commandThrottle + commandThrottle * commandHeading;
         leftSpeed = -leftSpeed;
 
         double lfSpeed = leftSpeed;
@@ -90,8 +99,8 @@ public class Drivebase implements Subsystem {
         double rbSpeed = rightSpeed;
 
         lfSpeed = hypot * Math.cos(thetaX) + commandRotation;
-        rbSpeed = hypot * Math.cos(thetaX) - commandRotation;
-        lbSpeed = hypot * Math.sin(thetaX) + commandRotation;
+        rfSpeed = hypot * Math.sin(thetaX) - commandRotation;
+        lbSpeed = hypot * Math.cos(thetaX) + commandRotation;
         rbSpeed = hypot * Math.sin(thetaX) - commandRotation;
 
         motorRightFront.set(ControlMode.PercentOutput, rfSpeed);
@@ -111,9 +120,9 @@ public class Drivebase implements Subsystem {
          //   speed = joystick.getValue();
         //}
         if (source == throttleInput) {
-            setThrottle(-throttleInput.getValue());
+            setThrottle(throttleInput.getValue());
         } else if (source == headingInput) {
-            setHeading(-headingInput.getValue());
+            setHeading(headingInput.getValue());
         } else if(source == countClockInput || source ==clockInput ){
             commandRotation = clockInput.getValue() - countClockInput.getValue();
         }

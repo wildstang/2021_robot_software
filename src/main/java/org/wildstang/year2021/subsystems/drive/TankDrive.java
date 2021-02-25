@@ -5,6 +5,7 @@ import org.wildstang.year2021.robot.WSInputs;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
@@ -12,20 +13,20 @@ import org.wildstang.framework.io.inputs.AnalogInput;
 import org.wildstang.framework.subsystems.Subsystem;
 
 /**
- * Class:       TankTest.java
+ * Class:       TankDrive.java
  * Inputs:      2 joysticks
- * Outputs:     2 talon
+ * Outputs:     4 VictorSPX
  * Description: A tank drive system that controls two motors.
  */
-public class TankTest implements Subsystem {
+public class TankDrive implements Subsystem {
 
     // inputs
     private AnalogInput leftJoystick;
     private AnalogInput rightJoystick;
 
     // outputs
-    private TalonSRX leftMotor;
-    private TalonSRX rightMotor;
+    private VictorSPX leftMotor;
+    private VictorSPX rightMotor;
 
     // states
     private double speed;
@@ -46,8 +47,8 @@ public class TankTest implements Subsystem {
     }
 
     public void initOutputs() {
-        leftMotor = new TalonSRX(CANConstants.EXAMPLE_CONTROLLER);
-        rightMotor = new TalonSRX(CANConstants.EXAMPLE_CONTROLLER);
+        leftMotor = new VictorSPX(CANConstants.LEFT_DRIVE_VICTOR_FRONT);
+        rightMotor = new VictorSPX(CANConstants.LEFT_DRIVE_VICTOR_BACK);
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
@@ -76,6 +77,6 @@ public class TankTest implements Subsystem {
 
     // returns the unique name of the example
     public String getName() {
-        return "Tank drive test";
+        return "Tank drive";
     }
 }

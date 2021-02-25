@@ -32,14 +32,20 @@ public class TestSubsystem implements Subsystem {
 
     // initializes the subsystem
     public void init() {
+        initInputs();
+        initOutputs();
+        resetState();
+    }
+
+    public void initInputs() {
         // register button and attach input listener with WS Input
         joystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());
         joystick.addInputListener(this);
+    }
 
+    public void initOutputs() {
         // create motor controller object with CAN Constant
         motor = new TalonSRX(CANConstants.EXAMPLE_CONTROLLER);
-
-        resetState();
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)

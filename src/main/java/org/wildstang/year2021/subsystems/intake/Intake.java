@@ -15,8 +15,8 @@ import org.wildstang.framework.subsystems.Subsystem;
 
 /**
  * Class:       Intake.java
- * Inputs:      
- * Outputs:     2 VictorSPX
+ * Inputs:      Right trigger (roller),  
+ * Outputs:     1 VictorSPX
  * Description: 
  */
 public class Intake implements Subsystem {

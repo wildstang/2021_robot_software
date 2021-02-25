@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
@@ -15,7 +16,7 @@ import org.wildstang.framework.subsystems.Subsystem;
 
 /**
  * Class:       Hopper.java
- * Inputs:      
+ * Inputs:      1 DigitalInput (X button)
  * Outputs:     1 VictorSPX
  * Description: 
  */
@@ -25,7 +26,7 @@ public class Hopper implements Subsystem {
     private AnalogInput joystick;
 
     // outputs
-    private TalonSRX motor;
+    private VictorSPX motor;
 
     // states
     private double speed;
@@ -37,7 +38,7 @@ public class Hopper implements Subsystem {
         joystick.addInputListener(this);
 
         // create motor controller object with CAN Constant
-        motor = new TalonSRX(CANConstants.EXAMPLE_CONTROLLER);
+        motor = new VictorSPX(CANConstants.HOPPER_VICTOR);
 
         resetState();
     }

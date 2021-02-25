@@ -14,8 +14,8 @@ import org.wildstang.framework.io.inputs.AnalogInput;
 import org.wildstang.framework.subsystems.Subsystem;
 
 /**
- * Class:       Intake.java
- * Inputs:      
+ * Class:       Arm.java
+ * Inputs:      2 DigitalInput (DPAD up and DPAD down)
  * Outputs:     1 VictorSPX
  * Description: 
  */
@@ -37,9 +37,17 @@ public class Arm implements Subsystem {
         joystick.addInputListener(this);
 
         // create motor controller object with CAN Constant
-        motor = new TalonSRX(CANConstants.EXAMPLE_CONTROLLER);
+        motor = new TalonSRX(CANConstants.ARM_VICTOR);
 
         resetState();
+    }
+
+    public void initInputs() {
+
+    }
+
+    public void initOutputs() {
+        
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)

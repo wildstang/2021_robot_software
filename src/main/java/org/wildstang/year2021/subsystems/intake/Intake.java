@@ -30,9 +30,8 @@ public class Intake implements Subsystem {
 
     // states
     private double speed;
-
-    
-
+  
+  
     // initializes the subsystem
     public void init() {
         // register button and attach input listener with WS Input
@@ -40,7 +39,7 @@ public class Intake implements Subsystem {
         rightTrigger.addInputListener(this);
 
         // create motor controller object with CAN Constant
-        motor = new VictorSPX(CANConstants.EXAMPLE_CONTROLLER);
+        motor = new VictorSPX(CANConstants.INTAKE_ROLLER_VICTOR);
 
         resetState();
     }

@@ -18,7 +18,7 @@ import org.wildstang.framework.subsystems.Subsystem;
  * Class:       Hopper.java
  * Inputs:      1 DigitalInput (X button)
  * Outputs:     1 VictorSPX
- * Description: 
+ * Description: X button toggles hopper flap, press once to open, press again to close
  */
 public class Hopper implements Subsystem {
 

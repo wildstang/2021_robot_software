@@ -17,7 +17,7 @@ import org.wildstang.framework.subsystems.Subsystem;
  * Class:       Arm.java
  * Inputs:      2 DigitalInput (DPAD up and DPAD down)
  * Outputs:     1 VictorSPX
- * Description: 
+ * Description: DPAD up runs the motor one way to lift the arm, DPAD down runs the motor the oppposite way to lower the arm
  */
 public class Arm implements Subsystem {
 
@@ -47,7 +47,7 @@ public class Arm implements Subsystem {
     }
 
     public void initOutputs() {
-        
+
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)

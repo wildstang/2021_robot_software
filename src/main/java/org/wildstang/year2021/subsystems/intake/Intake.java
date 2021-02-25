@@ -1,4 +1,4 @@
-package org.wildstang.year2021.subsystems;
+package org.wildstang.year2021.subsystems.intake;
 
 import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
@@ -14,12 +14,12 @@ import org.wildstang.framework.io.inputs.AnalogInput;
 import org.wildstang.framework.subsystems.Subsystem;
 
 /**
- * Class:       TestSubsystem.java
- * Inputs:      1 joystick
- * Outputs:     1 talon
- * Description: This is a testing subsystem that controls a single motor with a joystick.
+ * Class:       Intake.java
+ * Inputs:      AnalogInput (Right trigger) 
+ * Outputs:     1 VictorSPX
+ * Description: After pressing the right trigger by a certain amount (0.5), the intake roller will start moving at full speed.
  */
-public class TestSubsystem implements Subsystem {
+public class Intake implements Subsystem {
 
     // inputs
     private AnalogInput joystick;
@@ -32,20 +32,14 @@ public class TestSubsystem implements Subsystem {
 
     // initializes the subsystem
     public void init() {
-        initInputs();
-        initOutputs();
-        resetState();
-    }
-
-    public void initInputs() {
         // register button and attach input listener with WS Input
         joystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());
         joystick.addInputListener(this);
-    }
 
-    public void initOutputs() {
         // create motor controller object with CAN Constant
         motor = new TalonSRX(CANConstants.EXAMPLE_CONTROLLER);
+
+        resetState();
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
@@ -71,6 +65,6 @@ public class TestSubsystem implements Subsystem {
 
     // returns the unique name of the example
     public String getName() {
-        return "Test Subsystem";
+        return "Intake";
     }
 }

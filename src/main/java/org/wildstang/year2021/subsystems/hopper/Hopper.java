@@ -1,4 +1,4 @@
-package org.wildstang.year2021.subsystems;
+package org.wildstang.year2021.subsystems.hopper;
 
 import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
@@ -14,38 +15,32 @@ import org.wildstang.framework.io.inputs.AnalogInput;
 import org.wildstang.framework.subsystems.Subsystem;
 
 /**
- * Class:       TestSubsystem.java
- * Inputs:      1 joystick
- * Outputs:     1 talon
- * Description: This is a testing subsystem that controls a single motor with a joystick.
+ * Class:       Hopper.java
+ * Inputs:      1 DigitalInput (X button)
+ * Outputs:     1 VictorSPX
+ * Description: X button toggles hopper flap, press once to open, press again to close
  */
-public class TestSubsystem implements Subsystem {
+public class Hopper implements Subsystem {
 
     // inputs
     private AnalogInput joystick;
 
     // outputs
-    private TalonSRX motor;
+    private VictorSPX motor;
 
     // states
     private double speed;
 
     // initializes the subsystem
     public void init() {
-        initInputs();
-        initOutputs();
-        resetState();
-    }
-
-    public void initInputs() {
         // register button and attach input listener with WS Input
         joystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());
         joystick.addInputListener(this);
-    }
 
-    public void initOutputs() {
         // create motor controller object with CAN Constant
-        motor = new TalonSRX(CANConstants.EXAMPLE_CONTROLLER);
+        motor = new VictorSPX(CANConstants.HOPPER_VICTOR);
+
+        resetState();
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
@@ -71,6 +66,6 @@ public class TestSubsystem implements Subsystem {
 
     // returns the unique name of the example
     public String getName() {
-        return "Test Subsystem";
+        return "Hopper";
     }
 }

@@ -68,7 +68,7 @@ public class Hopper implements Subsystem {
         else if(moveTimer>0&&moveTimer<moveTimerTime){
         motor.set(ControlMode.PercentOutput, multiplier*-1);
         moveTimer--;
-    }
+        }
         else
             resetState();
         if(!toggle&&moveTimer==0){
@@ -86,6 +86,8 @@ public class Hopper implements Subsystem {
             else
                 toggle = false;
         }
+        else
+            toggle = false;
     }
 
     // used for testing

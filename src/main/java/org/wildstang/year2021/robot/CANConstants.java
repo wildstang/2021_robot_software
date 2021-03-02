@@ -21,9 +21,9 @@ public final class CANConstants {
     public static final int DRIVE4 = 16;
     public static final int ANGLE4 = 17;
 
-    public static final int ENC1 = 30;
-    public static final int ENC2 = 31;
-    public static final int ENC3 = 32;
-    public static final int ENC4 = 33;
+    public static final int ENC1 = 31;//front left
+    public static final int ENC2 = 32;//front right
+    public static final int ENC3 = 33;//rear left
+    public static final int ENC4 = 34;//rear right
     
 }

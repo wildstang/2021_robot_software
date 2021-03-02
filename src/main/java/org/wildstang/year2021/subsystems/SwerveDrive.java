@@ -26,10 +26,10 @@ public class SwerveDrive implements Subsystem {
 
     public static final double maxSpeed = Units.feetToMeters(14.4);//14.4 ft/s max speed
     private static final double maxAngularSpeed = Math.PI;// 1/2PI * value rotations per second
-    private final String[] names = new String[]{"Pod 1", "Pod 2", "Pod 3", "Pod 4"};
+    private final String[] names = new String[]{"Front Left", "Front Right", "Back Left", "Back Right"};
     private final double WIDTH = 11.5;//inches
     private final double LENGTH = 11.5;//inches
-    private final double offset1 = 0.0;//pod 1 offset in in
+    private final double offset1 = 0.0;//pod 1 offset in deg
     private final double offset2 = 0.0;
     private final double offset3 = 0.0;
     private final double offset4 = 0.0;
@@ -53,8 +53,8 @@ public class SwerveDrive implements Subsystem {
 
     private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
         new Translation2d(Units.inchesToMeters(WIDTH/2), Units.inchesToMeters(LENGTH/2)),
-        new Translation2d(Units.inchesToMeters(WIDTH/2), Units.inchesToMeters(-LENGTH/2)),
         new Translation2d(Units.inchesToMeters(-WIDTH/2), Units.inchesToMeters(LENGTH/2)),
+        new Translation2d(Units.inchesToMeters(WIDTH/2), Units.inchesToMeters(-LENGTH/2)),
         new Translation2d(Units.inchesToMeters(-WIDTH/2), Units.inchesToMeters(-LENGTH/2))
     );
 

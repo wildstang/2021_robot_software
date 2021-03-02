@@ -88,7 +88,7 @@ public class SwerveDrive implements Subsystem {
     }
 
     public void initOutputs(){
-        SwerveModule[] modules = new SwerveModule[]{
+        modules = new SwerveModule[]{
             new SwerveModule(new CANSparkMax(CANConstants.DRIVE1, MotorType.kBrushless), 
                 new CANSparkMax(CANConstants.ANGLE1, MotorType.kBrushless), new CANCoder(CANConstants.ENC1), Rotation2d.fromDegrees(offset1)),
             new SwerveModule(new CANSparkMax(CANConstants.DRIVE2, MotorType.kBrushless), 

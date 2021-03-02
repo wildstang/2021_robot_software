@@ -10,6 +10,7 @@ import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 
 public class SwerveModule {
@@ -23,7 +24,10 @@ public class SwerveModule {
     private static final double angleD = 0.0;
 
     private double encoderTicksPerRot = 1;//for neo integrated encoder
-    private double gearRatio = 256/3;//2:1 gear ratio for angle motor
+    private double gearRatio = 12.8;//15:32 and 10:60 gear ratio for angle motor
+
+    private double target;
+    private double drivePower;
 
     private CANSparkMax driveMotor;
     private CANSparkMax angleMotor;
@@ -65,10 +69,16 @@ public class SwerveModule {
         double desiredTicks = currentTicks + deltaTicks;//neo motor encoder target ticks for position loop
         
         //set angle motor to track to desiredTicks
-        angleController.setReference(desiredTicks, ControlType.kPosition);
+        angleController.setReference(desiredTicks, ControlType.kPosition); target = desiredTicks;
 
         double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond);
-        driveMotor.set(feetPerSecond / SwerveDrive.maxSpeed);
+        driveMotor.set(feetPerSecond / SwerveDrive.maxSpeed); drivePower = feetPerSecond/SwerveDrive.maxSpeed;
+    }
+    public void displayNumbers(String name){
+        SmartDashboard.putNumber(name + " CANCoder", canCoder.getAbsolutePosition());
+        SmartDashboard.putNumber(name + " NEO angle encoder", angleMotor.getEncoder().getPosition());
+        SmartDashboard.putNumber(name + " NEO angle target", target);
+        SmartDashboard.putNumber(name + " NEO drive power", drivePower);
     }
     
 }

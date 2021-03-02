@@ -19,14 +19,16 @@ import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 
 public class SwerveDrive implements Subsystem {
 
     public static final double maxSpeed = Units.feetToMeters(14.4);//14.4 ft/s max speed
     private static final double maxAngularSpeed = Math.PI;// 1/2PI * value rotations per second
-    private final double WIDTH = 10;//inches
-    private final double LENGTH = 10;//inches
+    private final String[] names = new String[]{"Pod 1", "Pod 2", "Pod 3", "Pod 4"};
+    private final double WIDTH = 11.5;//inches
+    private final double LENGTH = 11.5;//inches
     private final double offset1 = 0.0;//pod 1 offset in in
     private final double offset2 = 0.0;
     private final double offset3 = 0.0;
@@ -50,10 +52,10 @@ public class SwerveDrive implements Subsystem {
     private SwerveModule[] modules;
 
     private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-        new Translation2d(Units.inchesToMeters(WIDTH), Units.inchesToMeters(LENGTH)),
-        new Translation2d(Units.inchesToMeters(WIDTH), Units.inchesToMeters(-LENGTH)),
-        new Translation2d(Units.inchesToMeters(-WIDTH), Units.inchesToMeters(LENGTH)),
-        new Translation2d(Units.inchesToMeters(-WIDTH), Units.inchesToMeters(-LENGTH))
+        new Translation2d(Units.inchesToMeters(WIDTH/2), Units.inchesToMeters(LENGTH/2)),
+        new Translation2d(Units.inchesToMeters(WIDTH/2), Units.inchesToMeters(-LENGTH/2)),
+        new Translation2d(Units.inchesToMeters(-WIDTH/2), Units.inchesToMeters(LENGTH/2)),
+        new Translation2d(Units.inchesToMeters(-WIDTH/2), Units.inchesToMeters(-LENGTH/2))
     );
 
     @Override
@@ -114,7 +116,9 @@ public class SwerveDrive implements Subsystem {
             SwerveModule module = modules[i];
             SwerveModuleState state = states[i];
             module.setDesiredState(state);
+            module.displayNumbers(names[i]);
         }
+        SmartDashboard.putNumber("Gyro Reading", gyro.getRotation2d().getDegrees());
     }
 
     @Override

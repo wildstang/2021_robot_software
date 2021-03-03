@@ -52,10 +52,10 @@ public class SwerveDrive implements Subsystem {
     private SwerveModule[] modules;
 
     private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-        new Translation2d(Units.inchesToMeters(WIDTH/2), Units.inchesToMeters(LENGTH/2)),
-        new Translation2d(Units.inchesToMeters(-WIDTH/2), Units.inchesToMeters(LENGTH/2)),
-        new Translation2d(Units.inchesToMeters(WIDTH/2), Units.inchesToMeters(-LENGTH/2)),
-        new Translation2d(Units.inchesToMeters(-WIDTH/2), Units.inchesToMeters(-LENGTH/2))
+        new Translation2d(Units.inchesToMeters(LENGTH/2), Units.inchesToMeters(WIDTH/2)),
+        new Translation2d(Units.inchesToMeters(LENGTH/2), Units.inchesToMeters(-WIDTH/2)),
+        new Translation2d(Units.inchesToMeters(-LENGTH/2), Units.inchesToMeters(WIDTH/2)),
+        new Translation2d(Units.inchesToMeters(-LENGTH/2), Units.inchesToMeters(-WIDTH/2))
     );
 
     @Override

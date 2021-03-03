@@ -18,9 +18,9 @@ public class SwerveModule {
     private static final double driveI = 0.01;
     private static final double driveD = 0.1;
     private static final double driveF = 0.2;
-    private static final double angleP = 1.0;
+    private static final double angleP = 0.5;
     private static final double angleI = 0.0;
-    private static final double angleD = 0.0;
+    private static final double angleD = 0.01;
 
     private double encoderTicksPerRot = 1;//for neo integrated encoder
     private double gearRatio = 12.8;//15:32 and 10:60 gear ratio for angle motor
@@ -48,7 +48,7 @@ public class SwerveModule {
         driveController.setI(driveI);
         driveController.setD(driveD);
         driveController.setFF(driveF);
-        angleController.setP(angleP);
+        angleController.setP(angleP / gearRatio);
         angleController.setI(angleI);
         angleController.setD(angleD);
         

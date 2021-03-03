@@ -29,10 +29,10 @@ public class SwerveDrive implements Subsystem {
     private final String[] names = new String[]{"Front Left", "Front Right", "Back Left", "Back Right"};
     private final double WIDTH = 11.5;//inches
     private final double LENGTH = 11.5;//inches
-    private final double offset1 = 0.0;//pod 1 offset in deg
-    private final double offset2 = 0.0;
-    private final double offset3 = 0.0;
-    private final double offset4 = 0.0;
+    private final double offset1 = -100.7;//pod 1 offset in deg
+    private final double offset2 = -133.5;
+    private final double offset3 = -20.6;
+    private final double offset4 = -233.1;
 
     private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(3);
     private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(3);
@@ -83,8 +83,8 @@ public class SwerveDrive implements Subsystem {
         leftStickY.addInputListener(this);
         rightStickX = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_LEFT_JOYSTICK_X);
         rightStickX.addInputListener(this);
-        rightBumper = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SHOULDER_RIGHT);
-        rightBumper.addInputListener(this);
+        //rightBumper = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SHOULDER_RIGHT);
+        //rightBumper.addInputListener(this);
     }
 
     public void initOutputs(){
@@ -110,7 +110,7 @@ public class SwerveDrive implements Subsystem {
     public void update() {
         // TODO Auto-generated method stub
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(
-            isFieldOriented ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, gyro.getRotation2d()) : new ChassisSpeeds(xSpeed, ySpeed, rotSpeed));
+            isFieldOriented ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, new Rotation2d(0)) : new ChassisSpeeds(xSpeed, ySpeed, rotSpeed));
         SwerveDriveKinematics.normalizeWheelSpeeds(states, maxSpeed);
         for (int i = 0; i < states.length; i++){
             SwerveModule module = modules[i];

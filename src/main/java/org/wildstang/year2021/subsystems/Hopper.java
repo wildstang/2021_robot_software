@@ -6,7 +6,7 @@ import org.wildstang.year2021.robot.WSInputs;
 import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
@@ -26,7 +26,7 @@ public class Hopper implements Subsystem {
     private DigitalInput reverse;
 
     // outputs
-    private TalonSRX motor;
+    private VictorSPX motor;
 
     // states
     private double speed;
@@ -41,13 +41,14 @@ public class Hopper implements Subsystem {
 
         // create motor controller object with CAN Constant
       
-        motor = new TalonSRX(CANConstants.HOPPER_TALON);
+        motor = new VictorSPX(CANConstants.HOPPER_TALON);
         resetState();
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
         motor.set(ControlMode.PercentOutput, speed);
+       System.out.println(speed);
     }
 
     // respond to input updates
@@ -60,6 +61,7 @@ public class Hopper implements Subsystem {
         }else{
             speed = 0;
         }
+      
     }
 
     // used for testing

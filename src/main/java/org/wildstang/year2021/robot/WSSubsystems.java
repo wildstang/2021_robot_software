@@ -12,9 +12,9 @@ import org.wildstang.framework.core.Subsystems;
 public enum WSSubsystems implements Subsystems {
 
     // enumerate subsystems
-    DRIVEBASE("Drive Base", Drivebase.class);
-    //INTAKE("Intake", Intake.class),
-    //HOPPER("Hopper", Hopper.class);
+    DRIVEBASE("Drive Base", Drivebase.class),
+    INTAKE("Intake", Intake.class),
+    HOPPER("Hopper", Hopper.class);
     
     private String name;
     private Class<?> subsystemClass;

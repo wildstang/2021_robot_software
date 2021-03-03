@@ -81,13 +81,13 @@ public class Drivebase implements Subsystem {
         
         
         hypot = Math.sqrt(hypot);
-        System.out.println(hypot);
+       // System.out.println(hypot);
 
         double thetaX = Math.asin(commandThrottle/hypot);
         if(commandHeading < 0){
             thetaX = Math.PI-thetaX;
         }
-        System.out.println(thetaX);
+        //System.out.println(thetaX);
 
         double leftSpeed = commandThrottle - commandThrottle * commandHeading;
         double rightSpeed = commandThrottle + commandThrottle * commandHeading;

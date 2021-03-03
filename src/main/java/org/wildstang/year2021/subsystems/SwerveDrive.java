@@ -48,7 +48,7 @@ public class SwerveDrive implements Subsystem {
     private double rotSpeed;
     private boolean isFieldOriented;
 
-    private final AnalogGyro gyro = new AnalogGyro(0);
+    //private final AnalogGyro gyro = new AnalogGyro(0);
     private SwerveModule[] modules;
 
     private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
@@ -64,7 +64,7 @@ public class SwerveDrive implements Subsystem {
         xSpeed = -xSpeedLimiter.calculate(leftStickX.getValue())*maxSpeed;
         ySpeed = -ySpeedLimiter.calculate(leftStickY.getValue())*maxSpeed;
         rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxSpeed;
-        if (source == rightBumper && rightBumper.getValue()) isFieldOriented = !isFieldOriented;
+        //if (source == rightBumper && rightBumper.getValue()) isFieldOriented = !isFieldOriented;
     }
 
     @Override
@@ -118,7 +118,7 @@ public class SwerveDrive implements Subsystem {
             module.setDesiredState(state);
             module.displayNumbers(names[i]);
         }
-        SmartDashboard.putNumber("Gyro Reading", gyro.getRotation2d().getDegrees());
+        //SmartDashboard.putNumber("Gyro Reading", gyro.getRotation2d().getDegrees());
     }
 
     @Override
@@ -127,8 +127,8 @@ public class SwerveDrive implements Subsystem {
         xSpeed = 0;
         ySpeed = 0;
         rotSpeed = 0;
-        isFieldOriented = true;
-        gyro.reset();
+        isFieldOriented = false;//should be true
+        //gyro.reset();
     }
 
     @Override

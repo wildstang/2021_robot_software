@@ -52,7 +52,7 @@ public class Drivebase implements Subsystem {
         throttleInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());
         throttleInput.addInputListener(this);
 
-        headingInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_X.getName());
+        headingInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_X.getName());
         headingInput.addInputListener(this);
 
         countClockInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_LEFT.getName());
@@ -98,10 +98,12 @@ public class Drivebase implements Subsystem {
         double rfSpeed = rightSpeed;
         double rbSpeed = rightSpeed;
 
-        lfSpeed = hypot * Math.cos(thetaX) + commandRotation;
-        rfSpeed = hypot * Math.sin(thetaX) - commandRotation;
-        lbSpeed = hypot * Math.cos(thetaX) + commandRotation;
-        rbSpeed = hypot * Math.sin(thetaX) - commandRotation;
+        lfSpeed = hypot * (-Math.sin(thetaX) - Math.cos(thetaX)) + commandRotation;
+        rfSpeed = hypot * (Math.sin(thetaX)-Math.cos(thetaX)) + commandRotation;
+        lbSpeed = hypot * (-Math.sin(thetaX)+Math.cos(thetaX)) + commandRotation;
+        rbSpeed = hypot * (Math.sin(thetaX)+Math.cos(thetaX)) + commandRotation;
+
+
 
         motorRightFront.set(ControlMode.PercentOutput, rfSpeed);
         motorRightBack.set(ControlMode.PercentOutput, rbSpeed);
@@ -124,8 +126,11 @@ public class Drivebase implements Subsystem {
         } else if (source == headingInput) {
             setHeading(headingInput.getValue());
         } else if(source == countClockInput || source ==clockInput ){
-            commandRotation = clockInput.getValue() - countClockInput.getValue();
+            commandRotation = clockInput.getValue() + countClockInput.getValue();
         }
+        //System.out.println("Clock Input:" + clockInput.getValue());
+        //System.out.println("Count Clock Input:" + countClockInput.getValue());
+        //System.out.println("Commandrotation:"+commandRotation);
     }
 
     // used for testing

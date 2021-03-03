@@ -68,11 +68,11 @@ public enum WSInputs implements Inputs {
     // ---------------------------------
     DRIVER_LEFT_JOYSTICK_Y  ("Throttle",
             WSInputType.JS_JOYSTICK, new WsJSJoystickInputConfig(0, JoystickConstants.LEFT_JOYSTICK_Y),  true), 
-    DRIVER_LEFT_JOYSTICK_X  ("Open",
+    DRIVER_LEFT_JOYSTICK_X  ("Heading",
             WSInputType.JS_JOYSTICK, new WsJSJoystickInputConfig(0, JoystickConstants.LEFT_JOYSTICK_X),  true),
     DRIVER_RIGHT_JOYSTICK_Y ("Open",
             WSInputType.JS_JOYSTICK, new WsJSJoystickInputConfig(0, JoystickConstants.RIGHT_JOYSTICK_Y), true),
-    DRIVER_RIGHT_JOYSTICK_X ("Heading",
+    DRIVER_RIGHT_JOYSTICK_X ("Open",
             WSInputType.JS_JOYSTICK, new WsJSJoystickInputConfig(0, JoystickConstants.RIGHT_JOYSTICK_X), true), 
     
     // ---------------------------------

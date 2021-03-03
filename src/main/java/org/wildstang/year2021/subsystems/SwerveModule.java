@@ -5,6 +5,7 @@ import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
@@ -37,6 +38,8 @@ public class SwerveModule {
         this.driveMotor = driveMotor;
         this.angleMotor = angleMotor;
         this.canCoder = canCoder;
+        this.driveMotor.setIdleMode(IdleMode.kCoast);
+        this.angleMotor.setIdleMode(IdleMode.kBrake);
 
         //set up angle and drive with pid and kpid respectively
         driveController = driveMotor.getPIDController();
@@ -48,6 +51,7 @@ public class SwerveModule {
         angleController.setP(angleP);
         angleController.setI(angleI);
         angleController.setD(angleD);
+        
 
         CANCoderConfiguration canCoderConfiguration = new CANCoderConfiguration();
         canCoderConfiguration.magnetOffsetDegrees = offset.getDegrees();

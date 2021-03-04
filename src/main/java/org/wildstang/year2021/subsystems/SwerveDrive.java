@@ -29,10 +29,10 @@ public class SwerveDrive implements Subsystem {
     private final String[] names = new String[]{"Front Left", "Front Right", "Back Left", "Back Right"};
     private final double WIDTH = 11.5;//inches
     private final double LENGTH = 11.5;//inches
-    private final double offset1 = -100.7;//pod 1 offset in deg
-    private final double offset2 = -133.5;
-    private final double offset3 = -20.6;
-    private final double offset4 = -233.1;
+    private final double offset1 = -280.98;//pod 1 offset in deg
+    private final double offset2 = -313.59;
+    private final double offset3 = -199.95;
+    private final double offset4 = -52.03;
 
     private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(3);
     private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(3);
@@ -61,8 +61,8 @@ public class SwerveDrive implements Subsystem {
     @Override
     public void inputUpdate(Input source) {
         // TODO Auto-generated method stub
-        xSpeed = -xSpeedLimiter.calculate(leftStickX.getValue())*maxSpeed;
-        ySpeed = -ySpeedLimiter.calculate(leftStickY.getValue())*maxSpeed;
+        xSpeed = -xSpeedLimiter.calculate(leftStickY.getValue())*maxSpeed;
+        ySpeed = ySpeedLimiter.calculate(leftStickX.getValue())*maxSpeed;
         rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxSpeed;
         //if (source == rightBumper && rightBumper.getValue()) isFieldOriented = !isFieldOriented;
     }
@@ -81,7 +81,7 @@ public class SwerveDrive implements Subsystem {
         leftStickX.addInputListener(this);
         leftStickY = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y);
         leftStickY.addInputListener(this);
-        rightStickX = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_LEFT_JOYSTICK_X);
+        rightStickX = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_X);
         rightStickX.addInputListener(this);
         //rightBumper = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SHOULDER_RIGHT);
         //rightBumper.addInputListener(this);
@@ -103,7 +103,6 @@ public class SwerveDrive implements Subsystem {
     @Override
     public void selfTest() {
         // TODO Auto-generated method stub
-
     }
 
     @Override

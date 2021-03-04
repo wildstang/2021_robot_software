@@ -48,7 +48,7 @@ public class SwerveModule {
         driveController.setI(driveI);
         driveController.setD(driveD);
         driveController.setFF(driveF);
-        angleController.setP(angleP / gearRatio);
+        angleController.setP(angleP);
         angleController.setI(angleI);
         angleController.setD(angleD);
         

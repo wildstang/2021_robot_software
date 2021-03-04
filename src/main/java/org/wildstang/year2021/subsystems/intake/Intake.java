@@ -32,11 +32,11 @@ public class Intake implements Subsystem {
 
     // outputs
     private VictorSPX rollerMotor;
-    private VictorSPX liftMotor;
+   
 
     // states
     private double speed;
-    private double liftSpeed;
+    
 
     //helpful variables
     private double maxSpeed = 20.0; //this is just where we can set a consecutive speed, for convinience, instead of changing the speed in each area implemented every time we change it
@@ -49,7 +49,6 @@ public class Intake implements Subsystem {
 
         // create rollerMotor controller object with CAN Constant
         rollerMotor = new VictorSPX(CANConstants.INTAKE_ROLLER_VICTOR);
-        liftMotor = new VictorSPX(CANConstants.INTAKE_LIFT_VICTOR);
 
         resetState();
     }
@@ -57,7 +56,6 @@ public class Intake implements Subsystem {
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
         rollerMotor.set(ControlMode.PercentOutput, speed);
-        liftMotor.set(ControlMode.PercentOutput, liftSpeed);
     }
 
     // respond to input updates
@@ -81,7 +79,6 @@ public class Intake implements Subsystem {
     // resets all variables to the default state
     public void resetState() {
         speed = 0.0;
-        liftSpeed = 0;
     }
 
     // returns the unique name of the example
@@ -89,11 +86,6 @@ public class Intake implements Subsystem {
         return "Intake";
     }
 
-    public void runLift(){
-        liftSpeed = maxSpeed;
-    }
-
-    public void stopLift(){
-        liftSpeed = 0;
-    }
+    
+    
 }

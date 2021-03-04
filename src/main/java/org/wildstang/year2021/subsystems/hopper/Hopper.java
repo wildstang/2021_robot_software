@@ -3,10 +3,8 @@ package org.wildstang.year2021.subsystems.hopper;
 import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
 
-import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import org.wildstang.framework.core.Core;
@@ -18,7 +16,7 @@ import org.wildstang.framework.subsystems.Subsystem;
  * Class:       Hopper.java
  * Inputs:      1 DigitalInput (X button)
  * Outputs:     1 VictorSPX
- * Description: X button isPresseds hopper flap, press once to isOpen, press again to close
+ * Description: Press X button to roll, press again to stop
  */
 public class Hopper implements Subsystem {
 
@@ -31,10 +29,7 @@ public class Hopper implements Subsystem {
     // states
     private double speed = 0;
     private double multiplier = 10;
-    private int moveTimerTime = 100; // 100*0.02 = 1 second hatch timer
-    private int currentMoveTimer = 0;
-    private boolean isOpen;
-    private boolean isPressed;
+    private boolean isRolling;
 
     // initializes the subsystem
     public void init() {
@@ -42,7 +37,7 @@ public class Hopper implements Subsystem {
         xButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_LEFT.getName());
         xButton.addInputListener(this);
         
-        isOpen = false;
+        isRolling = false;
 
         // create motor controller object with CAN Constant
         motor = new VictorSPX(CANConstants.HOPPER_VICTOR);
@@ -51,35 +46,20 @@ public class Hopper implements Subsystem {
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        if (isPressed && currentMoveTimer == moveTimerTime) {
-            isOpen = !isOpen;
-            currentMoveTimer--;
+        if (isRolling){
+            speed = 1.0;
         }
-        if (isOpen && currentMoveTimer > 0 && currentMoveTimer < moveTimerTime) {
-            motor.set(ControlMode.PercentOutput, speed*multiplier);
-            currentMoveTimer--;
-        }
-        else if(currentMoveTimer > 0 && currentMoveTimer < moveTimerTime) {
-            motor.set(ControlMode.PercentOutput, speed*multiplier*-1);
-            currentMoveTimer--;
-        }
-        else
+        else{
             resetState();
-        if (!isPressed && currentMoveTimer == 0){
-            currentMoveTimer = moveTimerTime;
         }
-
-        motor.set(ControlMode.PercentOutput, speed*multiplier);
-
+            motor.set(ControlMode.PercentOutput, speed*multiplier);
     }
 
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
         if (signal == xButton)
-            isPressed = true;
-        else
-            isPressed = false;
+            isRolling = !isRolling;
     }
 
     // used for testing

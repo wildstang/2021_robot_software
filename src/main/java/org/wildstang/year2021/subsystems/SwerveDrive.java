@@ -33,7 +33,7 @@ public class SwerveDrive implements Subsystem {
     private final double offset2 = -313.59;
     private final double offset3 = -199.95;
     private final double offset4 = -52.03;
-    private final double deadband = 0.05;
+    private final double deadband = 0.1;
 
     private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(3);
     private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(3);
@@ -53,10 +53,10 @@ public class SwerveDrive implements Subsystem {
     private SwerveModule[] modules;
 
     private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-        new Translation2d(Units.inchesToMeters(LENGTH/2), Units.inchesToMeters(WIDTH/2)),
-        new Translation2d(Units.inchesToMeters(LENGTH/2), Units.inchesToMeters(-WIDTH/2)),
+        new Translation2d(Units.inchesToMeters(-LENGTH/2), Units.inchesToMeters(-WIDTH/2)),
         new Translation2d(Units.inchesToMeters(-LENGTH/2), Units.inchesToMeters(WIDTH/2)),
-        new Translation2d(Units.inchesToMeters(-LENGTH/2), Units.inchesToMeters(-WIDTH/2))
+        new Translation2d(Units.inchesToMeters(LENGTH/2), Units.inchesToMeters(-WIDTH/2)),
+        new Translation2d(Units.inchesToMeters(LENGTH/2), Units.inchesToMeters(WIDTH/2))
     );
 
     @Override
@@ -67,6 +67,7 @@ public class SwerveDrive implements Subsystem {
         ySpeed = ySpeedLimiter.calculate(leftStickX.getValue())*maxSpeed;
         if (Math.abs(leftStickX.getValue()) < deadband) ySpeed = 0;
         rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
+        SmartDashboard.putNumber("Rotation joystick", rightStickX.getValue());
         SmartDashboard.putNumber("Rotation", rotSpeed);
         if (Math.abs(rightStickX.getValue()) < deadband) rotSpeed = 0;
         //if (source == rightBumper && rightBumper.getValue()) isFieldOriented = !isFieldOriented;

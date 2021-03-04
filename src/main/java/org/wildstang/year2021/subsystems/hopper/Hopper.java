@@ -5,8 +5,6 @@ import org.wildstang.year2021.robot.WSInputs;
 
 import java.util.Map;
 
-import javax.lang.model.util.ElementScanner6;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
@@ -20,7 +18,7 @@ import org.wildstang.framework.subsystems.Subsystem;
  * Class:       Hopper.java
  * Inputs:      1 DigitalInput (X button)
  * Outputs:     1 VictorSPX
- * Description: X button toggles hopper flap, press once to open, press again to close
+ * Description: X button isPresseds hopper flap, press once to isOpen, press again to close
  */
 public class Hopper implements Subsystem {
 
@@ -31,63 +29,57 @@ public class Hopper implements Subsystem {
     private VictorSPX motor;
 
     // states
-    private double speed;
-
+    private double speed = 0;
     private double multiplier = 10;
+    private int moveTimerTime = 100; // 100*0.02 = 1 second hatch timer
+    private int currentMoveTimer = 0;
+    private boolean isOpen;
+    private boolean isPressed;
 
-    private int moveTimerTime = 400;
-
-    private int moveTimer;
-
-    private boolean open;
-
-    private boolean toggle;
     // initializes the subsystem
     public void init() {
         // register button and attach input listener with WS Input
         xButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_LEFT.getName());
         xButton.addInputListener(this);
+        
+        isOpen = false;
 
         // create motor controller object with CAN Constant
         motor = new VictorSPX(CANConstants.HOPPER_VICTOR);
-        moveTimer = moveTimerTime;
-        open = false;
         resetState();
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        if(toggle&&moveTimer==moveTimerTime){
-            open = !open;
-            moveTimer--;
+        if (isPressed && currentMoveTimer == moveTimerTime) {
+            isOpen = !isOpen;
+            currentMoveTimer--;
         }
-        if(open&&moveTimer>0&&moveTimer<moveTimerTime){
-        motor.set(ControlMode.PercentOutput, multiplier);
-        moveTimer--;
+        if (isOpen && currentMoveTimer > 0 && currentMoveTimer < moveTimerTime) {
+            motor.set(ControlMode.PercentOutput, speed*multiplier);
+            currentMoveTimer--;
         }
-        else if(moveTimer>0&&moveTimer<moveTimerTime){
-        motor.set(ControlMode.PercentOutput, multiplier*-1);
-        moveTimer--;
+        else if(currentMoveTimer > 0 && currentMoveTimer < moveTimerTime) {
+            motor.set(ControlMode.PercentOutput, speed*multiplier*-1);
+            currentMoveTimer--;
         }
         else
             resetState();
-        if(!toggle&&moveTimer==0){
-            moveTimer=moveTimerTime;
+        if (!isPressed && currentMoveTimer == 0){
+            currentMoveTimer = moveTimerTime;
         }
-        
+
+        motor.set(ControlMode.PercentOutput, speed*multiplier);
+
     }
 
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if (signal == xButton) {
-            if(xButton.getValue())
-                toggle = true;
-            else
-                toggle = false;
-        }
+        if (signal == xButton)
+            isPressed = true;
         else
-            toggle = false;
+            isPressed = false;
     }
 
     // used for testing

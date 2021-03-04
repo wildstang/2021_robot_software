@@ -22,16 +22,24 @@ import org.wildstang.framework.subsystems.Subsystem;
  */
 public class Intake implements Subsystem {
 
+
+    /**
+     *
+     */
+
     // inputs
     private AnalogInput rightTrigger;
 
     // outputs
-    private VictorSPX motor;
+    private VictorSPX rollerMotor;
+    private VictorSPX liftMotor;
 
     // states
     private double speed;
+    private double liftSpeed;
 
-    
+    //helpful variables
+    private double maxSpeed = 20.0; //this is just where we can set a consecutive speed, for convinience, instead of changing the speed in each area implemented every time we change it
 
     // initializes the subsystem
     public void init() {
@@ -39,15 +47,17 @@ public class Intake implements Subsystem {
         rightTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_RIGHT.getName());
         rightTrigger.addInputListener(this);
 
-        // create motor controller object with CAN Constant
-        motor = new VictorSPX(CANConstants.EXAMPLE_CONTROLLER);
+        // create rollerMotor controller object with CAN Constant
+        rollerMotor = new VictorSPX(CANConstants.INTAKE_ROLLER_VICTOR);
+        liftMotor = new VictorSPX(CANConstants.INTAKE_LIFT_VICTOR);
 
         resetState();
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        motor.set(ControlMode.PercentOutput, speed);
+        rollerMotor.set(ControlMode.PercentOutput, speed);
+        liftMotor.set(ControlMode.PercentOutput, liftSpeed);
     }
 
     // respond to input updates
@@ -55,10 +65,13 @@ public class Intake implements Subsystem {
         // check to see which input was updated
         if (signal == rightTrigger) {
             if(rightTrigger.getValue() > 0.5){
-                speed = 20;
+                speed = maxSpeed;
+                //when right trigger is pressed past halfway, the intake spins at speed <speedValue>
             } else {
-                speed = 0;
+                resetState();
             }
+        } else {
+            resetState();
         }
     }
 
@@ -68,10 +81,19 @@ public class Intake implements Subsystem {
     // resets all variables to the default state
     public void resetState() {
         speed = 0.0;
+        liftSpeed = 0;
     }
 
     // returns the unique name of the example
     public String getName() {
         return "Intake";
+    }
+
+    public void runLift(){
+        liftSpeed = maxSpeed;
+    }
+
+    public void stopLift(){
+        liftSpeed = 0;
     }
 }

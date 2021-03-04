@@ -9,7 +9,16 @@ package org.wildstang.year2021.robot;
  */
 public final class CANConstants {
 
+    // TODO: update with correct motor IDs
+    public static final int LEFT_DRIVE_VICTOR_FRONT = 1;
+    public static final int LEFT_DRIVE_VICTOR_BACK = 2;
+    public static final int RIGHT_DRIVE_VICTOR_FRONT = 3;
+    public static final int RIGHT_DRIVE_VICTOR_BACK = 4;
+    public static final int ARM_VICTOR = 5;
+    public static final int INTAKE_LIFT_VICTOR = 6;
+    public static final int INTAKE_ROLLER_VICTOR = 7;
+    public static final int HOPPER_VICTOR = 8;
+    
     public static final int EXAMPLE_CONTROLLER = 1;
     public static final int[] EXAMPLE_PAIRED_CONTROLLERS = {2,3};
-    
 }

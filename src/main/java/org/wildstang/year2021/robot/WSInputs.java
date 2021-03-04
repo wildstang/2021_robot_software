@@ -100,7 +100,7 @@ public enum WSInputs implements Inputs {
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 3),                                 false), 
     DRIVER_SHOULDER_LEFT         ("Open",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 4),                                 false), 
-    DRIVER_SHOULDER_RIGHT        ("Open",
+    DRIVER_SHOULDER_RIGHT        ("Toggle Field Oriented/Absolute",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 5),                                 false), 
     DRIVER_TRIGGER_LEFT          ("Open",
             WSInputType.JS_JOYSTICK, new WsJSJoystickInputConfig(0, JoystickConstants.LEFT_TRIGGER),  false), 

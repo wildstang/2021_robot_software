@@ -3,6 +3,7 @@ package org.wildstang.year2021.subsystems;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.kauailabs.navx.frc.AHRS;
 
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
@@ -12,7 +13,7 @@ import org.wildstang.framework.subsystems.Subsystem;
 import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
 
-import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -49,7 +50,7 @@ public class SwerveDrive implements Subsystem {
     private double rotSpeed;
     private boolean isFieldOriented;
 
-    //private final AnalogGyro gyro = new AnalogGyro(0);
+    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     private SwerveModule[] modules;
 
     private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
@@ -70,7 +71,7 @@ public class SwerveDrive implements Subsystem {
         SmartDashboard.putNumber("Rotation joystick", rightStickX.getValue());
         SmartDashboard.putNumber("Rotation", rotSpeed);
         if (Math.abs(rightStickX.getValue()) < deadband) rotSpeed = 0;
-        //if (source == rightBumper && rightBumper.getValue()) isFieldOriented = !isFieldOriented;
+        if (source == rightBumper && rightBumper.getValue()) isFieldOriented = !isFieldOriented;
     }
 
     @Override
@@ -89,8 +90,8 @@ public class SwerveDrive implements Subsystem {
         leftStickY.addInputListener(this);
         rightStickX = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_X);
         rightStickX.addInputListener(this);
-        //rightBumper = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SHOULDER_RIGHT);
-        //rightBumper.addInputListener(this);
+        rightBumper = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SHOULDER_RIGHT);
+        rightBumper.addInputListener(this);
     }
 
     public void initOutputs(){
@@ -115,7 +116,7 @@ public class SwerveDrive implements Subsystem {
     public void update() {
         // TODO Auto-generated method stub
         SwerveModuleState[] states = kinematics.toSwerveModuleStates(
-            isFieldOriented ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, new Rotation2d(0)) : new ChassisSpeeds(xSpeed, ySpeed, rotSpeed));
+            isFieldOriented ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, gyro.getRotation2d()) : new ChassisSpeeds(xSpeed, ySpeed, rotSpeed));
         SwerveDriveKinematics.normalizeWheelSpeeds(states, maxSpeed);
         for (int i = 0; i < states.length; i++){
             SwerveModule module = modules[i];
@@ -123,7 +124,8 @@ public class SwerveDrive implements Subsystem {
             module.setDesiredState(state);
             module.displayNumbers(names[i]);
         }
-        //SmartDashboard.putNumber("Gyro Reading", gyro.getRotation2d().getDegrees());
+        SmartDashboard.putNumber("Gyro Reading", gyro.getRotation2d().getDegrees());
+        SmartDashboard.putBoolean("Is field oriented", isFieldOriented);
     }
 
     @Override
@@ -133,7 +135,7 @@ public class SwerveDrive implements Subsystem {
         ySpeed = 0;
         rotSpeed = 0;
         isFieldOriented = false;//should be true
-        //gyro.reset();
+        gyro.reset();
     }
 
     @Override

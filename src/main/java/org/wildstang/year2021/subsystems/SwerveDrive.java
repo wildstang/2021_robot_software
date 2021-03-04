@@ -33,6 +33,7 @@ public class SwerveDrive implements Subsystem {
     private final double offset2 = -313.59;
     private final double offset3 = -199.95;
     private final double offset4 = -52.03;
+    private final double deadband = 0.05;
 
     private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(3);
     private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(3);
@@ -62,8 +63,12 @@ public class SwerveDrive implements Subsystem {
     public void inputUpdate(Input source) {
         // TODO Auto-generated method stub
         xSpeed = -xSpeedLimiter.calculate(leftStickY.getValue())*maxSpeed;
+        if (Math.abs(leftStickY.getValue()) < deadband) xSpeed = 0;
         ySpeed = ySpeedLimiter.calculate(leftStickX.getValue())*maxSpeed;
-        rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxSpeed;
+        if (Math.abs(leftStickX.getValue()) < deadband) ySpeed = 0;
+        rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
+        SmartDashboard.putNumber("Rotation", rotSpeed);
+        if (Math.abs(rightStickX.getValue()) < deadband) rotSpeed = 0;
         //if (source == rightBumper && rightBumper.getValue()) isFieldOriented = !isFieldOriented;
     }
 

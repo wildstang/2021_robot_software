@@ -44,6 +44,7 @@ public class SwerveDrive implements Subsystem {
     private AnalogInput leftStickY;
     private AnalogInput rightStickX;
     private DigitalInput rightBumper;
+    private DigitalInput leftBumper;
 
     private double xSpeed;
     private double ySpeed;
@@ -72,6 +73,7 @@ public class SwerveDrive implements Subsystem {
         SmartDashboard.putNumber("Rotation", rotSpeed);
         if (Math.abs(rightStickX.getValue()) < deadband) rotSpeed = 0;
         if (source == rightBumper && rightBumper.getValue()) isFieldOriented = !isFieldOriented;
+        if (source == leftBumper && leftBumper.getValue()) gyro.reset();
     }
 
     @Override
@@ -92,6 +94,8 @@ public class SwerveDrive implements Subsystem {
         rightStickX.addInputListener(this);
         rightBumper = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SHOULDER_RIGHT);
         rightBumper.addInputListener(this);
+        leftBumper = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SHOULDER_LEFT);
+        leftBumper.addInputListener(this);
     }
 
     public void initOutputs(){

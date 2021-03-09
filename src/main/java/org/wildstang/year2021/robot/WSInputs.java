@@ -98,7 +98,7 @@ public enum WSInputs implements Inputs {
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 2),                                 false),
     DRIVER_FACE_UP               ("Open",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 3),                                 false), 
-    DRIVER_SHOULDER_LEFT         ("Open",
+    DRIVER_SHOULDER_LEFT         ("Gyro Reset",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 4),                                 false), 
     DRIVER_SHOULDER_RIGHT        ("Toggle Field Oriented/Absolute",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 5),                                 false), 

@@ -13,7 +13,7 @@ import org.wildstang.framework.subsystems.Subsystem;
 import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
 
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -50,7 +50,7 @@ public class SwerveDrive implements Subsystem {
     private double rotSpeed;
     private boolean isFieldOriented;
 
-    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    private final AHRS gyro = new AHRS(I2C.Port.kOnboard);
     private SwerveModule[] modules;
 
     private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
@@ -134,7 +134,7 @@ public class SwerveDrive implements Subsystem {
         xSpeed = 0;
         ySpeed = 0;
         rotSpeed = 0;
-        isFieldOriented = false;//should be true
+        isFieldOriented = true;//should be true
         gyro.reset();
     }
 

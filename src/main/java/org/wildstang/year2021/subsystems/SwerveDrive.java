@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.util.Units;
 public class SwerveDrive implements Subsystem {
 
     public static final double maxSpeed = Units.feetToMeters(14.4);//14.4 ft/s max speed
-    private static final double maxAngularSpeed = 21.25; // 1/2PI * value rotations per second
+    private static final double maxAngularSpeed = 21.25     ; // 1/2PI * value rotations per second
     private final String[] names = new String[]{"Front Left", "Front Right", "Back Left", "Back Right"};
     private final double WIDTH = 11.5;//inches
     private final double LENGTH = 11.5;//inches
@@ -106,7 +106,7 @@ public class SwerveDrive implements Subsystem {
                 new CANSparkMax(CANConstants.ANGLE4, MotorType.kBrushless), new CANCoder(CANConstants.ENC4), Rotation2d.fromDegrees(offset4))
         };
     }
-
+    
     @Override
     public void selfTest() {
         // TODO Auto-generated method stub

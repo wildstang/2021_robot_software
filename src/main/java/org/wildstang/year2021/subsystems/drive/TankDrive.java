@@ -32,7 +32,7 @@ public class TankDrive implements Subsystem {
     // states
     private double leftSpeed;
     private double rightSpeed;
-    private double multiplier = 20; // change to adjust max speed
+    private double multiplier = 0.8; // change to adjust max speed
 
     // initializes the subsystem
     public void init() {

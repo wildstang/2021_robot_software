@@ -11,12 +11,12 @@ import org.wildstang.framework.core.Subsystems;
 public enum WSSubsystems implements Subsystems {
 
     // enumerate subsystems
-    TEST("Test Subsystem", TestSubsystem.class);
+    TEST("Test Subsystem", TestSubsystem.class),
     DRIVE("Drivetrain", Drive.class);
     
     private String name;
     private Class<?> subsystemClass;
-
+    
     WSSubsystems(String name, Class<?> subsystemClass) {
         this.name = name;
         this.subsystemClass = subsystemClass;

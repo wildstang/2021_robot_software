@@ -24,8 +24,8 @@ public class Drive implements Subsystem {
     private AnalogInput rightJoystick;
  
     // outputs
-    private VictorSPX leftMoter;
-    private VictorSPX rightMoter;
+    private VictorSPX leftMotor; 
+    private VictorSPX rightMotor;
  
     // states
     private double leftSpeed;
@@ -34,13 +34,13 @@ public class Drive implements Subsystem {
     // initializes the subsystem
     public void init() {
         // create motor controller object with CAN Constant
-        leftMoter = new VictorSPX(CANConstants.DRIVE_LEFT);
-        rightMoter = new VictorSPX(CANConstants.DRIVE_RIGHT);
+        leftMotor = new VictorSPX(CANConstants.DRIVE_LEFT);
+        rightMotor = new VictorSPX(CANConstants.DRIVE_RIGHT);
  
         // register button and attach input listener with WS Input
         leftJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());
         leftJoystick.addInputListener(this);
-        rightJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());
+        rightJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_Y.getName());
         rightJoystick.addInputListener(this);
         
         resetState();
@@ -48,6 +48,7 @@ public class Drive implements Subsystem {
  
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
+        //I dont know whats, leftMotor and rightMotor are initialized on lines 27 & 28
         leftMotor.set(ControlMode.PercentOutput, leftSpeed);
         rightMotor.set(ControlMode.PercentOutput, rightSpeed);
     }

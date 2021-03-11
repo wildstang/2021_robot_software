@@ -9,8 +9,8 @@ package org.wildstang.year2021.robot;
  */
 public final class CANConstants {
 
-    public static final int DRIVE_LEFT = 1;
-    public static final int DRIVE_RIGHT = 1;
+    public static final int DRIVE_LEFT = 2;
+    public static final int DRIVE_RIGHT = 3;
 
     public static final int EXAMPLE_CONTROLLER = 1;
     public static final int[] EXAMPLE_PAIRED_CONTROLLERS = {2,3};

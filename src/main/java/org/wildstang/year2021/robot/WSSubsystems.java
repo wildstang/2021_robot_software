@@ -1,6 +1,7 @@
 package org.wildstang.year2021.robot;
 
 import org.wildstang.year2021.subsystems.TestSubsystem;
+import org.wildstang.year2021.subsystems.Drive;
 import org.wildstang.framework.core.Subsystems;
 
 /**
@@ -11,6 +12,7 @@ public enum WSSubsystems implements Subsystems {
 
     // enumerate subsystems
     TEST("Test Subsystem", TestSubsystem.class);
+    DRIVE("Drivetrain", Drive.class);
     
     private String name;
     private Class<?> subsystemClass;

@@ -39,7 +39,7 @@ public class Intake implements Subsystem {
     
 
     //helpful variables
-    private double maxSpeed = 20.0; //this is just where we can set a consecutive speed, for convinience, instead of changing the speed in each area implemented every time we change it
+    private double maxSpeed = 0.8; //this is just where we can set a consecutive speed, for convinience, instead of changing the speed in each area implemented every time we change it
 
     // initializes the subsystem
     public void init() {

@@ -31,7 +31,7 @@ public class Arm implements Subsystem {
 
     // states
     private double speed;
-    private double speedMult = 10;
+    private double speedMult = 0.8;
 
     // initializes the subsystem
     public void init() {

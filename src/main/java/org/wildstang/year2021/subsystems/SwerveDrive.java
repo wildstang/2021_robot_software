@@ -54,6 +54,9 @@ public class SwerveDrive implements Subsystem {
     private final AHRS gyro = new AHRS(I2C.Port.kOnboard);
     private SwerveModule[] modules;
 
+    public enum driveType {TELEOP, AUTO};
+    public driveType driveState;
+
     private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
         new Translation2d(Units.inchesToMeters(-LENGTH/2), Units.inchesToMeters(-WIDTH/2)),
         new Translation2d(Units.inchesToMeters(-LENGTH/2), Units.inchesToMeters(WIDTH/2)),
@@ -118,16 +121,21 @@ public class SwerveDrive implements Subsystem {
 
     @Override
     public void update() {
-        // TODO Auto-generated method stub
-        SwerveModuleState[] states = kinematics.toSwerveModuleStates(
-            isFieldOriented ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, gyro.getRotation2d()) : new ChassisSpeeds(xSpeed, ySpeed, rotSpeed));
-        SwerveDriveKinematics.normalizeWheelSpeeds(states, maxSpeed);
-        for (int i = 0; i < states.length; i++){
-            SwerveModule module = modules[i];
-            SwerveModuleState state = states[i];
-            module.setDesiredState(state);
-            module.displayNumbers(names[i]);
+        switch (driveState) {
+        case TELEOP://runs for teleop
+            SwerveModuleState[] states = kinematics.toSwerveModuleStates(
+                isFieldOriented ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rotSpeed, gyro.getRotation2d()) : new ChassisSpeeds(xSpeed, ySpeed, rotSpeed));
+            SwerveDriveKinematics.normalizeWheelSpeeds(states, maxSpeed);
+            for (int i = 0; i < states.length; i++){
+                SwerveModule module = modules[i];
+                SwerveModuleState state = states[i];
+                module.setDesiredState(state);
+                module.displayNumbers(names[i]);
+            }
+        case AUTO://runs for auto
+        //code can be here, or in a method and this left blank
         }
+        
         SmartDashboard.putNumber("Gyro Reading", gyro.getRotation2d().getDegrees());
         SmartDashboard.putBoolean("Is field oriented", isFieldOriented);
     }
@@ -140,12 +148,19 @@ public class SwerveDrive implements Subsystem {
         rotSpeed = 0;
         isFieldOriented = true;//should be true
         gyro.reset();
+        setToTeleop();
     }
 
     @Override
     public String getName() {
         // TODO Auto-generated method stub
         return "Swerve Drive";
+    }
+    public void setToTeleop(){
+        driveState = driveType.TELEOP;
+    }
+    public void setToAuto(){
+        driveState = driveType.AUTO;
     }
     
 }

@@ -14,7 +14,7 @@ public enum WSSubsystems implements Subsystems {
     // enumerate subsystems
     SwerveDrive("Swerve Drive", SwerveDrive.class),
 
-    TEST("Test Subsystem", TestSubsystem.class),
+    //TEST("Test Subsystem", TestSubsystem.class),
     INTAKE("Intake", Intake.class);
     
     private String name;

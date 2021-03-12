@@ -22,7 +22,12 @@ import java.lang.management.ManagementFactory;
 import java.util.List;
 import java.lang.management.GarbageCollectorMXBean;
 
+import org.wildstang.year2021.subsystems.SwerveDrive;
+
 import org.wildstang.year2021.auto.programs.ExampleAutoProgram;
+import org.wildstang.year2021.auto.programs.StraightPath;
+import org.wildstang.year2021.auto.programs.TestPath;
+import org.wildstang.year2021.auto.programs.TurnPath;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -50,6 +55,9 @@ public class Robot extends TimedRobot {
         core.createSubsystems(WSSubsystems.values());
 
         AutoManager.getInstance().addProgram(new ExampleAutoProgram());
+        AutoManager.getInstance().addProgram(new TestPath());
+        AutoManager.getInstance().addProgram(new StraightPath());
+        AutoManager.getInstance().addProgram(new TurnPath());
         
     }
 
@@ -65,13 +73,16 @@ public class Robot extends TimedRobot {
 
         core.setAutoManager(AutoManager.getInstance());
         AutoManager.getInstance().startCurrentProgram();
+        SwerveDrive drive = (SwerveDrive) Core.getSubsystemManager().getSubsystem(WSSubsystems.SwerveDrive.getName());
+        drive.setToAuto();
     }
 
     @Override
     public void teleopInit() {
         System.out.println("Engaging teleoperation mode.");
         Core.getSubsystemManager().resetState();
-
+        SwerveDrive drive = (SwerveDrive) Core.getSubsystemManager().getSubsystem(WSSubsystems.SwerveDrive.getName());
+        drive.setToTeleop();
     }
 
     @Override

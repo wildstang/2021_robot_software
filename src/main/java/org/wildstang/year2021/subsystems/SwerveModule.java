@@ -17,13 +17,15 @@ public class SwerveModule {
     private static final double driveP = 15.0;
     private static final double driveI = 0.01;
     private static final double driveD = 0.1;
-    private static final double driveF = 0.2;
+    private static final double driveF = 0.00581;
     private static final double angleP = 0.5;
     private static final double angleI = 0.0;
     private static final double angleD = 0.0001;
 
     private double encoderTicksPerRot = 1;//for neo integrated encoder
     private double gearRatio = 12.8;//15:32 and 10:60 gear ratio for angle motor
+    private double driveGearRatio = 6.86;//MK3 fast gearing
+    private double wheelDiameter = 4.0;//inches
 
     private double target;
     private double drivePower;
@@ -81,6 +83,16 @@ public class SwerveModule {
         SmartDashboard.putNumber(name + " NEO angle encoder", angleMotor.getEncoder().getPosition());
         SmartDashboard.putNumber(name + " NEO angle target", target);
         SmartDashboard.putNumber(name + " NEO drive power", drivePower);
+    }
+    public void resetDriveEncoders(){
+        driveMotor.getEncoder().setPosition(0.0);
+    }
+    public void setDriveBrake(boolean isBrake){
+        if(isBrake){
+            driveMotor.setIdleMode(IdleMode.kBrake); 
+        } else {
+            driveMotor.setIdleMode(IdleMode.kCoast);
+        }
     }
     
 }

@@ -50,6 +50,10 @@ public class SwerveDrive implements Subsystem {
     private double ySpeed;
     private double rotSpeed;
     private boolean isFieldOriented;
+    private double maxVelocity;
+    private double newVelocity;
+    private double maxAccel;
+    private double newAccel;
 
     private final AHRS gyro = new AHRS(I2C.Port.kOnboard);
     private SwerveModule[] modules;
@@ -135,9 +139,15 @@ public class SwerveDrive implements Subsystem {
         case AUTO://runs for auto
         //code can be here, or in a method and this left blank
         }
-        
+
+        newVelocity = Math.sqrt(Math.abs(gyro.getVelocityX()) + Math.abs(gyro.getVelocityY()));
+        if (newVelocity > maxVelocity && newVelocity < 5.0) maxVelocity = newVelocity;
+        newAccel = Math.sqrt(Math.abs(gyro.getWorldLinearAccelX()) + Math.abs(gyro.getWorldLinearAccelY()));
+        if (newAccel > maxAccel) maxAccel = newAccel;
         SmartDashboard.putNumber("Gyro Reading", gyro.getRotation2d().getDegrees());
         SmartDashboard.putBoolean("Is field oriented", isFieldOriented);
+        SmartDashboard.putNumber("Max recorded velocity", maxVelocity);
+        SmartDashboard.putNumber("Max recorded acceleration", maxAccel);
     }
 
     @Override
@@ -149,6 +159,8 @@ public class SwerveDrive implements Subsystem {
         isFieldOriented = true;//should be true
         gyro.reset();
         setToTeleop();
+        maxAccel = 0;
+        maxVelocity = 0;
     }
 
     @Override

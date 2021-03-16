@@ -138,6 +138,22 @@ public class SwerveDrive implements Subsystem {
             }
         case AUTO://runs for auto
         //code can be here, or in a method and this left blank
+        //checks if we're currently running a path
+        //have some sort of counter to loop through pathData
+        //currentHeading = pathData[counter][15]
+        //tell each swerve module to run at each angle
+        for (int i  = 0; i < modules.length; i++){
+            modules[i].runAtAngle(heading);
+        }
+
+        //currentVelocity = pathData[counter][8]
+        //currentPosition = pathData[counter][7]
+        //double guess = currentVelocity * kF
+        //double check = kP * (currentPosition - modules[0].getPosition())
+        //double power = guess + check
+        for (int i = 0; i < modules.length; i++){
+            modules[i].runAtPower(power);
+        }
         }
 
         newVelocity = Math.sqrt(Math.abs(gyro.getVelocityX()) + Math.abs(gyro.getVelocityY()));

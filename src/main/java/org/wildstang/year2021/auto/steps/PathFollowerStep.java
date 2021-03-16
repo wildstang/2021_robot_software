@@ -31,6 +31,8 @@ public class PathFollowerStep extends AutoStep {
     @Override
     public void initialize() {
         //start path
+        //tell the swerve to run a path
+        //give it pathData
     }
 
     @Override
@@ -40,6 +42,7 @@ public class PathFollowerStep extends AutoStep {
             setFinished(true);
         } else {
            //update from pathData[counter][either positionP, velocityP, or headingP]
+           //
             counter++;
         }
     }

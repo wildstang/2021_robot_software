@@ -94,5 +94,12 @@ public class SwerveModule {
             driveMotor.setIdleMode(IdleMode.kCoast);
         }
     }
+    public void runAtAngle(double angle){
+        angleController.setReference(angle, ControlType.kPosition);
+        //angleMotor.set(ControlMode.Position, angle);
+    }
+    public void runAtPower(double power){
+        driveMotor.set(power);
+    }
     
 }

@@ -31,13 +31,15 @@ public class PathFollowerStep extends AutoStep {
     @Override
     public void initialize() {
         //start path
+        pathData.setPathData(pathData);
+        isRunningTrue();
         //tell the swerve to run a path
         //give it pathData
     }
 
     @Override
     public void update() {
-        if (counter >= pathData.length){
+        if (counter.counterGetVal() >= pathData.length){
             //end path
             setFinished(true);
         } else {

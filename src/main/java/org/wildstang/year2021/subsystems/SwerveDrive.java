@@ -54,6 +54,9 @@ public class SwerveDrive implements Subsystem {
     private double newVelocity;
     private double maxAccel;
     private double newAccel;
+    private double [][] pathData;
+    private boolean isRunningPath = false; 
+    private int counter = 0;
 
     private final AHRS gyro = new AHRS(I2C.Port.kOnboard);
     private SwerveModule[] modules;
@@ -82,7 +85,14 @@ public class SwerveDrive implements Subsystem {
         if (source == rightBumper && rightBumper.getValue()) isFieldOriented = !isFieldOriented;
         if (source == leftBumper && leftBumper.getValue()) gyro.reset();
     }
+    public void setPathData(double [][] argument ){
+        this.pathData = argument;
+    }
 
+    public void isRunningTrue(){
+        isRunningPath = true;
+        counter = 0;
+    }
     @Override
     public void init() {
         // TODO Auto-generated method stub
@@ -91,6 +101,8 @@ public class SwerveDrive implements Subsystem {
         resetState();
 
     }
+
+
 
     public void initInputs(){
         leftStickX = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_X);
@@ -139,23 +151,31 @@ public class SwerveDrive implements Subsystem {
         case AUTO://runs for auto
         //code can be here, or in a method and this left blank
         //checks if we're currently running a path
+        if(isRunningTrue && counter <= pathData.length){
         //have some sort of counter to loop through pathData
-        //currentHeading = pathData[counter][15]
+           
+            
+               
+               double currentHeading = pathData[counter][15];    
+          
+            
         //tell each swerve module to run at each angle
-        for (int i  = 0; i < modules.length; i++){
-            modules[i].runAtAngle(heading);
-        }
+                for (int i  = 0; i < modules.length; i++){
+                    modules[i].runAtAngle(currentHeading);
+                }
 
-        //currentVelocity = pathData[counter][8]
-        //currentPosition = pathData[counter][7]
-        //double guess = currentVelocity * kF
-        //double check = kP * (currentPosition - modules[0].getPosition())
-        //double power = guess + check
-        for (int i = 0; i < modules.length; i++){
-            modules[i].runAtPower(power);
+                double currentVelocity = pathData[counter][8]
+                double currentPosition = pathData[counter][7]
+                double guess = currentVelocity * kF
+                double check = kP * (currentPosition - modules[0].getPosition())
+                double power = guess + check
+                for (int i = 0; i < modules.length; i++){
+                    modules[i].runAtPower(power);
+                }
+                counter++; 
+            
         }
-        }
-
+       
         newVelocity = Math.sqrt(Math.abs(gyro.getVelocityX()) + Math.abs(gyro.getVelocityY()));
         if (newVelocity > maxVelocity && newVelocity < 5.0) maxVelocity = newVelocity;
         newAccel = Math.sqrt(Math.abs(gyro.getWorldLinearAccelX()) + Math.abs(gyro.getWorldLinearAccelY()));
@@ -164,6 +184,9 @@ public class SwerveDrive implements Subsystem {
         SmartDashboard.putBoolean("Is field oriented", isFieldOriented);
         SmartDashboard.putNumber("Max recorded velocity", maxVelocity);
         SmartDashboard.putNumber("Max recorded acceleration", maxAccel);
+    }
+    public int counterGetVal(){
+        return counter;
     }
 
     @Override

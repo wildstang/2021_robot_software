@@ -48,7 +48,7 @@ public class Hopper implements Subsystem {
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
         motor.set(ControlMode.PercentOutput, speed);
-       System.out.println(speed);
+       //System.out.println(speed);
     }
 
     // respond to input updates

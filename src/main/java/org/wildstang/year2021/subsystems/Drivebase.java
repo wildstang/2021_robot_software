@@ -87,23 +87,32 @@ public class Drivebase implements Subsystem {
         if(commandHeading < 0){
             thetaX = Math.PI-thetaX;
         }
-        //System.out.println(thetaX);
+        if(thetaX != thetaX){
+            thetaX = 0;
+        }
+        System.out.println(thetaX);
 
         double leftSpeed = commandThrottle - commandThrottle * commandHeading;
         double rightSpeed = commandThrottle + commandThrottle * commandHeading;
         leftSpeed = -leftSpeed;
 
+        System.out.println(leftSpeed);
+        System.out.println(rightSpeed);
         double lfSpeed = leftSpeed;
         double lbSpeed = leftSpeed;
         double rfSpeed = rightSpeed;
         double rbSpeed = rightSpeed;
 
-        lfSpeed = hypot * (-Math.sin(thetaX) - Math.cos(thetaX)) + commandRotation;
-        rfSpeed = hypot * (Math.sin(thetaX)-Math.cos(thetaX)) + commandRotation;
-        lbSpeed = hypot * (-Math.sin(thetaX)+Math.cos(thetaX)) + commandRotation;
-        rbSpeed = hypot * (Math.sin(thetaX)+Math.cos(thetaX)) + commandRotation;
+        //System.out.println("Commandrotation:"+commandRotation);
+        lfSpeed = hypot * (-Math.sin(thetaX) - Math.cos(thetaX)) - commandRotation;
+        rfSpeed = hypot * (Math.sin(thetaX)-Math.cos(thetaX)) - commandRotation;
+        lbSpeed = hypot * (-Math.sin(thetaX)+Math.cos(thetaX)) - commandRotation;
+        rbSpeed = hypot * (Math.sin(thetaX)+Math.cos(thetaX)) - commandRotation;
 
-
+        //System.out.println("lf: " +lfSpeed );
+        //System.out.println("rf: " +rfSpeed );
+        //System.out.println("lb: " +lbSpeed );
+        //System.out.println("rb: " +rbSpeed );
 
         motorRightFront.set(ControlMode.PercentOutput, rfSpeed);
         motorRightBack.set(ControlMode.PercentOutput, rbSpeed);
@@ -130,7 +139,7 @@ public class Drivebase implements Subsystem {
         }
         //System.out.println("Clock Input:" + clockInput.getValue());
         //System.out.println("Count Clock Input:" + countClockInput.getValue());
-        //System.out.println("Commandrotation:"+commandRotation);
+  
     }
 
     // used for testing
@@ -150,9 +159,13 @@ public class Drivebase implements Subsystem {
 
      public void setHeading(double heading) {
         this.commandHeading = heading;
+        if(heading < .1 && heading > -.1)
+            commandHeading = 0;
     }
 
     public void setThrottle(double throttle) {
         this.commandThrottle = throttle;
+         if(throttle < .1 && throttle > -.1)
+            commandThrottle = 0;
     }
 }

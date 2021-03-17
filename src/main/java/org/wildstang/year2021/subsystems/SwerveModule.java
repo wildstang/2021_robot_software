@@ -101,5 +101,13 @@ public class SwerveModule {
     public void runAtPower(double power){
         driveMotor.set(power);
     }
-    
+    public double getDriveF(){
+        return driveF;
+    }
+    public double getDriveP(){
+        return driveP;
+    }
+    public double getPosition(){
+        return driveMotor.getEncoder().getPosition() * wheelDiameter * Math.PI / driveGearRatio;
+    }
 }

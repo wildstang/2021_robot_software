@@ -92,6 +92,9 @@ public class SwerveDrive implements Subsystem {
     public void isRunningTrue(){
         isRunningPath = true;
         counter = 0;
+        for (int i = 0; i < modules.length; i++){
+            modules[i].resetDriveEncoders();
+        }
     }
     @Override
     public void init() {
@@ -151,7 +154,7 @@ public class SwerveDrive implements Subsystem {
         case AUTO://runs for auto
         //code can be here, or in a method and this left blank
         //checks if we're currently running a path
-        if(isRunningTrue && counter <= pathData.length){
+            if(isRunningPath && counter <= pathData.length){
         //have some sort of counter to loop through pathData
            
             
@@ -164,16 +167,16 @@ public class SwerveDrive implements Subsystem {
                     modules[i].runAtAngle(currentHeading);
                 }
 
-                double currentVelocity = pathData[counter][8]
-                double currentPosition = pathData[counter][7]
-                double guess = currentVelocity * kF
-                double check = kP * (currentPosition - modules[0].getPosition())
-                double power = guess + check
+                double currentVelocity = pathData[counter][8];
+                double currentPosition = pathData[counter][7];
+                double guess = currentVelocity * modules[0].getDriveF();
+                double check = modules[0].getDriveP() * (currentPosition - modules[0].getPosition());
+                double power = guess + check;
                 for (int i = 0; i < modules.length; i++){
                     modules[i].runAtPower(power);
                 }
                 counter++; 
-            
+        }
         }
        
         newVelocity = Math.sqrt(Math.abs(gyro.getVelocityX()) + Math.abs(gyro.getVelocityY()));
@@ -184,6 +187,7 @@ public class SwerveDrive implements Subsystem {
         SmartDashboard.putBoolean("Is field oriented", isFieldOriented);
         SmartDashboard.putNumber("Max recorded velocity", maxVelocity);
         SmartDashboard.putNumber("Max recorded acceleration", maxAccel);
+        
     }
     public int counterGetVal(){
         return counter;
@@ -213,5 +217,6 @@ public class SwerveDrive implements Subsystem {
     public void setToAuto(){
         driveState = driveType.AUTO;
     }
+    
     
 }

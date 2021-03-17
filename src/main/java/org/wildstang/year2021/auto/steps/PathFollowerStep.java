@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.wildstang.framework.auto.steps.AutoStep;
 import org.wildstang.framework.core.Core;
+import org.wildstang.year2021.robot.WSSubsystems;
 import org.wildstang.year2021.subsystems.SwerveDrive;
 
 import edu.wpi.first.wpilibj.Filesystem;
@@ -26,20 +27,21 @@ public class PathFollowerStep extends AutoStep {
 
     public PathFollowerStep(double[][] pathData) {
         this.pathData = pathData;
+        m_drive = (SwerveDrive) Core.getSubsystemManager().getSubsystem(WSSubsystems.SwerveDrive.getName());
     }
 
     @Override
     public void initialize() {
         //start path
-        pathData.setPathData(pathData);
-        isRunningTrue();
+        m_drive.setPathData(pathData);
+        m_drive.isRunningTrue();
         //tell the swerve to run a path
         //give it pathData
     }
 
     @Override
     public void update() {
-        if (counter.counterGetVal() >= pathData.length){
+        if (m_drive.counterGetVal() >= pathData.length){
             //end path
             setFinished(true);
         } else {

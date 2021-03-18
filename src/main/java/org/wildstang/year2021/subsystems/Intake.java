@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
 import org.wildstang.framework.io.inputs.AnalogInput;
+import org.wildstang.framework.io.inputs.DigitalInput;
 import org.wildstang.framework.subsystems.Subsystem;
 
 /**
@@ -23,7 +24,7 @@ import org.wildstang.framework.subsystems.Subsystem;
 public class Intake implements Subsystem {
 
     // inputs
-    //private AnalogInput joystick;
+    private DigitalInput button;
 
     // outputs
     private CANSparkMax motor;
@@ -42,6 +43,8 @@ public class Intake implements Subsystem {
 
         // create motor controller object with CAN Constant
         motor = new CANSparkMax(CANConstants.INTAKE_VICTOR, MotorType.kBrushless);
+        button = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_RIGHT);
+        button.addInputListener(this);
 
         resetState();
     }
@@ -64,6 +67,9 @@ public class Intake implements Subsystem {
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
+        if (button.getValue()){
+            isRunning = !isRunning;
+        }
        
     }
 

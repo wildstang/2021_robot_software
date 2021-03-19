@@ -90,7 +90,7 @@ public enum WSInputs implements Inputs {
     // ---------------------------------
     // Driver Buttons
     // --------------------------------- 
-    DRIVER_FACE_DOWN             ("Open",
+    DRIVER_FACE_DOWN             ("Intake",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 0),                                 false), 
     DRIVER_FACE_RIGHT            ("Open",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 1),                                 false), 
@@ -104,7 +104,7 @@ public enum WSInputs implements Inputs {
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 5),                                 false), 
     DRIVER_TRIGGER_LEFT          ("Open",
             WSInputType.JS_JOYSTICK, new WsJSJoystickInputConfig(0, JoystickConstants.LEFT_TRIGGER),  false), 
-    DRIVER_TRIGGER_RIGHT         ("Intake",
+    DRIVER_TRIGGER_RIGHT         ("Open",
             WSInputType.JS_JOYSTICK, new WsJSJoystickInputConfig(0, JoystickConstants.RIGHT_TRIGGER), false), 
     DRIVER_SELECT                ("Open",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 6),                                 false), 

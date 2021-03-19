@@ -39,13 +39,10 @@ public class Intake implements Subsystem {
 
        // initializes the subsystem
     public void init() {
-       
-
         // create motor controller object with CAN Constant
         motor = new CANSparkMax(CANConstants.INTAKE_VICTOR, MotorType.kBrushless);
-        button = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_RIGHT);
+        button = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SHOULDER_LEFT);    
         button.addInputListener(this);
-
         resetState();
     }
 
@@ -58,7 +55,7 @@ public class Intake implements Subsystem {
         motor.set(intakeSpeed);
 
         if(isRunning == true){
-            intakeSpeed = FULL_SPEED;
+            intakeSpeed = -FULL_SPEED;
         }else if(isRunning == false){
             intakeSpeed = 0.0;        
         }
@@ -68,7 +65,10 @@ public class Intake implements Subsystem {
     public void inputUpdate(Input signal) {
         // check to see which input was updated
         if (button.getValue()){
-            isRunning = !isRunning;
+            isRunning = true;
+        }
+        else {
+            isRunning = false;  
         }
        
     }

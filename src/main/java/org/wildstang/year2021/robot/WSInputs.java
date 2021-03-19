@@ -90,7 +90,7 @@ public enum WSInputs implements Inputs {
     // ---------------------------------
     // Driver Buttons
     // --------------------------------- 
-    DRIVER_FACE_DOWN             ("Intake",
+    DRIVER_FACE_DOWN             ("Open",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 0),                                 false), 
     DRIVER_FACE_RIGHT            ("Open",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 1),                                 false), 
@@ -98,15 +98,15 @@ public enum WSInputs implements Inputs {
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 2),                                 false),
     DRIVER_FACE_UP               ("Open",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 3),                                 false), 
-    DRIVER_SHOULDER_LEFT         ("Gyro Reset",
+    DRIVER_SHOULDER_LEFT         ("Intake",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 4),                                 false), 
-    DRIVER_SHOULDER_RIGHT        ("Toggle Field Oriented/Absolute",
+    DRIVER_SHOULDER_RIGHT        ("Open",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 5),                                 false), 
     DRIVER_TRIGGER_LEFT          ("Open",
             WSInputType.JS_JOYSTICK, new WsJSJoystickInputConfig(0, JoystickConstants.LEFT_TRIGGER),  false), 
     DRIVER_TRIGGER_RIGHT         ("Open",
             WSInputType.JS_JOYSTICK, new WsJSJoystickInputConfig(0, JoystickConstants.RIGHT_TRIGGER), false), 
-    DRIVER_SELECT                ("Open",
+    DRIVER_SELECT                ("Gyro Reset",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 6),                                 false), 
     DRIVER_START                 ("Open",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 7),                                 false), 

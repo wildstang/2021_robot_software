@@ -25,6 +25,7 @@ public class Intake implements Subsystem {
 
     // inputs
     private DigitalInput button;
+    private DigitalInput reverseButton; 
 
     // outputs
     private CANSparkMax motor;
@@ -34,7 +35,8 @@ public class Intake implements Subsystem {
     private boolean isRunning = false;
 
     //Constants
-    private static final double FULL_SPEED = 1.0;
+    private double full_speed;
+
 
 
        // initializes the subsystem
@@ -54,21 +56,27 @@ public class Intake implements Subsystem {
     public void update() {
         motor.set(intakeSpeed);
 
+        /*
         if(isRunning == true){
-            intakeSpeed = -FULL_SPEED;
+            intakeSpeed = full_speed;
         }else if(isRunning == false){
             intakeSpeed = 0.0;        
         }
+        */
     }
 
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
         if (button.getValue()){
-            isRunning = true;
+            intakeSpeed = -1.0;
+        }
+        else if (reverseButton.getValue()) {
+            intakeSpeed = 1.0;
         }
         else {
-            isRunning = false;  
+            intakeSpeed = 0.0; 
+
         }
        
     }

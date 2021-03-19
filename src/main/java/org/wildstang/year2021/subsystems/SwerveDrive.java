@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.util.Units;
 public class SwerveDrive implements Subsystem {
 
     public static final double maxSpeed = Units.feetToMeters(14.4);//14.4 ft/s max speed
-    private static final double maxAngularSpeed = 21.25     ; // 1/2PI * value rotations per second
+    private static final double maxAngularSpeed = 15; // 1/2PI * value rotations per second
     private final String[] names = new String[]{"Front Left", "Front Right", "Back Left", "Back Right"};
     private final double WIDTH = 11.5;//inches
     private final double LENGTH = 11.5;//inches
@@ -43,9 +43,10 @@ public class SwerveDrive implements Subsystem {
     private AnalogInput leftStickX;
     private AnalogInput leftStickY;
     private AnalogInput rightStickX;
-    private DigitalInput rightBumper;
-    private DigitalInput leftBumper;
+    //private DigitalInput rightBumper;
+    //private DigitalInput leftBumper;
     private DigitalInput select; 
+    //private DigitalInput start;
 
     private double xSpeed;
     private double ySpeed;
@@ -79,7 +80,8 @@ public class SwerveDrive implements Subsystem {
         if (Math.abs(leftStickY.getValue()) < deadband) xSpeed = 0;
         ySpeed = ySpeedLimiter.calculate(leftStickX.getValue())*maxSpeed;
         if (Math.abs(leftStickX.getValue()) < deadband) ySpeed = 0;
-        rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
+        //rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
+        rotSpeed = -rotSpeedLimiter.calculate(Math.pow(rightStickX.getValue(), 2.0))*maxAngularSpeed;
         SmartDashboard.putNumber("Rotation joystick", rightStickX.getValue());
         SmartDashboard.putNumber("Rotation", rotSpeed);
         if (Math.abs(rightStickX.getValue()) < deadband) rotSpeed = 0;
@@ -115,12 +117,14 @@ public class SwerveDrive implements Subsystem {
         leftStickY.addInputListener(this);
         rightStickX = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_X);
         rightStickX.addInputListener(this);
-        rightBumper = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SHOULDER_RIGHT);
-        rightBumper.addInputListener(this);
-        leftBumper = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SHOULDER_LEFT);
-        leftBumper.addInputListener(this);
+        //rightBumper = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SHOULDER_RIGHT);
+        //rightBumper.addInputListener(this);
+        //leftBumper = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SHOULDER_LEFT);
+        //leftBumper.addInputListener(this);
         select = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SELECT);
         select.addInputListener(this);
+        //start = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_START);
+        //start.addInputListener(this);
     }
 
     public void initOutputs(){

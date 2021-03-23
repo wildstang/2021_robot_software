@@ -95,7 +95,11 @@ public class SwerveModule {
         }
     }
     public void runAtAngle(double angle){
-        angleController.setReference(angle, ControlType.kPosition);
+        double currentRotation = getAngle().getDegrees();
+        double deltaRotation = currentRotation - angle;
+        double deltaTicks = deltaRotation/360 * encoderTicksPerRot * gearRatio;
+        double currentTicks = angleMotor.getEncoder().getPosition();
+        angleController.setReference(currentTicks + deltaTicks, ControlType.kPosition);
         //angleMotor.set(ControlMode.Position, angle);
     }
     public void runAtPower(double power){

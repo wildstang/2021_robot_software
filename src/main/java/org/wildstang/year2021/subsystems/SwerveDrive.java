@@ -174,15 +174,17 @@ public class SwerveDrive implements Subsystem {
                     modules[i].runAtAngle(currentHeading);
                 }
 
-                double currentVelocity = pathData[counter][8];
-                double currentPosition = pathData[counter][7];
+                double currentVelocity = 12*pathData[counter][8];
+                double currentPosition = 12*pathData[counter][7];
                 double guess = currentVelocity * modules[0].getDriveF();
                 double check = modules[0].getDriveP() * (currentPosition - modules[0].getPosition());
-                double power = guess + check;
+                double power = (guess + check) / 24;
+
                 for (int i = 0; i < modules.length; i++){
                     modules[i].runAtPower(power);
                 }
                 counter++; 
+                System.out.println(counter + " current power: " + power + "   current check: " + check);
         }
         }
        

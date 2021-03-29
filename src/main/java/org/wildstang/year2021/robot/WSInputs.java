@@ -78,7 +78,7 @@ public enum WSInputs implements Inputs {
     // ---------------------------------
     // Driver DPAD Buttons
     // ---------------------------------
-    DRIVER_DPAD_DOWN  ("Open",
+    DRIVER_DPAD_DOWN  ("Reverse",
             WSInputType.JS_DPAD_BUTTON, new WsJSButtonInputConfig(0, JoystickConstants.DPAD_Y_DOWN),  false), 
     DRIVER_DPAD_LEFT  ("Open",
             WSInputType.JS_DPAD_BUTTON, new WsJSButtonInputConfig(0, JoystickConstants.DPAD_X_LEFT),  false), 
@@ -90,7 +90,7 @@ public enum WSInputs implements Inputs {
     // ---------------------------------
     // Driver Buttons
     // --------------------------------- 
-    DRIVER_FACE_DOWN             ("Reverse",
+    DRIVER_FACE_DOWN             ("Open",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 0),                                 false), 
     DRIVER_FACE_RIGHT            ("Open",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 1),                                 false), 

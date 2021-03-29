@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.util.Units;
 
 public class SwerveModule {
 
-    private static final double driveP = 1.0;
+    private static final double driveP = 0.1;
     private static final double driveI = 0.01;
     private static final double driveD = 0.1;
     private static final double driveF = 0.00581;

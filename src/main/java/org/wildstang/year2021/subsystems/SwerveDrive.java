@@ -81,7 +81,7 @@ public class SwerveDrive implements Subsystem {
         ySpeed = ySpeedLimiter.calculate(leftStickX.getValue())*maxSpeed;
         if (Math.abs(leftStickX.getValue()) < deadband) ySpeed = 0;
         //rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
-        rotSpeed = -rotSpeedLimiter.calculate(Math.pow(rightStickX.getValue(), 2.0))*maxAngularSpeed;
+        rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
         SmartDashboard.putNumber("Rotation joystick", rightStickX.getValue());
         SmartDashboard.putNumber("Rotation", rotSpeed);
         if (Math.abs(rightStickX.getValue()) < deadband) rotSpeed = 0;
@@ -161,16 +161,14 @@ public class SwerveDrive implements Subsystem {
         case AUTO://runs for auto
         //code can be here, or in a method and this left blank
         //checks if we're currently running a path
-            if(isRunningPath && counter <= pathData.length){
+            if(isRunningPath && counter < pathData.length){
         //have some sort of counter to loop through pathData
            
-            
-               
-               double currentHeading = pathData[counter][15];    
+               double currentHeading = Math.toDegrees(pathData[counter][15]);    
           
             
         //tell each swerve module to run at each angle
-                for (int i  = 0; i < modules.length; i++){
+                for (int i  = 0; i <  modules.length; i++){
                     modules[i].runAtAngle(currentHeading);
                 }
 
@@ -183,8 +181,8 @@ public class SwerveDrive implements Subsystem {
                 for (int i = 0; i < modules.length; i++){
                     modules[i].runAtPower(power);
                 }
-                counter++; 
-                System.out.println(counter + " current power: " + power + "   current check: " + check);
+                counter++;
+                System.out.println(counter + " current power: " + power + "   current check: " + check + "   current guess: " + guess);
         }
         }
        

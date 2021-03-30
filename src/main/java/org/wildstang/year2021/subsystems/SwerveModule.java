@@ -14,11 +14,11 @@ import edu.wpi.first.wpilibj.util.Units;
 
 public class SwerveModule {
 
-    private static final double driveP = 0.1;
+    private static final double driveP = 0.02;
     private static final double driveI = 0.01;
     private static final double driveD = 0.1;
     private static final double driveF = 0.00581;
-    private static final double angleP = 0.5;
+    private static final double angleP = 0.15;
     private static final double angleI = 0.0;
     private static final double angleD = 0.0001;
 
@@ -96,7 +96,7 @@ public class SwerveModule {
     }
     public void runAtAngle(double angle){
         double currentRotation = getAngle().getDegrees();
-        double deltaRotation = currentRotation - angle;
+        double deltaRotation = -currentRotation + angle;
         double deltaTicks = deltaRotation/360 * encoderTicksPerRot * gearRatio;
         double currentTicks = angleMotor.getEncoder().getPosition();
         angleController.setReference(currentTicks + deltaTicks, ControlType.kPosition);

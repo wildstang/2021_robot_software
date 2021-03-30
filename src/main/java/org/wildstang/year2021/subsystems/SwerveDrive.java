@@ -35,14 +35,16 @@ public class SwerveDrive implements Subsystem {
     private final double offset3 = -199.95;
     private final double offset4 = -52.03;
     private final double deadband = 0.1;
+    private final double thrustFactor = 0.5;
 
-    private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(3);
-    private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(3);
+    private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(1);
+    private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(1);
     private final SlewRateLimiter rotSpeedLimiter = new SlewRateLimiter(3);
 
     private AnalogInput leftStickX;
     private AnalogInput leftStickY;
     private AnalogInput rightStickX;
+    private AnalogInput rightTrigger;
     //private DigitalInput rightBumper;
     //private DigitalInput leftBumper;
     private DigitalInput select; 
@@ -76,9 +78,9 @@ public class SwerveDrive implements Subsystem {
     @Override
     public void inputUpdate(Input source) {
         // TODO Auto-generated method stub
-        xSpeed = -xSpeedLimiter.calculate(leftStickY.getValue())*maxSpeed;
+        xSpeed = -xSpeedLimiter.calculate(leftStickY.getValue()*(1-thrustFactor+thrustFactor*Math.abs(rightTrigger.getValue())))*maxSpeed;
         if (Math.abs(leftStickY.getValue()) < deadband) xSpeed = 0;
-        ySpeed = ySpeedLimiter.calculate(leftStickX.getValue())*maxSpeed;
+        ySpeed = ySpeedLimiter.calculate(leftStickX.getValue()*(1-thrustFactor+thrustFactor*Math.abs(rightTrigger.getValue())))*maxSpeed;
         if (Math.abs(leftStickX.getValue()) < deadband) ySpeed = 0;
         //rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
         rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
@@ -117,6 +119,8 @@ public class SwerveDrive implements Subsystem {
         leftStickY.addInputListener(this);
         rightStickX = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_X);
         rightStickX.addInputListener(this);
+        rightTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_RIGHT);
+        rightTrigger.addInputListener(this);
         //rightBumper = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SHOULDER_RIGHT);
         //rightBumper.addInputListener(this);
         //leftBumper = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SHOULDER_LEFT);

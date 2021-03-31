@@ -17,8 +17,8 @@ public class SwerveModule {
     private static final double driveP = 0.02;
     private static final double driveI = 0.01;
     private static final double driveD = 0.1;
-    private static final double driveF = 0.006972;//0.00581
-    private static final double angleP = 0.05;
+    private static final double driveF = 0.007114;//0.00581
+    private static final double angleP = 0.15;
     private static final double angleI = 0.0;
     private static final double angleD = 0.0;
 
@@ -96,6 +96,13 @@ public class SwerveModule {
     }
     public void runAtAngle(double angle){
         double currentRotation = getAngle().getDegrees();
+
+        if (currentRotation > 180 && angle+180<currentRotation){
+            currentRotation-=360.0;
+        } else if (angle>180 && currentRotation+180<angle){
+            currentRotation+=360.0;
+        }
+        
         double deltaRotation = -currentRotation + angle;
         double deltaTicks = deltaRotation/360 * encoderTicksPerRot * gearRatio;
         double currentTicks = angleMotor.getEncoder().getPosition();

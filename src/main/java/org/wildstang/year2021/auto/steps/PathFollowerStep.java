@@ -43,6 +43,7 @@ public class PathFollowerStep extends AutoStep {
     public void update() {
         if (m_drive.counterGetVal() >= pathData.length){
             //end path
+            m_drive.stopMoving();
             setFinished(true);
         } else {
            //update from pathData[counter][either positionP, velocityP, or headingP]

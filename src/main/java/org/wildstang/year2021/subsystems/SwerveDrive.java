@@ -99,6 +99,7 @@ public class SwerveDrive implements Subsystem {
         counter = 0;
         for (int i = 0; i < modules.length; i++){
             modules[i].resetDriveEncoders();
+            modules[i].setDriveBrake(true);
         }
     }
     @Override
@@ -174,13 +175,17 @@ public class SwerveDrive implements Subsystem {
         //tell each swerve module to run at each angle
                 for (int i  = 0; i <  modules.length; i++){
                     modules[i].runAtAngle(currentHeading);
+                    modules[i].displayNumbers(names[i]);
                 }
 
                 double currentVelocity = 12*pathData[counter][8];
                 double currentPosition = 12*pathData[counter][7];
                 double guess = currentVelocity * modules[0].getDriveF();
-                double check = modules[0].getDriveP() * (currentPosition - modules[0].getPosition());
-                double power = (guess + check);
+                double check = modules[0].getDriveP() * (currentPosition + modules[0].getPosition());
+                double power = -(guess + check);
+                SmartDashboard.putNumber("Position of path", currentPosition);
+                SmartDashboard.putNumber("Drive encoder distance", modules[0].getPosition());
+                SmartDashboard.putNumber("path counter", counter);
 
                 for (int i = 0; i < modules.length; i++){
                     modules[i].runAtPower(power);
@@ -224,9 +229,17 @@ public class SwerveDrive implements Subsystem {
     }
     public void setToTeleop(){
         driveState = driveType.TELEOP;
+        for (int i = 0; i < modules.length; i++){
+            modules[i].setDriveBrake(false);
+        }
     }
     public void setToAuto(){
         driveState = driveType.AUTO;
+    }
+    public void stopMoving(){
+        for (int i = 0; i < modules.length; i++){
+            modules[i].runAtPower(0.0);
+        }
     }
     
     

@@ -17,10 +17,10 @@ public class SwerveModule {
     private static final double driveP = 0.02;
     private static final double driveI = 0.01;
     private static final double driveD = 0.1;
-    private static final double driveF = 0.00581;
-    private static final double angleP = 0.15;
+    private static final double driveF = 0.006972;//0.00581
+    private static final double angleP = 0.05;
     private static final double angleI = 0.0;
-    private static final double angleD = 0.0001;
+    private static final double angleD = 0.0;
 
     private double encoderTicksPerRot = 1;//for neo integrated encoder
     private double gearRatio = 12.8;//15:32 and 10:60 gear ratio for angle motor

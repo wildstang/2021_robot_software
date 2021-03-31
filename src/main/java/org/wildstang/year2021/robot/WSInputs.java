@@ -104,7 +104,7 @@ public enum WSInputs implements Inputs {
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 5),                                 false), 
     DRIVER_TRIGGER_LEFT          ("Open",
             WSInputType.JS_JOYSTICK, new WsJSJoystickInputConfig(0, JoystickConstants.LEFT_TRIGGER),  false), 
-    DRIVER_TRIGGER_RIGHT         ("Open",
+    DRIVER_TRIGGER_RIGHT         ("Thrust",
             WSInputType.JS_JOYSTICK, new WsJSJoystickInputConfig(0, JoystickConstants.RIGHT_TRIGGER), false), 
     DRIVER_SELECT                ("Gyro Reset",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 6),                                 false), 

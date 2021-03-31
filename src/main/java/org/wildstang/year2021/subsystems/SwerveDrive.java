@@ -25,8 +25,8 @@ import edu.wpi.first.wpilibj.util.Units;
 
 public class SwerveDrive implements Subsystem {
 
-    public static final double maxSpeed = Units.feetToMeters(14.4);//14.4 ft/s max speed
-    private static final double maxAngularSpeed = 15; // 1/2PI * value rotations per second
+    public static final double maxSpeed = Units.feetToMeters(0.5);//14.4 ft/s max speed
+    private static final double maxAngularSpeed = 1.5; // 1/2PI * value rotations per second
     private final String[] names = new String[]{"Front Left", "Front Right", "Back Left", "Back Right"};
     private final double WIDTH = 11.5;//inches
     private final double LENGTH = 11.5;//inches
@@ -37,8 +37,8 @@ public class SwerveDrive implements Subsystem {
     private final double deadband = 0.1;
     private final double thrustFactor = 0.5;
 
-    private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(1);
-    private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(1);
+    private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(3);
+    private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(3);
     private final SlewRateLimiter rotSpeedLimiter = new SlewRateLimiter(3);
 
     private AnalogInput leftStickX;
@@ -78,12 +78,14 @@ public class SwerveDrive implements Subsystem {
     @Override
     public void inputUpdate(Input source) {
         // TODO Auto-generated method stub
-        xSpeed = -xSpeedLimiter.calculate(leftStickY.getValue()*(1-thrustFactor+thrustFactor*Math.abs(rightTrigger.getValue())))*maxSpeed;
+        xSpeed = 0.5*-xSpeedLimiter.calculate(leftStickY.getValue())*(1-thrustFactor+thrustFactor*Math.abs(rightTrigger.getValue()))*maxSpeed;
+        //xSpeed = -(leftStickY.getValue())*(1-thrustFactor+thrustFactor*Math.abs(rightTrigger.getValue()))*maxSpeed;
         if (Math.abs(leftStickY.getValue()) < deadband) xSpeed = 0;
-        ySpeed = ySpeedLimiter.calculate(leftStickX.getValue()*(1-thrustFactor+thrustFactor*Math.abs(rightTrigger.getValue())))*maxSpeed;
+        ySpeed = 0.5*ySpeedLimiter.calculate(leftStickX.getValue())*(1-thrustFactor+thrustFactor*Math.abs(rightTrigger.getValue()))*maxSpeed;
+        //ySpeed = (leftStickX.getValue())*(1-thrustFactor+thrustFactor*Math.abs(rightTrigger.getValue()))*maxSpeed;
         if (Math.abs(leftStickX.getValue()) < deadband) ySpeed = 0;
         //rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
-        rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
+        rotSpeed = 0.5*-rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
         SmartDashboard.putNumber("Rotation joystick", rightStickX.getValue());
         SmartDashboard.putNumber("Rotation", rotSpeed);
         if (Math.abs(rightStickX.getValue()) < deadband) rotSpeed = 0;

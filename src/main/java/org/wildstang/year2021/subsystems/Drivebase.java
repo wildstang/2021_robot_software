@@ -8,6 +8,11 @@ import java.util.Map;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
 import org.wildstang.framework.io.inputs.AnalogInput;
@@ -76,7 +81,8 @@ public class Drivebase implements Subsystem {
         //double leftSpeed = -throttleInput;
         //double rightSpeed =  throttleInput;
   //System.out.println("drive");
-
+        
+        
         double hypot = Math.pow(commandHeading, 2) + Math.pow(commandThrottle, 2);
         
         
@@ -96,8 +102,8 @@ public class Drivebase implements Subsystem {
         double rightSpeed = commandThrottle + commandThrottle * commandHeading;
         leftSpeed = -leftSpeed;
 
-        System.out.println(leftSpeed);
-        System.out.println(rightSpeed);
+        //System.out.println(leftSpeed);
+        //System.out.println(rightSpeed);
         double lfSpeed = leftSpeed;
         double lbSpeed = leftSpeed;
         double rfSpeed = rightSpeed;
@@ -109,6 +115,12 @@ public class Drivebase implements Subsystem {
         lbSpeed = hypot * (-Math.sin(thetaX)+Math.cos(thetaX)) - commandRotation;
         rbSpeed = hypot * (Math.sin(thetaX)+Math.cos(thetaX)) - commandRotation;
 
+        SmartDashboard.putNumber("commandThrottle", commandThrottle);
+        SmartDashboard.putNumber("commandHeading", commandHeading);
+        SmartDashboard.putNumber("lfSpeed", lfSpeed);
+        SmartDashboard.putNumber("rfSpeed", rfSpeed);
+        SmartDashboard.putNumber("lbSpeed", lbSpeed);
+        SmartDashboard.putNumber("rbSpeed", rbSpeed);
         //System.out.println("lf: " +lfSpeed );
         //System.out.println("rf: " +rfSpeed );
         //System.out.println("lb: " +lbSpeed );

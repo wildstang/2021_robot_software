@@ -8,6 +8,11 @@ import java.util.Map;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
 import org.wildstang.framework.io.inputs.DigitalInput;
@@ -47,6 +52,7 @@ public class Intake implements Subsystem {
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
+    SmartDashboard.putNumber("Intake Speed", speed);
         motor.set(ControlMode.PercentOutput, speed);
         //System.out.println(speed);
     }

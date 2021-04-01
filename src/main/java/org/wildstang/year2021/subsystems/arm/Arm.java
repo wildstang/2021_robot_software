@@ -33,6 +33,12 @@ public class Arm implements Subsystem {
     private double speed;
     private double speedMult = 0.8;
 
+    private boolean armMoving = false;
+    private double originalPosition = motor.getActiveTrajectoryPosition();
+    private double positionChange = 0;
+    private double armRotation = 0;
+    private boolean armMovingUp;
+
     // initializes the subsystem
     public void init() {
         initInputs();
@@ -55,6 +61,9 @@ public class Arm implements Subsystem {
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
         motor.set(ControlMode.PercentOutput, speed);
+        if (armMoving == true) {
+            updateAutoArmMove();
+        }
     }
 
     // respond to input updates
@@ -81,4 +90,33 @@ public class Arm implements Subsystem {
     public String getName() {
         return "Arm";
     }
+
+    // allows auto to move the arm based on the amount the motor should rotate
+    // I'm not sure if motor.getActiveTrajectoryPosition() is actually what gets the motor's currect position but it's my best guess.
+    // also yes I'm aware that this is incredibly inefficient and dumb but I couldn't figure out a way to make it work without all billion global variables.
+    public void moveArm(double rotation, boolean up) {
+        armMoving = true;
+        armRotation = rotation;
+        armMovingUp = up;
+        originalPosition = motor.getActiveTrajectoryPosition();
+        positionChange = 0;
+    }
+
+    // updates with every tick of the update() function
+    public void updateAutoArmMove() {
+        if (positionChange <= armRotation) {
+            if (armMovingUp == true) {
+                speed = speedMult;
+            } else {
+                speed = -speedMult;
+            }
+            // tracks how much the arm has moved
+            positionChange = Math.abs(motor.getActiveTrajectoryPosition() - originalPosition);
+        } else {
+            speed = 0;
+            armMoving = false;
+        }
+    }
+
+
 }

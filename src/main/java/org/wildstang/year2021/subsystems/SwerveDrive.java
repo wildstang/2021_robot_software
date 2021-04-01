@@ -79,12 +79,12 @@ public class SwerveDrive implements Subsystem {
     @Override
     public void inputUpdate(Input source) {
         // TODO Auto-generated method stub
-        xSpeed = 0.5*-xSpeedLimiter.calculate(leftStickY.getValue())*maxSpeed;
+        xSpeed = -xSpeedLimiter.calculate(leftStickY.getValue())*maxSpeed;
         if (Math.abs(leftStickY.getValue()) < deadband) xSpeed = 0;
-        ySpeed = 0.5*ySpeedLimiter.calculate(leftStickX.getValue())*maxSpeed;
+        ySpeed = ySpeedLimiter.calculate(leftStickX.getValue())*maxSpeed;
         if (Math.abs(leftStickX.getValue()) < deadband) ySpeed = 0;
         //rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
-        rotSpeed = 0.5*-rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
+        rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
         SmartDashboard.putNumber("Rotation joystick", rightStickX.getValue());
         SmartDashboard.putNumber("Rotation", rotSpeed);
         if (Math.abs(rightStickX.getValue()) < deadband) rotSpeed = 0;
@@ -162,7 +162,11 @@ public class SwerveDrive implements Subsystem {
             for (int i = 0; i < states.length; i++){
                 SwerveModule module = modules[i];
                 SwerveModuleState state = states[i];
-                module.setDesiredState(state, thrustValue);
+                if (xSpeed == 0 && ySpeed == 0 && rotSpeed == 0){
+                    module.runAtPower(0.0);
+                } else {
+                    module.setDesiredState(state, thrustValue);
+                }
                 module.displayNumbers(names[i]);
             }
         case AUTO://runs for auto

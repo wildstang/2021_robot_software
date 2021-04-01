@@ -63,7 +63,7 @@ public class SwerveModule {
     public Rotation2d getAngle(){
         return Rotation2d.fromDegrees(canCoder.getAbsolutePosition());
     }
-    public void setDesiredState(SwerveModuleState desiredState){
+    public void setDesiredState(SwerveModuleState desiredState, double thrust){
         Rotation2d currentRotation = getAngle();
         SwerveModuleState state = SwerveModuleState.optimize(desiredState, currentRotation);
         Rotation2d rotationDelta = state.angle.minus(currentRotation);//rotation to complete move
@@ -76,7 +76,7 @@ public class SwerveModule {
         angleController.setReference(desiredTicks, ControlType.kPosition); target = desiredTicks;
 
         double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond);
-        driveMotor.set(feetPerSecond / SwerveDrive.maxSpeed); drivePower = feetPerSecond/SwerveDrive.maxSpeed;
+        driveMotor.set(thrust * feetPerSecond / SwerveDrive.maxSpeed); drivePower = feetPerSecond/SwerveDrive.maxSpeed;
     }
     public void displayNumbers(String name){
         SmartDashboard.putNumber(name + " CANCoder", canCoder.getAbsolutePosition());

@@ -25,8 +25,8 @@ import edu.wpi.first.wpilibj.util.Units;
 
 public class SwerveDrive implements Subsystem {
 
-    public static final double maxSpeed = Units.feetToMeters(0.5);//14.4 ft/s max speed
-    private static final double maxAngularSpeed = 1.5; // 1/2PI * value rotations per second
+    public static final double maxSpeed = Units.feetToMeters(14.4);//14.4 ft/s max speed
+    private static final double maxAngularSpeed = Math.toRadians(180); // 1/2PI * value rotations per second
     private final String[] names = new String[]{"Front Left", "Front Right", "Back Left", "Back Right"};
     private final double WIDTH = 11.5;//inches
     private final double LENGTH = 11.5;//inches
@@ -61,6 +61,7 @@ public class SwerveDrive implements Subsystem {
     private double [][] pathData;
     private boolean isRunningPath = false; 
     private int counter = 0;
+    private double thrustValue;
 
     private final AHRS gyro = new AHRS(I2C.Port.kOnboard);
     private SwerveModule[] modules;
@@ -78,11 +79,9 @@ public class SwerveDrive implements Subsystem {
     @Override
     public void inputUpdate(Input source) {
         // TODO Auto-generated method stub
-        xSpeed = 0.5*-xSpeedLimiter.calculate(leftStickY.getValue())*(1-thrustFactor+thrustFactor*Math.abs(rightTrigger.getValue()))*maxSpeed;
-        //xSpeed = -(leftStickY.getValue())*(1-thrustFactor+thrustFactor*Math.abs(rightTrigger.getValue()))*maxSpeed;
+        xSpeed = 0.5*-xSpeedLimiter.calculate(leftStickY.getValue())*maxSpeed;
         if (Math.abs(leftStickY.getValue()) < deadband) xSpeed = 0;
-        ySpeed = 0.5*ySpeedLimiter.calculate(leftStickX.getValue())*(1-thrustFactor+thrustFactor*Math.abs(rightTrigger.getValue()))*maxSpeed;
-        //ySpeed = (leftStickX.getValue())*(1-thrustFactor+thrustFactor*Math.abs(rightTrigger.getValue()))*maxSpeed;
+        ySpeed = 0.5*ySpeedLimiter.calculate(leftStickX.getValue())*maxSpeed;
         if (Math.abs(leftStickX.getValue()) < deadband) ySpeed = 0;
         //rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
         rotSpeed = 0.5*-rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
@@ -91,6 +90,7 @@ public class SwerveDrive implements Subsystem {
         if (Math.abs(rightStickX.getValue()) < deadband) rotSpeed = 0;
         if (source == select && select.getValue()) gyro.reset();
         //if (source == leftBumper && leftBumper.getValue()) gyro.reset();
+        thrustValue = 1 - thrustFactor + thrustFactor * rightTrigger.getValue();
     }
     public void setPathData(double [][] argument ){
         this.pathData = argument;
@@ -162,7 +162,7 @@ public class SwerveDrive implements Subsystem {
             for (int i = 0; i < states.length; i++){
                 SwerveModule module = modules[i];
                 SwerveModuleState state = states[i];
-                module.setDesiredState(state);
+                module.setDesiredState(state, thrustValue);
                 module.displayNumbers(names[i]);
             }
         case AUTO://runs for auto

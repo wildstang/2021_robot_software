@@ -175,12 +175,16 @@ public class SwerveDrive implements Subsystem {
             if(isRunningPath && counter < pathData.length){
         //have some sort of counter to loop through pathData
            
-               double currentHeading = Math.toDegrees(pathData[counter][15]);    
+               double currentHeading = Math.toDegrees(pathData[counter][15]); 
+               double adjustedHeading = currentHeading - gyro.getRotation2d().getDegrees();
+               if (adjustedHeading < 0){
+                   adjustedHeading += 360;
+               }   
           
             
         //tell each swerve module to run at each angle
                 for (int i  = 0; i <  modules.length; i++){
-                    modules[i].runAtAngle(currentHeading);
+                    modules[i].runAtAngle(adjustedHeading);
                     modules[i].displayNumbers(names[i]);
                 }
 

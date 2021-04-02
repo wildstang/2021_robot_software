@@ -17,7 +17,7 @@ public class SwerveModule {
     private static final double driveP = 0.02;
     private static final double driveI = 0.01;
     private static final double driveD = 0.1;
-    private static final double driveF = 0.007114;//0.00581
+    private static final double driveF = 0.0068845;//0.00581
     private static final double angleP = 0.15;
     private static final double angleI = 0.0;
     private static final double angleD = 0.0;

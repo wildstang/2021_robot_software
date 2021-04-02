@@ -31,11 +31,11 @@ public class Intake implements Subsystem {
     private CANSparkMax motor;
 
     // states
-    private double intakeSpeed;
-    private boolean isRunning = false;
+    private enum intakeState {ON, REVERSE, OFF};
+    private intakeState state;
 
     //Constants
-    private double full_speed;
+    private double full_speed = -1.0;
 
 
 
@@ -51,36 +51,31 @@ public class Intake implements Subsystem {
     }
 
     public void turnOnIntake(){
-        isRunning = true;
+        state = intakeState.ON;
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        motor.set(intakeSpeed);
-
-        /*
-        if(isRunning == true){
-            intakeSpeed = full_speed;
-        }else if(isRunning == false){
-            intakeSpeed = 0.0;        
+        switch(state){
+        case ON:
+            motor.set(full_speed);
+        case OFF:
+            motor.set(0.0);
+        case REVERSE:
+            motor.set(-full_speed);
         }
-        */
     }
 
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
         if (button.getValue()){
-            intakeSpeed = -1.0;
-        }
-        else if (reverseButton.getValue()) {
-            intakeSpeed = 1.0;
-        }
-        else {
-            intakeSpeed = 0.0; 
-
-        }
-       
+            state = intakeState.ON;
+        } else if (reverseButton.getValue()){
+            state = intakeState.REVERSE;
+        } else {
+            state = intakeState.OFF;
+        }       
     }
 
     // used for testing
@@ -88,7 +83,7 @@ public class Intake implements Subsystem {
 
     // resets all variables to the default state
     public void resetState() {
-        intakeSpeed = 0.0;
+        state = intakeState.OFF;
     }
 
     // returns the unique name of the example

@@ -37,7 +37,7 @@ public class Scoring implements Subsystem {
         joystick.addInputListener(this);
 
         // create motor controller object with CAN Constant
-        motor = new TalonSRX(CANConstants.EXAMPLE_CONTROLLER);
+        motor = new TalonSRX(CANConstants.Intake);
 
         resetState();
     }

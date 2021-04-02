@@ -9,9 +9,13 @@ package org.wildstang.year2021.robot;
  */
 public final class CANConstants {
 
-    public static final int LeftDriveTalon = 0; 
-    public static final int RightDriveTalon = 1; 
-    public static final int CenterDriveTalon1 = 2;
-    public static final int CenterDriveTalon2 = 3; 
+    public static final int LeftDriveTalon = 1; 
+    public static final int RightDriveTalon = 2; 
+    public static final int CenterDriveTalon1 = 3;
+    public static final int CenterDriveTalon2 = 4; 
+    public static final int Intake = 5;
+    public static final int IntakeDeplay = 6;  
+    public static final int HighFuel = 7; 
+    public static final int Descoring = 8; 
     
 }

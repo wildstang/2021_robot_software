@@ -37,8 +37,7 @@ public class HighFuel implements Subsystem {
         joystick.addInputListener(this);
 
         // create motor controller object with CAN Constant
-        motor = new TalonSRX(CANConstants.EXAMPLE_CONTROLLER);
-
+        motor = new TalonSRX(CANConstants.HighFuel);        
         resetState();
     }
 

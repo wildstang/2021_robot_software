@@ -1,4 +1,4 @@
-    ipackage org.wildstang.year2021.subsystems;
+package org.wildstang.year2021.subsystems;
 
 import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
@@ -24,7 +24,7 @@ import org.wildstang.year2021.robot.CANConstants;
 public class Drive implements Subsystem {
 
     // constants 
-    private double SPEED_MOD;
+     private double SPEED_MOD;
 
     // inputs
     private AnalogInput forwardTranslationStick;

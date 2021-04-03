@@ -35,7 +35,7 @@ public class SwerveDrive implements Subsystem {
     private final double offset3 = -199.95;
     private final double offset4 = -52.03;
     private final double deadband = 0.1;
-    private final double thrustFactor = 0.5;
+    private final double thrustFactor = 0.4;
 
     private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(3);
     private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(3);
@@ -85,6 +85,7 @@ public class SwerveDrive implements Subsystem {
         if (Math.abs(leftStickX.getValue()) < deadband) ySpeed = 0;
         //rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
         rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
+        if (Math.abs(rightStickX.getValue()) < deadband) rotSpeed = 0;
         SmartDashboard.putNumber("Rotation joystick", rightStickX.getValue());
         SmartDashboard.putNumber("Rotation", rotSpeed);
         if (Math.abs(rightStickX.getValue()) < deadband) rotSpeed = 0;
@@ -110,6 +111,7 @@ public class SwerveDrive implements Subsystem {
         initInputs();
         initOutputs();
         resetState();
+        gyro.reset();
 
     }
 
@@ -227,7 +229,7 @@ public class SwerveDrive implements Subsystem {
         ySpeed = 0;
         rotSpeed = 0;
         isFieldOriented = true;//should be true
-        gyro.reset();
+        //gyro.reset();
         setToTeleop();
         maxAccel = 0;
         maxVelocity = 0;

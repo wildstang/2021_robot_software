@@ -3,6 +3,8 @@ package org.wildstang.year2021.subsystems;
 import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -54,16 +56,20 @@ public class Intake implements Subsystem {
         state = intakeState.ON;
     }
 
-    // update the subsystem everytime the framework updates (every ~0.02 seconds)
+    //update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
         switch(state){
         case ON:
             motor.set(full_speed);
+            break;
         case OFF:
             motor.set(0.0);
+            break;
         case REVERSE:
             motor.set(-full_speed);
+            break;
         }
+        SmartDashboard.putNumber("Intake Speed", motor.get());
     }
 
     // respond to input updates

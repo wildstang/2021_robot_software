@@ -90,7 +90,7 @@ public class SwerveDrive implements Subsystem {
         if (Math.abs(rightStickX.getValue()) < deadband) rotSpeed = 0;
         if (source == select && select.getValue()) gyro.reset();
         //if (source == leftBumper && leftBumper.getValue()) gyro.reset();
-        thrustValue = 1 - thrustFactor + thrustFactor * rightTrigger.getValue();
+        thrustValue = 1 - thrustFactor + thrustFactor * Math.abs(rightTrigger.getValue());
     }
     public void setPathData(double [][] argument ){
         this.pathData = argument;
@@ -213,6 +213,7 @@ public class SwerveDrive implements Subsystem {
         SmartDashboard.putBoolean("Is field oriented", isFieldOriented);
         SmartDashboard.putNumber("Max recorded velocity", maxVelocity);
         SmartDashboard.putNumber("Max recorded acceleration", maxAccel);
+        SmartDashboard.putNumber("Thrust value", thrustValue);
         
     }
     public int counterGetVal(){

@@ -76,7 +76,7 @@ public class SwerveModule {
         angleController.setReference(desiredTicks, ControlType.kPosition); target = desiredTicks;
 
         double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond);
-        driveMotor.set(thrust * feetPerSecond / SwerveDrive.maxSpeed); drivePower = feetPerSecond/SwerveDrive.maxSpeed;
+        driveMotor.set(thrust * feetPerSecond / SwerveDrive.maxSpeed/3.2); drivePower = thrust * feetPerSecond/SwerveDrive.maxSpeed;
     }
     public void displayNumbers(String name){
         SmartDashboard.putNumber(name + " CANCoder", canCoder.getAbsolutePosition());

@@ -33,6 +33,8 @@ import org.wildstang.year2021.auto.programs.BarrelPath;
 import org.wildstang.year2021.auto.programs.SlalomPath;
 import org.wildstang.year2021.auto.programs.SearchAPath;
 import org.wildstang.year2021.auto.programs.SearchBPath;
+import org.wildstang.year2021.auto.programs.SearchABPath;
+import org.wildstang.year2021.auto.programs.SearchBBPath;
 import org.wildstang.year2021.auto.programs.BounceAPath;
 import org.wildstang.year2021.auto.programs.BounceBPath;
 import org.wildstang.year2021.auto.programs.BounceCPath;
@@ -72,10 +74,12 @@ public class Robot extends TimedRobot {
         AutoManager.getInstance().addProgram(new BouncePath());
         AutoManager.getInstance().addProgram(new SearchAPath());
         AutoManager.getInstance().addProgram(new SearchBPath());
-        AutoManager.getInstance().addProgram(new BounceAPath());
-        AutoManager.getInstance().addProgram(new BounceBPath());
-        AutoManager.getInstance().addProgram(new BounceCPath());
-        AutoManager.getInstance().addProgram(new BounceDPath());
+        AutoManager.getInstance().addProgram(new SearchABPath());
+        AutoManager.getInstance().addProgram(new SearchBBPath());
+        // AutoManager.getInstance().addProgram(new BounceAPath());
+        // AutoManager.getInstance().addProgram(new BounceBPath());
+        // AutoManager.getInstance().addProgram(new BounceCPath());
+        // AutoManager.getInstance().addProgram(new BounceDPath());
         
     }
 

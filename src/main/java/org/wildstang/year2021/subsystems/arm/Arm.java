@@ -34,10 +34,11 @@ public class Arm implements Subsystem {
     private double speedMult = 0.8;
 
     private boolean armMoving = false;
+    private boolean armMovingUp;
     private double originalPosition = motor.getActiveTrajectoryPosition();
     private double positionChange = 0;
     private double armRotation = 0;
-    private boolean armMovingUp;
+    
 
     // initializes the subsystem
     public void init() {
@@ -84,6 +85,7 @@ public class Arm implements Subsystem {
     // resets all variables to the default state
     public void resetState() {
         speed = 0.0;
+        armMoving = false;
     }
 
     // returns the unique name of the example

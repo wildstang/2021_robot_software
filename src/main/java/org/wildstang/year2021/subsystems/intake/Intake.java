@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
@@ -21,37 +22,54 @@ import org.wildstang.framework.subsystems.Subsystem;
  */
 public class Intake implements Subsystem {
 
+
+    /**
+     *
+     */
+
     // inputs
-    private AnalogInput joystick;
+    private AnalogInput rightTrigger;
 
     // outputs
-    private TalonSRX motor;
+    private VictorSPX rollerMotor;
+   
 
     // states
     private double speed;
+    
+
+    //helpful variables
+    private double maxSpeed = 0.8; //this is just where we can set a consecutive speed, for convinience, instead of changing the speed in each area implemented every time we change it
 
     // initializes the subsystem
     public void init() {
         // register button and attach input listener with WS Input
-        joystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());
-        joystick.addInputListener(this);
+        rightTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_RIGHT.getName());
+        rightTrigger.addInputListener(this);
 
-        // create motor controller object with CAN Constant
-        motor = new TalonSRX(CANConstants.EXAMPLE_CONTROLLER);
+        // create rollerMotor controller object with CAN Constant
+        rollerMotor = new VictorSPX(CANConstants.INTAKE_ROLLER_VICTOR);
 
         resetState();
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        motor.set(ControlMode.PercentOutput, speed);
+        rollerMotor.set(ControlMode.PercentOutput, speed);
     }
 
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if (signal == joystick) {
-            speed = joystick.getValue();
+        if (signal == rightTrigger) {
+            if(rightTrigger.getValue() > 0.5){
+                speed = maxSpeed;
+                //when right trigger is pressed past halfway, the intake spins at speed <speedValue>
+            } else {
+                resetState();
+            }
+        } else {
+            resetState();
         }
     }
 
@@ -67,4 +85,7 @@ public class Intake implements Subsystem {
     public String getName() {
         return "Intake";
     }
+
+    
+    
 }

@@ -4,7 +4,6 @@ import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import org.wildstang.framework.core.Core;
@@ -16,7 +15,7 @@ import org.wildstang.framework.subsystems.Subsystem;
  * Class:       TankDrive.java
  * Inputs:      2 joysticks
  * Outputs:     4 VictorSPX
- * Description: A tank drive system that controls two motors.
+ * Description: A tank drive system that controls four motors.
  */
 public class TankDrive implements Subsystem {
 
@@ -25,12 +24,15 @@ public class TankDrive implements Subsystem {
     private AnalogInput rightJoystick;
 
     // outputs
-    private VictorSPX leftMotor;
-    private VictorSPX rightMotor;
+    private VictorSPX leftFrontMotor;
+    private VictorSPX leftBackMotor;
+    private VictorSPX rightFrontMotor;
+    private VictorSPX rightBackMotor;
 
     // states
-    private double speed;
-    private double multiplier = 35; // for 35 MPH
+    private double leftSpeed;
+    private double rightSpeed;
+    private double multiplier = 0.8; // change to adjust max speed
 
     // initializes the subsystem
     public void init() {
@@ -47,24 +49,32 @@ public class TankDrive implements Subsystem {
     }
 
     public void initOutputs() {
-        leftMotor = new VictorSPX(CANConstants.LEFT_DRIVE_VICTOR_FRONT);
-        rightMotor = new VictorSPX(CANConstants.LEFT_DRIVE_VICTOR_BACK);
+        leftFrontMotor = new VictorSPX(CANConstants.LEFT_DRIVE_VICTOR_FRONT);
+        leftBackMotor = new VictorSPX(CANConstants.LEFT_DRIVE_VICTOR_BACK);
+        rightFrontMotor = new VictorSPX(CANConstants.RIGHT_DRIVE_VICTOR_FRONT);
+        rightBackMotor = new VictorSPX(CANConstants.RIGHT_DRIVE_VICTOR_BACK);
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        leftMotor.set(ControlMode.PercentOutput, speed);
-        rightMotor.set(ControlMode.PercentOutput, speed);
+        leftFrontMotor.set(ControlMode.PercentOutput, leftSpeed);
+        leftBackMotor.set(ControlMode.PercentOutput, leftSpeed);
+        rightFrontMotor.set(ControlMode.PercentOutput, rightSpeed);
+        rightBackMotor.set(ControlMode.PercentOutput, rightSpeed);
     }
 
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
         if (signal == leftJoystick) {
-            speed = leftJoystick.getValue() * multiplier;
+            if (leftJoystick.getValue() > 0.5) {
+                leftSpeed = leftJoystick.getValue() * multiplier;
+            }
         }
         if (signal == rightJoystick) {
-            speed = rightJoystick.getValue() * multiplier;
+            if (rightJoystick.getValue() > 0.5) {
+                rightSpeed = rightJoystick.getValue() * multiplier;
+            }
         }
     }
 
@@ -72,11 +82,12 @@ public class TankDrive implements Subsystem {
 
     // resets all variables to the default state
     public void resetState() {
-        speed = 0.0;
+        leftSpeed = 0.0;
+        rightSpeed = 0.0;
     }
 
     // returns the unique name of the example
     public String getName() {
-        return "Tank drive";
+        return "Tank Drive";
     }
 }

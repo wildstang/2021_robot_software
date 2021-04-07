@@ -15,9 +15,9 @@ import org.wildstang.framework.subsystems.Subsystem;
 
 /**
  * Class:       Intake.java
- * Inputs:      Right trigger (roller),  
+ * Inputs:      AnalogInput (Right trigger) 
  * Outputs:     1 VictorSPX
- * Description: 
+ * Description: After pressing the right trigger by a certain amount (0.5), the intake roller will start moving at full speed.
  */
 public class Intake implements Subsystem {
 

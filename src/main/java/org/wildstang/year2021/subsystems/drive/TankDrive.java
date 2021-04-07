@@ -4,7 +4,6 @@ import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import org.wildstang.framework.core.Core;
@@ -33,7 +32,7 @@ public class TankDrive implements Subsystem {
     // states
     private double leftSpeed;
     private double rightSpeed;
-    private double multiplier = 20; // change to adjust max speed
+    private double multiplier = 0.8; // change to adjust max speed
 
     // initializes the subsystem
     public void init() {
@@ -68,10 +67,14 @@ public class TankDrive implements Subsystem {
     public void inputUpdate(Input signal) {
         // check to see which input was updated
         if (signal == leftJoystick) {
-            leftSpeed = leftJoystick.getValue() * multiplier;
+            if (leftJoystick.getValue() > 0.5) {
+                leftSpeed = leftJoystick.getValue() * multiplier;
+            }
         }
         if (signal == rightJoystick) {
-            rightSpeed = rightJoystick.getValue() * multiplier;
+            if (rightJoystick.getValue() > 0.5) {
+                rightSpeed = rightJoystick.getValue() * multiplier;
+            }
         }
     }
 

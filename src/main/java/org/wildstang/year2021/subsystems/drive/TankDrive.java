@@ -78,6 +78,14 @@ public class TankDrive implements Subsystem {
         }
     }
 
+    public void setLeftMotorSpeed(double s) {
+        leftSpeed = s;
+    }
+
+    public void setRightMotorSpeed(double s) {
+        rightSpeed = s;
+    }
+
     public void selfTest() {}
 
     // resets all variables to the default state

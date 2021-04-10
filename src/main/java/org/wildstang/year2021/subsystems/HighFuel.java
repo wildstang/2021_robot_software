@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
@@ -25,7 +26,7 @@ public class HighFuel implements Subsystem {
     private AnalogInput joystick;
 
     // outputs
-    private TalonSRX motor;
+    private VictorSPX motor;
 
     // states
     private double speed;
@@ -37,13 +38,13 @@ public class HighFuel implements Subsystem {
         joystick.addInputListener(this);
 
         // create motor controller object with CAN Constant
-        motor = new TalonSRX(CANConstants.HighFuel);        
+        //motor = new TalonSRX(CANConstants.HighFuel);        
         resetState();
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        motor.set(ControlMode.PercentOutput, speed);
+        //motor.set(ControlMode.PercentOutput, speed);
     }
 
     // respond to input updates

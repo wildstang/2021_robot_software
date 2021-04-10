@@ -3,10 +3,13 @@ package org.wildstang.year2021.subsystems;
 import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
 
+import edu.wpi.first.wpilibj.Victor;
+
 import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
@@ -25,7 +28,7 @@ public class TestSubsystem implements Subsystem {
     private AnalogInput joystick;
 
     // outputs
-    private TalonSRX motor;
+    private VictorSPX motor;
 
     // states
     private double speed;
@@ -37,14 +40,14 @@ public class TestSubsystem implements Subsystem {
         joystick.addInputListener(this);
 
         // create motor controller object with CAN Constant
-        motor = new TalonSRX(CANConstants.LeftDriveTalon);
+        //motor = new TalonSRX(CANConstants.LeftDriveTalon);
 
         resetState();
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        motor.set(ControlMode.PercentOutput, speed);
+        //motor.set(ControlMode.PercentOutput, speed);
     }
 
     // respond to input updates

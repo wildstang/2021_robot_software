@@ -1,0 +1,30 @@
+package org.wildstang.year2021.auto.steps;
+
+import org.wildstang.framework.auto.steps.AutoStep;
+import org.wildstang.year2021.subsystems.arm.Arm;
+
+public class ArmUpwardsStep extends AutoStep {
+    Arm arm = new Arm();
+
+    public driveUpwardsStep() {
+        this(1.0);
+    }
+
+    public driveUpwardsStep(double: distance) {
+    moveArm(distance, true);
+    }
+
+    public void initialize() {
+    moveArm(double, boolean);
+    }
+
+    public void update() {
+        if (Arm.arm.armMoving == false) {
+        setFinished(true);
+         }
+    }
+
+    public String toString() {
+        return "ArmUpwardsStep";
+    }
+}

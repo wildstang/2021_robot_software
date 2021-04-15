@@ -1,10 +1,11 @@
 package org.wildstang.year2021.auto.steps;
 
+import org.wildstang.framework.auto.steps.AutoStep;
+import org.wildstang.framework.timer.WsTimer;
 import org.wildstang.framework.core.Core;
 import org.wildstang.year2021.robot.WSSubsystems;
-import org.wildstang.framework.auto.steps.AutoStep;
-import org.wildstang.year2021.subsystems.Hopper;
 
+import org.wildstang.year2021.subsystems.Drivebase;
 
 /**
  * This is an example Autonomous Step.
@@ -16,21 +17,33 @@ import org.wildstang.year2021.subsystems.Hopper;
  * When the step is initialized a timer is started.
  * When the step is updated, the time is checked. If the time excedes the delay, the step if set to finished.
  */
-public class hopperOnStep extends AutoStep {
-    private Hopper hopper;
-    public void initialize(){
-        hopper = (Hopper) Core.getSubsystemManager().getSubsystem(WSSubsystems.HOPPER.getName());
+public class StopStep extends AutoStep {
+
+    private Drivebase drive;
+
+
+    public void initialize() {
+        // start the timer
+        
+        drive = (Drivebase) Core.getSubsystemManager().getSubsystem(WSSubsystems.DRIVEBASE.getName());
     }
 
-    public void update(){
-        hopper.turnOnHopper();
-        this.setFinished(true);
+    public void update() {
+        // check if the timer has exceded the desired delay
+        drive.setThrottle(0);
+        setFinished(true);
+
+        
+        
+
+       
     }
-    
 
     public String toString() {
         // give it a name
-        return "Hopper on";
+        return "Stop Step";
     }
 
 }
+
+

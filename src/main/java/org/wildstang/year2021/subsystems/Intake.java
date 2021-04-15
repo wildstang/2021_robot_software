@@ -39,8 +39,8 @@ public class Intake implements Subsystem {
     // initializes the subsystem
     public void init() {
         // register button and attach input listener with WS Input
-        forward = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_FACE_DOWN.getName());
-        reverse = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_FACE_RIGHT.getName());
+        forward = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
+        reverse = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_RIGHT.getName());
         forward.addInputListener(this);
         reverse.addInputListener(this);
 
@@ -67,6 +67,10 @@ public class Intake implements Subsystem {
         }else{
             speed = 0;
         }
+    }
+    
+    public void turnOnIntake(){
+        speed = 1;
     }
 
     // used for testing

@@ -64,6 +64,10 @@ public class Hopper implements Subsystem {
       
     }
 
+    public void turnOnHopper(){
+        speed = 1;
+    }
+
     // used for testing
     public void selfTest() {}
 

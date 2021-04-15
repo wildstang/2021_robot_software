@@ -50,6 +50,8 @@ public class Drivebase implements Subsystem {
     private double commandRotation;
     // states
     private double speed;
+    private final double offset = -0.028;
+    private final double horizontalOffset = -0.15;
 
     // initializes the subsystem
     public void init() {
@@ -96,7 +98,7 @@ public class Drivebase implements Subsystem {
         if(thetaX != thetaX){
             thetaX = 0;
         }
-        System.out.println(thetaX);
+        //System.out.println(thetaX);
 
         double leftSpeed = commandThrottle - commandThrottle * commandHeading;
         double rightSpeed = commandThrottle + commandThrottle * commandHeading;
@@ -110,10 +112,10 @@ public class Drivebase implements Subsystem {
         double rbSpeed = rightSpeed;
 
         //System.out.println("Commandrotation:"+commandRotation);
-        lfSpeed = hypot * (-Math.sin(thetaX) - Math.cos(thetaX)) - commandRotation;
-        rfSpeed = hypot * (Math.sin(thetaX)-Math.cos(thetaX)) - commandRotation;
-        lbSpeed = hypot * (-Math.sin(thetaX)+Math.cos(thetaX)) - commandRotation;
-        rbSpeed = hypot * (Math.sin(thetaX)+Math.cos(thetaX)) - commandRotation;
+        lfSpeed = hypot * ((-Math.sin(thetaX)* (1- offset)) - (Math.cos(thetaX)* (1+ horizontalOffset))) - commandRotation;
+        rfSpeed = hypot * ((Math.sin(thetaX) * (1+offset))-(Math.cos(thetaX)* (1- horizontalOffset) )) - commandRotation;
+        lbSpeed = hypot * ((-Math.sin(thetaX) * (1-offset))+(Math.cos(thetaX)* (1+ horizontalOffset) )) - commandRotation;
+        rbSpeed = hypot * ((Math.sin(thetaX) * (1 + offset))+(Math.cos(thetaX)* (1- horizontalOffset) )) - commandRotation;
 
         SmartDashboard.putNumber("commandThrottle", commandThrottle);
         SmartDashboard.putNumber("commandHeading", commandHeading);
@@ -121,6 +123,9 @@ public class Drivebase implements Subsystem {
         SmartDashboard.putNumber("rfSpeed", rfSpeed);
         SmartDashboard.putNumber("lbSpeed", lbSpeed);
         SmartDashboard.putNumber("rbSpeed", rbSpeed);
+        SmartDashboard.putNumber("offset", offset);
+        SmartDashboard.putNumber("hypotenuse", hypot);
+         SmartDashboard.putNumber("theta", thetaX);
         //System.out.println("lf: " +lfSpeed );
         //System.out.println("rf: " +rfSpeed );
         //System.out.println("lb: " +lbSpeed );

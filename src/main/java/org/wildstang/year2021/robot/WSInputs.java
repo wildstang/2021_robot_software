@@ -90,9 +90,9 @@ public enum WSInputs implements Inputs {
     // ---------------------------------
     // Driver Buttons
     // --------------------------------- 
-    DRIVER_FACE_DOWN             ("Open",
+    DRIVER_FACE_DOWN             ("Intake",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 0),                                 false), 
-    DRIVER_FACE_RIGHT            ("Open",
+    DRIVER_FACE_RIGHT            ("Reverse Intake",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 1),                                 false), 
     DRIVER_FACE_LEFT             ("Open",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 2),                                 false),

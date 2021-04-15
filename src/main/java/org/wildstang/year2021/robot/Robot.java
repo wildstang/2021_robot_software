@@ -22,7 +22,7 @@ import java.lang.management.ManagementFactory;
 import java.util.List;
 import java.lang.management.GarbageCollectorMXBean;
 
-import org.wildstang.year2021.auto.programs.ExampleAutoProgram;
+import org.wildstang.year2021.auto.programs.ForwardProgram;
 
 /**
  * The VM is configured to automatically run this class, and to call the blah
@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
         core.createOutputs(WSOutputs.values());
         core.createSubsystems(WSSubsystems.values());
 
-        AutoManager.getInstance().addProgram(new ExampleAutoProgram());
+        AutoManager.getInstance().addProgram(new ForwardProgram());
         
     }
 

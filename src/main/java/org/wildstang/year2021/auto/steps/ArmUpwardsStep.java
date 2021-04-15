@@ -11,7 +11,7 @@ public class ArmUpwardsStep extends AutoStep {
         this(1.0);
     }
 
-    public ArmUpwardsStep(double: distance) {
+    public ArmUpwardsStep(double s) {
         if (speed >= -1 && speed <= 1) {
             speed = Math.abs(s);
         } else {

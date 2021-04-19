@@ -3,17 +3,17 @@ package org.wildstang.year2021.auto.steps;
 import org.wildstang.framework.auto.steps.AutoStep;
 import org.wildstang.year2021.subsystems.drive.TankDrive;
 
-public class DriveLeftStep extends AutoStep {
+public class DriveRightForwardsStep extends AutoStep {
     TankDrive drive = new TankDrive();
     double speed = 0.0;
 
-    public DriveLeftStep() {
-        this(-1.0);
+    public DriveRightForwardsStep() {
+        this(1.0);
     }
     
-    public DriveLeftStep(double s) {
+    public DriveRightForwardsStep(double s) {
         if (s <= 1.0 || s >= -1.0) {
-            speed = s;
+            speed = Math.abs(s);
         }  
         else {
             speed = 0.0;
@@ -21,7 +21,7 @@ public class DriveLeftStep extends AutoStep {
     }
 
     public void initialize() {
-        drive.setLeftMotorSpeed(speed);
+        drive.setRightMotorSpeed(speed);
     }
 
     public void update() {
@@ -29,6 +29,6 @@ public class DriveLeftStep extends AutoStep {
     }
     
     public String toString() {
-        return "DriveLeftStep";
+        return "DriveRightForwardsStep";
     }
 }

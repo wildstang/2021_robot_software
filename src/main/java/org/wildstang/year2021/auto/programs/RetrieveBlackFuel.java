@@ -2,6 +2,9 @@ package org.wildstang.year2021.auto.programs;
 
 import org.wildstang.framework.auto.AutoProgram;
 import org.wildstang.year2021.auto.steps.DriveBackwardsStep;
+import org.wildstang.year2021.auto.steps.DriveLeftBackwardsStep;
+import org.wildstang.year2021.auto.steps.ArmUpwardsStep;
+import org.wildstang.year2021.auto.steps.ArmDownwardsStep;
 import org.wildstang.year2021.auto.steps.DelayStep;
 
 /**
@@ -14,10 +17,28 @@ public class RetrieveBlackFuel extends AutoProgram {
 
     @Override
     protected void defineSteps() {
-        // define a series of steps
-        addStep(new DriveBackwardsStep());
+        // move backwards
+        addStep(new DriveBackwardsStep(1.0));
         addStep(new DelayStep(2));
         addStep(new DriveBackwardsStep(0.0));
+        // align with black fuel cell tower
+        addStep(new DriveLeftBackwardsStep(1.0));
+        addStep(new DelayStep(0.25));
+        addStep(new DriveLeftBackwardsStep(0.0));
+        // approach black fuel cell tower
+        addStep(new DriveBackwardsStep(0.5));
+        addStep(new DelayStep(1));
+        addStep(new DriveBackwardsStep(0.0));
+        // lift arm
+        addStep(new ArmUpwardsStep());
+        addStep(new DelayStep(1));
+        addStep(new ArmUpwardsStep(0.0));
+        // wait for ball to roll down into hopper
+        addStep(new DelayStep(1));
+        // lower arm
+        addStep(new ArmDownwardsStep());
+        addStep(new DelayStep(1));
+        addStep(new ArmDownwardsStep(0.0));
     }
 
     @Override

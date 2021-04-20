@@ -20,17 +20,33 @@ public class PurpleProgram extends AutoProgram {
         //Starts the roller and drives towards the center
         addStep(new DriveForwardsStep());
         addStep(new RunIntakeStep());
-        addStep(new DelayStep(3));
-        //Stops moving forward and raises arm
-        addStep(new DriveForwardsStep(0));
-        addStep(new ArmUpwardsStep());
-        addStep(new DelayStep(1));
-        //Moves arm downward
-        addStep(new ArmDownwardsStep());
-        addStep(new DelayStep(1));
-        //Stops arm moving downward and stops the intake
-        addStep(new ArmDownwardsStep(0));
-        addStep(new RunIntakeStep(0));
+        addStep(new DelayStep(2));
+       //Stops driving forward and pauses for a second to gather balls, then turns off the intake
+       addStep(new DriveForwardsStep(0));
+       addStep(new DelayStep(2));
+       addStep(new RunIntakeStep(0));
+       //Drives backwards to prepare to spin
+       addStep(new DriveBackwardsStep(1);
+       addStep(new DelayStep(1));
+       addStep(new DriveBackwardsStep(0));
+       //Spins, then stops
+       addStep(new DriveLeftBackwardsStep());
+       addStep(new DriveRightForwardsStep());
+       addStep(new DelayStep(2));
+       addStep(new DriveLeftBackwardsStep(0));
+       addStep(new DriveRightForwardsStep(0));
+       // Drives back to tower
+       addStep(new DriveBackwardsStep());
+       addStep(new DelayStep(1));
+       addStep(new DriveBackwardsStep(0));
+       //Raises arm
+       addStep(new ArmUpwardsStep());
+       addStep(new DelayStep(2));
+       addStep(new ArmUpwardsStep(0));
+       //Lowers arm
+       addStep(new ArmDownwardsStep());
+       addStep(new DelayStep(2));
+       addStep(new ArmDownwardsStep(0));
     }
 
     @Override

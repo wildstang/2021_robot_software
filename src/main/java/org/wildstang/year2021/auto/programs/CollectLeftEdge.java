@@ -15,14 +15,18 @@ public class CollectLeftEdge extends AutoProgram{
         addStep(new DriveRightForwardsStep(1.0));
         addStep(new DelayStep(0.75));
         addStep(new DriveRightForwardsStep(0.0));
+        addStep(new DelayStep(0.5));
         addStep(new DriveForwardsStep(0.5));
         addStep(new DelayStep(0.5));
         addStep(new DriveForwardsStep(0.0));
+        addStep(new DelayStep(0.5));
         addStep(new DriveLeftForwardsStep(1.0));
         addStep(new DelayStep(0.50));
         addStep(new DriveLeftForwardsStep(0.0));
+        addStep(new DelayStep(0.5));
         //prepare to collect fuel
         addStep(new RunIntakeStep(1.0));
+        addStep(new DelayStep(0.5));
         //collect fuel
         addStep(new DriveForwardsStep(1.0));
         addStep(new DelayStep(3));

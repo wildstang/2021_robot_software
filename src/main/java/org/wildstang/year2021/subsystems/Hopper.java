@@ -34,13 +34,15 @@ public class Hopper implements Subsystem {
     // initializes the subsystem
     public void init() {
         // register button and attach input listener with WS Input
-        forward = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_FACE_LEFT.getName());
-        reverse = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_FACE_UP.getName());
+        forward = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_LEFT.getName());
+        reverse = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_UP.getName());
         forward.addInputListener(this);
         reverse.addInputListener(this);
 
         // create motor controller object with CAN Constant
-      
+        
+        speed = 0;
+
         motor = new VictorSPX(CANConstants.HOPPER_TALON);
         resetState();
     }

@@ -1,6 +1,7 @@
 package org.wildstang.year2021.subsystems;
- 
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
  
 import org.wildstang.framework.core.Core;
@@ -24,8 +25,8 @@ public class Drive implements Subsystem {
     private AnalogInput rightJoystick;
  
     // outputs
-    private VictorSPX leftMotor; 
-    private VictorSPX rightMotor;
+    private TalonSRX leftMotor; 
+    private TalonSRX rightMotor;
  
     // states
     private double leftSpeed;
@@ -34,8 +35,8 @@ public class Drive implements Subsystem {
     // initializes the subsystem
     public void init() {
         // create motor controller object with CAN Constant
-        leftMotor = new VictorSPX(CANConstants.DRIVE_LEFT);
-        rightMotor = new VictorSPX(CANConstants.DRIVE_RIGHT);
+        leftMotor = new TalonSRX(CANConstants.DRIVE_LEFT);
+        rightMotor = new TalonSRX(CANConstants.DRIVE_RIGHT);
  
         // register button and attach input listener with WS Input
         leftJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());

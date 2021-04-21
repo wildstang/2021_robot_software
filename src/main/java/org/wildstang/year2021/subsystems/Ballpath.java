@@ -41,7 +41,6 @@ public class Ballpath implements Subsystem {
     private final double hatchWaitTime = 10;
 
     //Booleans
-    private boolean outputPosition;
     private boolean timerStatus;
     private boolean leftShoulderStatus;
 
@@ -73,6 +72,7 @@ public class Ballpath implements Subsystem {
         intakeMotor = new VictorSPX(CANConstants.INTAKE_MOTOR);
         outputMotor = new VictorSPX(CANConstants.OUTPUT_MOTOR);
 
+        timer.start();
         resetState();
     }
 
@@ -92,26 +92,17 @@ public class Ballpath implements Subsystem {
                 outputMotorSpeed = HALF_SPEED;
             } else if (timer.hasPeriodPassed(hatchMoveTime)) {
                 currentCommand = commands.PAUSED;
-                timer.reset();
-                timer.start();
             }
         }
-        // I don't think i need this
-        /*if (currentCommand == commands.LOWERED) {
-            outputMotorSpeed = 0;
-            currentCommand = commands.LOWERED;
-        } */
         if (currentCommand == commands.PAUSED) {
             outputMotorSpeed = 0;
-            if (timer.hasPeriodPassed(hatchWaitTime)) {
+            if (timer.hasPeriodPassed(hatchMoveTime + hatchWaitTime)) {
                 currentCommand = commands.RAISING;
-                timer.reset();
-                timer.start();
             }
         }
         if (currentCommand == commands.RAISING) {
             outputMotorSpeed = -(HALF_SPEED);
-            if (timer.hasPeriodPassed(hatchMoveTime)) {
+            if (timer.hasPeriodPassed(2*hatchMoveTime + hatchWaitTime)) {
                 currentCommand = commands.RESET;
             }
         }
@@ -120,9 +111,7 @@ public class Ballpath implements Subsystem {
             timerStatus = false; 
             currentCommand = commands.IDLE;
         }
-
-
-                
+          
     }
 
     // respond to input updates
@@ -134,21 +123,24 @@ public class Ballpath implements Subsystem {
             intakeMotorSpeed = 0;
         }
 
-        
         if (currentCommand == commands.IDLE && leftShoulder.getValue() == true) {
             currentCommand = commands.LOWERING;
-        }
-        
-        
+        }    
     }
 
     // used for testing
-    public void selfTest() {}
+    public void selfTest() {
+
+    }
 
     // resets all variables to the default state
     public void resetState() {
         intakeMotorSpeed = 0;
+        outputMotorSpeed = 0;
         leftShoulderStatus = false;
+        timerStatus = false;
+        currentCommand = commands.IDLE;
+
     }
 
     // returns the unique name of the example

@@ -12,6 +12,7 @@ public final class CANConstants {
     public static final int DRIVE_LEFT = 2;
     public static final int DRIVE_RIGHT = 3;
     public static final int INTAKE_MOTOR = 4;
+    public static final int OUTPUT_MOTOR = 4;
 
     public static final int EXAMPLE_CONTROLLER = 1;
     public static final int[] EXAMPLE_PAIRED_CONTROLLERS = {2,3};

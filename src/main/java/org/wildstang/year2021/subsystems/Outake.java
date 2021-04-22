@@ -8,11 +8,6 @@ import java.util.Map;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
 import org.wildstang.framework.io.inputs.DigitalInput;
@@ -24,66 +19,57 @@ import org.wildstang.framework.subsystems.Subsystem;
  * Outputs:     1 talon
  * Description: This is a testing subsystem that controls a single motor with a joystick.
  */
-public class Intake implements Subsystem {
+public class Outake implements Subsystem {
 
     // inputs
-    private DigitalInput forward;
-    private DigitalInput reverse;
+    private DigitalInput up;
+    private DigitalInput down;
+    private DigitalInput limit;
 
     // outputs
     private VictorSPX motor;
-    private VictorSPX hopperMotor;
 
     // states
     private double speed;
-    private double hopperSpeed;
 
     // initializes the subsystem
     public void init() {
         // register button and attach input listener with WS Input
-        forward = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
-        reverse = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_RIGHT.getName());
-        forward.addInputListener(this);
-        reverse.addInputListener(this);
+        down = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_LEFT.getName());
+        up = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_UP.getName());
+        limit = (DigitalInput) Core.getInputManager().getInput(WSInputs.OUTAKE_LIMIT.getName());
+
+        
+        limit.addInputListener(this);
+        up.addInputListener(this);
+        down.addInputListener(this);
 
         // create motor controller object with CAN Constant
       
-        motor = new VictorSPX(CANConstants.INTAKE_TALON);
-        hopperMotor = new VictorSPX(CANConstants.HOPPER_TALON);
+        motor = new VictorSPX(CANConstants.OUTAKE_TALON);
         resetState();
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        SmartDashboard.putNumber("Intake Speed", speed);
-        SmartDashboard.putNumber("Hopper Speed", hopperSpeed);
         motor.set(ControlMode.PercentOutput, speed);
-        hopperMotor.set(ControlMode.PercentOutput, hopperSpeed);
-        //System.out.println(speed);
+       //System.out.println(speed);
     }
 
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if (signal == forward && forward.getValue()) {
+        if (signal == up || signal == limit && up.getValue() && !limit.getValue()) {
             speed = 1;
-            hopperSpeed = 1;
-        }else if(signal == reverse && reverse.getValue()){
+        }else if(signal == down && down.getValue()){
             speed = -1;
-            hopperSpeed = 1;
         }else{
             speed = 0;
-            hopperSpeed = 0;
         }
+      
     }
+
     
-    public void turnOnIntake(){
-        speed = 1;
-    }
-    
-    public void turnOnHopper(){
-        hopperSpeed = 1;
-    }
 
     // used for testing
     public void selfTest() {}
@@ -95,6 +81,6 @@ public class Intake implements Subsystem {
 
     // returns the unique name of the example
     public String getName() {
-        return "Intake Subsystem";
+        return "Outake Subsystem";
     }
 }

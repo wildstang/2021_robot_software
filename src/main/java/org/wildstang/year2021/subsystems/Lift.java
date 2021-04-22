@@ -19,11 +19,12 @@ import org.wildstang.framework.subsystems.Subsystem;
  * Outputs:     1 talon
  * Description: This is a testing subsystem that controls a single motor with a joystick.
  */
-public class Hopper implements Subsystem {
+public class Lift implements Subsystem {
 
     // inputs
-    private DigitalInput forward;
-    private DigitalInput reverse;
+    private DigitalInput up;
+    private DigitalInput down;
+    private DigitalInput limit;
 
     // outputs
     private VictorSPX motor;
@@ -34,14 +35,18 @@ public class Hopper implements Subsystem {
     // initializes the subsystem
     public void init() {
         // register button and attach input listener with WS Input
-        forward = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_FACE_LEFT.getName());
-        reverse = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_FACE_UP.getName());
-        forward.addInputListener(this);
-        reverse.addInputListener(this);
+        up = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_DPAD_UP.getName());
+        down = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_DPAD_DOWN.getName());
+        limit = (DigitalInput) Core.getInputManager().getInput(WSInputs.LIFT_LIMIT.getName());
+
+        
+        limit.addInputListener(this);
+        up.addInputListener(this);
+        down.addInputListener(this);
 
         // create motor controller object with CAN Constant
       
-        motor = new VictorSPX(CANConstants.HOPPER_TALON);
+        motor = new VictorSPX(CANConstants.LIFT_TALON);
         resetState();
     }
 
@@ -54,9 +59,9 @@ public class Hopper implements Subsystem {
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if (signal == forward && forward.getValue()) {
+        if (signal == up || signal == limit && up.getValue() && !limit.getValue()) {
             speed = 1;
-        }else if(signal == reverse && reverse.getValue()){
+        }else if(signal == down && down.getValue()){
             speed = -1;
         }else{
             speed = 0;
@@ -64,9 +69,7 @@ public class Hopper implements Subsystem {
       
     }
 
-    public void turnOnHopper(){
-        speed = 1;
-    }
+    
 
     // used for testing
     public void selfTest() {}
@@ -78,6 +81,6 @@ public class Hopper implements Subsystem {
 
     // returns the unique name of the example
     public String getName() {
-        return "Test Subsystem";
+        return "Lift Subsystem";
     }
 }

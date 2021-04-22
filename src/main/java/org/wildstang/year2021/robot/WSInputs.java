@@ -78,13 +78,13 @@ public enum WSInputs implements Inputs {
     // ---------------------------------
     // Driver DPAD Buttons
     // ---------------------------------
-    DRIVER_DPAD_DOWN  ("Open",
+    DRIVER_DPAD_DOWN  ("Lift Down",
             WSInputType.JS_DPAD_BUTTON, new WsJSButtonInputConfig(0, JoystickConstants.DPAD_Y_DOWN),  false), 
     DRIVER_DPAD_LEFT  ("Open",
             WSInputType.JS_DPAD_BUTTON, new WsJSButtonInputConfig(0, JoystickConstants.DPAD_X_LEFT),  false), 
     DRIVER_DPAD_RIGHT ("Open",
             WSInputType.JS_DPAD_BUTTON, new WsJSButtonInputConfig(0, JoystickConstants.DPAD_X_RIGHT), false), 
-    DRIVER_DPAD_UP    ("Open",
+    DRIVER_DPAD_UP    ("Lift Up",
             WSInputType.JS_DPAD_BUTTON, new WsJSButtonInputConfig(0, JoystickConstants.DPAD_Y_UP),    false), 
 
     // ---------------------------------
@@ -94,9 +94,9 @@ public enum WSInputs implements Inputs {
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 0),                                 false), 
     DRIVER_FACE_RIGHT            ("Reverse Intake",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 1),                                 false), 
-    DRIVER_FACE_LEFT             ("Open",
+    DRIVER_FACE_LEFT             ("Outake Down",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 2),                                 false),
-    DRIVER_FACE_UP               ("Open",
+    DRIVER_FACE_UP               ("Outake Up",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 3),                                 false), 
     DRIVER_SHOULDER_LEFT         ("Open",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 4),                                 false), 
@@ -170,7 +170,8 @@ public enum WSInputs implements Inputs {
     // ********************************
     // Digital IOs
     // ********************************
-    
+    OUTAKE_LIMIT("Outake limit", WSInputType.SWITCH, new WsDigitalInputConfig(1, false), false),
+    LIFT_LIMIT("Lift limit", WSInputType.SWITCH, new WsDigitalInputConfig(2, false), false),
     // -------------------------------
     // Networked sensors
     // -------------------------------

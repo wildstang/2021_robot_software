@@ -3,7 +3,7 @@ package org.wildstang.year2021.auto.steps;
 import org.wildstang.framework.core.Core;
 import org.wildstang.year2021.robot.WSSubsystems;
 import org.wildstang.framework.auto.steps.AutoStep;
-import org.wildstang.year2021.subsystems.Hopper;
+import org.wildstang.year2021.subsystems.Intake;
 
 
 /**
@@ -17,9 +17,9 @@ import org.wildstang.year2021.subsystems.Hopper;
  * When the step is updated, the time is checked. If the time excedes the delay, the step if set to finished.
  */
 public class hopperOnStep extends AutoStep {
-    private Hopper hopper;
+    private Intake hopper;
     public void initialize(){
-        hopper = (Hopper) Core.getSubsystemManager().getSubsystem(WSSubsystems.HOPPER.getName());
+        hopper = (Intake) Core.getSubsystemManager().getSubsystem(WSSubsystems.INTAKE.getName());
     }
 
     public void update(){

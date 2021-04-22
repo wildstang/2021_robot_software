@@ -51,7 +51,7 @@ public class Drive implements Subsystem {
     public void update() {
         //I dont know whats, leftMotor and rightMotor are initialized on lines 27 & 28
         leftMotor.set(ControlMode.PercentOutput, leftSpeed);
-        rightMotor.set(ControlMode.PercentOutput, rightSpeed);
+        rightMotor.set(ControlMode.PercentOutput, -rightSpeed);
     }
  
     // respond to input updates

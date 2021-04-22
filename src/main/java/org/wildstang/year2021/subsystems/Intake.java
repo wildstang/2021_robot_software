@@ -48,6 +48,8 @@ public class Intake implements Subsystem {
 
         // create motor controller object with CAN Constant
       
+        speed = 0;
+
         motor = new VictorSPX(CANConstants.INTAKE_TALON);
         hopperMotor = new VictorSPX(CANConstants.HOPPER_TALON);
         resetState();

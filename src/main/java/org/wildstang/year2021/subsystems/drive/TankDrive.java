@@ -5,6 +5,7 @@ import org.wildstang.year2021.robot.WSInputs;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
@@ -14,7 +15,7 @@ import org.wildstang.framework.subsystems.Subsystem;
 /**
  * Class:       TankDrive.java
  * Inputs:      2 joysticks
- * Outputs:     4 VictorSPX
+ * Outputs:     2 VictorSPX (front), 2 TalonSRX (back)
  * Description: A tank drive system that controls four motors.
  */
 public class TankDrive implements Subsystem {
@@ -25,9 +26,9 @@ public class TankDrive implements Subsystem {
 
     // outputs
     private VictorSPX leftFrontMotor;
-    private VictorSPX leftBackMotor;
+    private TalonSRX leftBackMotor;
     private VictorSPX rightFrontMotor;
-    private VictorSPX rightBackMotor;
+    private TalonSRX rightBackMotor;
 
     // states
     private double leftSpeed;
@@ -50,9 +51,9 @@ public class TankDrive implements Subsystem {
 
     public void initOutputs() {
         leftFrontMotor = new VictorSPX(CANConstants.LEFT_DRIVE_VICTOR_FRONT);
-        leftBackMotor = new VictorSPX(CANConstants.LEFT_DRIVE_VICTOR_BACK);
+        leftBackMotor = new TalonSRX(CANConstants.LEFT_DRIVE_TALON_BACK);
         rightFrontMotor = new VictorSPX(CANConstants.RIGHT_DRIVE_VICTOR_FRONT);
-        rightBackMotor = new VictorSPX(CANConstants.RIGHT_DRIVE_VICTOR_BACK);
+        rightBackMotor = new TalonSRX(CANConstants.RIGHT_DRIVE_TALON_BACK);
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)

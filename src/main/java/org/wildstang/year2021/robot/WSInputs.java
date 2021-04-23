@@ -90,7 +90,7 @@ public enum WSInputs implements Inputs {
     // ---------------------------------
     // Driver Buttons
     // --------------------------------- 
-    DRIVER_FACE_DOWN             ("Open",
+    DRIVER_FACE_DOWN             ("Intake Toggle",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 0),                                 false), 
     DRIVER_FACE_RIGHT            ("Open",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(0, 1),                                 false), 

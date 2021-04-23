@@ -2,6 +2,7 @@ package org.wildstang.year2021.auto.programs;
 
 import org.wildstang.framework.auto.AutoProgram;
 import org.wildstang.year2021.auto.steps.DelayStep;
+import org.wildstang.year2021.auto.steps.autoIntakeDeploy;
 
 /**
  * This is the framework of an Autonomous Program.
@@ -14,7 +15,8 @@ public class ExampleAutoProgram extends AutoProgram {
     @Override
     protected void defineSteps() {
         // define a series of steps
-        addStep(new DelayStep(5));
+        //addStep(new DelayStep(5));
+        addStep(new autoIntakeDeploy());
     }
 
     @Override

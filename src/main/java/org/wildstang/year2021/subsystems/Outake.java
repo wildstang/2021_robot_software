@@ -59,7 +59,8 @@ public class Outake implements Subsystem {
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if (signal == up || signal == limit && up.getValue() && !limit.getValue()) {
+     
+        if ((signal == up || signal == limit) && up.getValue() && limit.getValue()) {
             speed = 1;
         }else if(signal == down && down.getValue()){
             speed = -1;

@@ -27,8 +27,8 @@ import org.wildstang.framework.subsystems.Subsystem;
 public class Intake implements Subsystem {
 
     // inputs
-    private DigitalInput forward;
-    private DigitalInput reverse;
+    private DigitalInput out;
+    private DigitalInput in;
 
     // outputs
     private VictorSPX motor;
@@ -41,10 +41,10 @@ public class Intake implements Subsystem {
     // initializes the subsystem
     public void init() {
         // register button and attach input listener with WS Input
-        forward = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
-        reverse = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_RIGHT.getName());
-        forward.addInputListener(this);
-        reverse.addInputListener(this);
+        out = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
+        in = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_RIGHT.getName());
+        out.addInputListener(this);
+        in.addInputListener(this);
 
         // create motor controller object with CAN Constant
       
@@ -67,10 +67,10 @@ public class Intake implements Subsystem {
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if (signal == forward && forward.getValue()) {
+        if (signal == out && out.getValue()) {
             speed = 1;
             hopperSpeed = 1;
-        }else if(signal == reverse && reverse.getValue()){
+        }else if(signal == in && in.getValue()){
             speed = -1;
             hopperSpeed = 1;
         }else{
@@ -82,9 +82,17 @@ public class Intake implements Subsystem {
     public void turnOnIntake(){
         speed = 1;
     }
+
+     public void intakeOff(){
+        hopperSpeed = 0;
+    }
     
     public void turnOnHopper(){
         hopperSpeed = 1;
+    }
+
+     public void hopperOff(){
+        hopperSpeed = 0;
     }
 
     // used for testing

@@ -105,6 +105,6 @@ public class Intake implements Subsystem {
 
     // returns the unique name of the example
     public String getName() {
-        return "Intake Subsystem";
+        return "Intake";
     }
 }

@@ -85,6 +85,6 @@ public class Lift implements Subsystem {
 
     // returns the unique name of the example
     public String getName() {
-        return "Lift Subsystem";
+        return "Lift";
     }
 }

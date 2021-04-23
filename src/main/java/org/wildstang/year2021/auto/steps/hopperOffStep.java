@@ -20,6 +20,7 @@ public class hopperOffStep extends AutoStep {
     private Intake hopper;
     public void initialize(){
         hopper = (Intake) Core.getSubsystemManager().getSubsystem(WSSubsystems.INTAKE.getName());
+        //drive = (Drivebase) Core.getSubsystemManager().getSubsystem(WSSubsystems.DRIVEBASE.getName());
     }
 
     public void update(){

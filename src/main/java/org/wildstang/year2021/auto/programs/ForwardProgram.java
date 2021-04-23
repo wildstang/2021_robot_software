@@ -20,7 +20,7 @@ public class ForwardProgram extends AutoProgram {
     @Override
     protected void defineSteps() {
         // define a series of step
-        addStep(new hopperOnStep());
+        //addStep(new hopperOnStep());
         addStep(new intakeOnStep());
         addStep (new DriveForwardStep(2));
         addStep(new StopStep());

@@ -9,12 +9,10 @@ package org.wildstang.year2021.robot;
  */
 public final class CANConstants {
 
-    // Drive CAN constant are good
-    public static final int LEFT_DRIVE_VICTOR_FRONT = 1;
-    public static final int LEFT_DRIVE_TALON_BACK = 2;
-    public static final int RIGHT_DRIVE_VICTOR_FRONT = 3;
-    public static final int RIGHT_DRIVE_TALON_BACK = 4;
-    // Manipulator CAN constants are not good
+    public static final int LEFT_FRONT_DRIVE_TALON = 1;
+    public static final int LEFT_REAR_DRIVE_VICTOR = 2;
+    public static final int RIGHT_FRONT_DRIVE_TALON = 3;
+    public static final int RIGHT_REAR_DRIVE_VICTOR = 4;
     public static final int ARM_VICTOR = 5;
     public static final int HOPPER_VICTOR = 6;
     public static final int INTAKE_ROLLER_VICTOR = 7;

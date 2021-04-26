@@ -15,7 +15,7 @@ import org.wildstang.framework.subsystems.Subsystem;
 /**
  * Class:       TankDrive.java
  * Inputs:      2 joysticks
- * Outputs:     2 VictorSPX (front), 2 TalonSRX (back)
+ * Outputs:     2 TalonSRX (front), 2 VictorSPX (rear)
  * Description: A tank drive system that controls four motors.
  */
 public class TankDrive implements Subsystem {
@@ -25,10 +25,10 @@ public class TankDrive implements Subsystem {
     private AnalogInput rightJoystick;
 
     // outputs
-    private VictorSPX leftFrontMotor;
-    private TalonSRX leftBackMotor;
-    private VictorSPX rightFrontMotor;
-    private TalonSRX rightBackMotor;
+    private TalonSRX leftFrontMotor;
+    private VictorSPX leftBackMotor;
+    private TalonSRX rightFrontMotor;
+    private VictorSPX rightBackMotor;
 
     // states
     private double leftSpeed;
@@ -50,10 +50,10 @@ public class TankDrive implements Subsystem {
     }
 
     public void initOutputs() {
-        leftFrontMotor = new VictorSPX(CANConstants.LEFT_DRIVE_VICTOR_FRONT);
-        leftBackMotor = new TalonSRX(CANConstants.LEFT_DRIVE_TALON_BACK);
-        rightFrontMotor = new VictorSPX(CANConstants.RIGHT_DRIVE_VICTOR_FRONT);
-        rightBackMotor = new TalonSRX(CANConstants.RIGHT_DRIVE_TALON_BACK);
+        leftFrontMotor = new TalonSRX(CANConstants.LEFT_FRONT_DRIVE_TALON);
+        leftBackMotor = new VictorSPX(CANConstants.LEFT_REAR_DRIVE_VICTOR);
+        rightFrontMotor = new TalonSRX(CANConstants.RIGHT_FRONT_DRIVE_TALON);
+        rightBackMotor = new VictorSPX(CANConstants.RIGHT_REAR_DRIVE_VICTOR);
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)

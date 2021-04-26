@@ -7,11 +7,11 @@ import org.wildstang.year2021.auto.steps.DriveRightForwardsStep;
 import org.wildstang.year2021.auto.steps.RunIntakeStep;
 import org.wildstang.year2021.auto.steps.DelayStep;
 
-public class CollectLeftEdge extends AutoProgram{
+public class CollectLeftEdge extends AutoProgram {
 
     @Override
     protected void defineSteps() {
-        //align with edge of field
+        // align with edge of field
         addStep(new DriveRightForwardsStep(1.0));
         addStep(new DelayStep(0.75));
         addStep(new DriveRightForwardsStep(0.0));
@@ -21,17 +21,17 @@ public class CollectLeftEdge extends AutoProgram{
         addStep(new DriveForwardsStep(0.0));
         addStep(new DelayStep(0.5));
         addStep(new DriveLeftForwardsStep(1.0));
-        addStep(new DelayStep(0.50));
+        addStep(new DelayStep(0.5));
         addStep(new DriveLeftForwardsStep(0.0));
         addStep(new DelayStep(0.5));
-        //prepare to collect fuel
+        // prepare to collect fuel
         addStep(new RunIntakeStep(1.0));
         addStep(new DelayStep(0.5));
-        //collect fuel
+        // collect fuel
         addStep(new DriveForwardsStep(1.0));
-        addStep(new DelayStep(3));
+        addStep(new DelayStep(2));
         addStep(new DriveForwardsStep(0.0));
-        //disengage intake
+        // disengage intake
         addStep(new RunIntakeStep(0.0));
     }
 

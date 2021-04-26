@@ -4,6 +4,9 @@ import org.wildstang.framework.auto.AutoProgram;
 import org.wildstang.year2021.auto.steps.DelayStep;
 import org.wildstang.year2021.auto.steps.RunIntakeStep;
 import org.wildstang.year2021.auto.steps.DriveForwardsStep;
+import org.wildstang.year2021.auto.steps.DriveBackwardsStep;
+import org.wildstang.year2021.auto.steps.DriveLeftBackwardsStep;
+import org.wildstang.year2021.auto.steps.DriveRightForwardsStep;
 import org.wildstang.year2021.auto.steps.ArmUpwardsStep;
 import org.wildstang.year2021.auto.steps.ArmDownwardsStep;
 
@@ -26,7 +29,7 @@ public class CenterWhiteFuel extends AutoProgram {
         addStep(new DelayStep(2));
         addStep(new RunIntakeStep(0));
         // drives backwards to prepare to spin
-        addStep(new DriveBackwardsStep(1);
+        addStep(new DriveBackwardsStep(1));
         addStep(new DelayStep(1));
         addStep(new DriveBackwardsStep(0));
         // spins, then stops

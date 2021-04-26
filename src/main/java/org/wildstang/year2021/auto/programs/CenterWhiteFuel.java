@@ -13,7 +13,7 @@ import org.wildstang.year2021.auto.steps.ArmDownwardsStep;
  * These programs work by defining a series of steps in the "defineSteps" functions.
  * The "toString" function defines a name for the program.
  */
-public class CenterWhiteFuelProgram extends AutoProgram {
+public class CenterWhiteFuel extends AutoProgram {
 
     @Override
     protected void defineSteps() {
@@ -55,7 +55,7 @@ public class CenterWhiteFuelProgram extends AutoProgram {
 
     @Override
     public String toString() {
-        return "CenterWhiteFuelProgram";
+        return "CenterWhiteFuel";
     }
 
 }

@@ -84,7 +84,7 @@ public class Intake implements Subsystem {
     }
 
      public void intakeOff(){
-        hopperSpeed = 0;
+        speed = 0;
     }
     
     public void turnOnHopper(){

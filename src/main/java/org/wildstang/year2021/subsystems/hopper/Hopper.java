@@ -60,9 +60,9 @@ public class Hopper implements Subsystem {
                 speed = -1.0; 
                 }
             }
-        }
-            
     }
+            
+    
 
     // used for testing
     public void selfTest() {}

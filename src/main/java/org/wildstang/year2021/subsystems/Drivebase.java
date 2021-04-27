@@ -32,6 +32,7 @@ public class Drivebase implements Subsystem {
     private AnalogInput headingInput;
     /** Input to control forward-backward movement */
     private AnalogInput throttleInput;
+    private AnalogInput rotateInput;
 
     private AnalogInput countClockInput;
     private AnalogInput clockInput;
@@ -61,6 +62,9 @@ public class Drivebase implements Subsystem {
 
         headingInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_X.getName());
         headingInput.addInputListener(this);
+
+        rotateInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_X.getName());
+        rotateInput.addInputListener(this);
 
         countClockInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_LEFT.getName());
         countClockInput.addInputListener(this);
@@ -102,7 +106,7 @@ public class Drivebase implements Subsystem {
 
         double leftSpeed = commandThrottle - commandThrottle * commandHeading;
         double rightSpeed = commandThrottle + commandThrottle * commandHeading;
-        leftSpeed = -leftSpeed;
+        rightSpeed = -rightSpeed;
 
         //System.out.println(leftSpeed);
         //System.out.println(rightSpeed);
@@ -117,6 +121,22 @@ public class Drivebase implements Subsystem {
         lbSpeed = hypot * ((-Math.sin(thetaX) * (1-offset))+(Math.cos(thetaX)* (1+ horizontalOffset) )) - commandRotation;
         rbSpeed = hypot * ((Math.sin(thetaX) * (1 + offset))+(Math.cos(thetaX)* (1- horizontalOffset) )) - commandRotation;
 
+        if(Math.abs(lfSpeed) < 0.05){
+            lfSpeed = 0;
+        }
+        
+        if(Math.abs(rfSpeed) < 0.05){
+            rfSpeed = 0;
+        }
+        
+        if(Math.abs(lbSpeed) < 0.05){
+            lbSpeed = 0;
+        }
+        
+        if(Math.abs(rbSpeed) < 0.05){
+            rbSpeed = 0;
+        }
+
         SmartDashboard.putNumber("commandThrottle", commandThrottle);
         SmartDashboard.putNumber("commandHeading", commandHeading);
         SmartDashboard.putNumber("lfSpeed", lfSpeed);
@@ -125,7 +145,7 @@ public class Drivebase implements Subsystem {
         SmartDashboard.putNumber("rbSpeed", rbSpeed);
         SmartDashboard.putNumber("offset", offset);
         SmartDashboard.putNumber("hypotenuse", hypot);
-         SmartDashboard.putNumber("theta", thetaX);
+        SmartDashboard.putNumber("theta", thetaX);
         //System.out.println("lf: " +lfSpeed );
         //System.out.println("rf: " +rfSpeed );
         //System.out.println("lb: " +lbSpeed );
@@ -151,8 +171,8 @@ public class Drivebase implements Subsystem {
             setThrottle(throttleInput.getValue());
         } else if (source == headingInput) {
             setHeading(headingInput.getValue());
-        } else if(source == countClockInput || source ==clockInput ){
-            commandRotation = clockInput.getValue() + countClockInput.getValue();
+        } else if(source == rotateInput ){
+           setRotation(rotateInput.getValue());
         }
         //System.out.println("Clock Input:" + clockInput.getValue());
         //System.out.println("Count Clock Input:" + countClockInput.getValue());
@@ -174,6 +194,12 @@ public class Drivebase implements Subsystem {
        return "Drive Base";
     }
 
+     public void setRotation(double rotate){
+         this.commandRotation = rotate;
+         if(rotate < .1 && rotate > -.1){
+             commandRotation = 0;
+         }
+     }
      public void setHeading(double heading) {
         this.commandHeading = heading;
         if(heading < .1 && heading > -.1)

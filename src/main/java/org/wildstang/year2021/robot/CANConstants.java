@@ -12,10 +12,10 @@ public final class CANConstants {
     public static final int EXAMPLE_CONTROLLER = 1;
     public static final int[] EXAMPLE_PAIRED_CONTROLLERS = {2,3};
 
-    public static final int LEFT_BACK_DRIVE_TALON = 2;
-    public static final int LEFT_FRONT_DRIVE_TALON = 1;
-    public static final int RIGHT_BACK_DRIVE_TALON = 4;
-    public static final int RIGHT_FRONT_DRIVE_TALON = 3;
+    public static final int LEFT_BACK_DRIVE_TALON = 3;
+    public static final int LEFT_FRONT_DRIVE_TALON = 4;
+    public static final int RIGHT_BACK_DRIVE_TALON = 1;
+    public static final int RIGHT_FRONT_DRIVE_TALON = 2;
     public static final int INTAKE_TALON = 5;
     public static final int HOPPER_TALON = 6;
     public static final int OUTAKE_TALON = 7;

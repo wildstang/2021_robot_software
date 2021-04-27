@@ -68,10 +68,10 @@ public class Intake implements Subsystem {
     public void inputUpdate(Input signal) {
         // check to see which input was updated
         if (signal == out && out.getValue()) {
-            speed = 1;
-            hopperSpeed = 1;
-        }else if(signal == in && in.getValue()){
             speed = -1;
+            hopperSpeed = 0;
+        }else if(signal == in && in.getValue()){
+            speed = 1;
             hopperSpeed = 1;
         }else{
             speed = 0;

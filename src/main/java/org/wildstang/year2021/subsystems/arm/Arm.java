@@ -40,7 +40,7 @@ public class Arm implements Subsystem {
 
     public void initInputs() {
         IInputManager inputManager = Core.getInputManager();
-        controllerStick = (AnalogInput) inputManager.getInput(WSInputs.MANIPULATOR_LEFT_JOYSTICK_Y.getName());
+        controllerStick = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_LEFT_JOYSTICK_Y.getName());
         controllerStick.addInputListener(this);
     }
 
@@ -57,15 +57,15 @@ public class Arm implements Subsystem {
     public void inputUpdate(Input signal) {
         // check to see if the stick has been moved enough to warrent the arm to move
         if (signal == controllerStick) {
-            Double stickValue = controllerStick.getValue()
+            double stickValue = controllerStick.getValue();
             if (Math.abs(stickValue) >= 0.4) {
                 speed = stickValue;
             } else {
                 resetState();
             }
-        } else  [
+        } else {
             resetState();
-        ]
+        }
                 
     }
 
@@ -83,6 +83,6 @@ public class Arm implements Subsystem {
     }
 
     public void setArmSpeed(double armSpeed) {
-            speed = armSpeed;
+        speed = armSpeed;
     }
 }

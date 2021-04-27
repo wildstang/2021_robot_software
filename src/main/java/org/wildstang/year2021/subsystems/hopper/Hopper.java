@@ -14,14 +14,14 @@ import org.wildstang.framework.subsystems.Subsystem;
 
 /**
  * Class:       Hopper.java
- * Inputs:      1 DigitalInput (X button)
+ * Inputs:      1 AnalogInput (Right Joystick)
  * Outputs:     1 VictorSPX
- * Description: Press X button to roll, press again to stop
+ * Description: Push right joystick up to roll hopper forwards, and down to roll it backwards.
  */
 public class Hopper implements Subsystem {
 
     // inputs
-    private DigitalInput xButton;
+    private AnalogInput rightJoystick;
 
     // outputs
     private VictorSPX motor;
@@ -29,16 +29,14 @@ public class Hopper implements Subsystem {
     // states
     private double speed = 0;
     private double multiplier = 10;
-    private boolean isRolling;
+    
 
     // initializes the subsystem
     public void init() {
-        // register button and attach input listener with WS Input
-        xButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_LEFT.getName());
-        xButton.addInputListener(this);
+        // register joystick and attach input listener with WS Input
+        rightJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_Y.getName());
+        rightJoystick.addInputListener(this);
         
-        isRolling = false;
-
         // create motor controller object with CAN Constant
         motor = new VictorSPX(CANConstants.HOPPER_VICTOR);
         resetState();
@@ -46,20 +44,24 @@ public class Hopper implements Subsystem {
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        if (isRolling){
-            speed = 1.0;
-        }
-        else{
-            resetState();
-        }
             motor.set(ControlMode.PercentOutput, speed*multiplier);
     }
 
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if (signal == xButton)
-            isRolling = !isRolling;
+        if (signal == rightJoystick){
+            
+                if(rightJoystick.getValue() > 0.5){
+                speed = 1.0;
+                }
+                
+                if(rightJoystick.getValue() < -0.5){
+                speed = -1.0; 
+                }
+            }
+        }
+            
     }
 
     // used for testing

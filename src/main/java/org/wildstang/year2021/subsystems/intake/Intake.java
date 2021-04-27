@@ -15,7 +15,7 @@ import org.wildstang.framework.subsystems.Subsystem;
  * Class:       Intake.java
  * Inputs:      AnalogInput (Right trigger) 
  * Outputs:     1 VictorSPX
- * Description: After pressing the right trigger by a certain amount (0.5), the intake roller will start moving at full speed.
+ * Description: After pressing the right trigger by a certain amount (0.2), the intake roller will start moving at however far the trigger is pushed.
  */
 public class Intake implements Subsystem {
 
@@ -26,6 +26,7 @@ public class Intake implements Subsystem {
 
     // inputs
     private AnalogInput rightTrigger;
+    private AnalogInput leftTrigger;
 
     // outputs
     private VictorSPX rollerMotor;
@@ -41,8 +42,10 @@ public class Intake implements Subsystem {
     // initializes the subsystem
     public void init() {
         // register button and attach input listener with WS Input
-        rightTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_RIGHT.getName());
+        rightTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_TRIGGER_RIGHT.getName());
         rightTrigger.addInputListener(this);
+        leftTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_TRIGGER_LEFT.getName());
+        leftTrigger.addInputListener(this);
 
         // create rollerMotor controller object with CAN Constant
         rollerMotor = new VictorSPX(CANConstants.INTAKE_ROLLER_VICTOR);
@@ -59,8 +62,18 @@ public class Intake implements Subsystem {
     public void inputUpdate(Input signal) {
         // check to see which input was updated
         if (signal == rightTrigger) {
-            if(rightTrigger.getValue() > 0.5){
-                speed = maxSpeed;
+            if(rightTrigger.getValue() > 0.2){
+                speed = rightTrigger.getValue() * maxSpeed;
+                //when right trigger is pressed past halfway, the intake spins at speed <speedValue>
+            } else {
+                resetState();
+            }
+        } else {
+            resetState();
+        }
+        if (signal == leftTrigger) {
+            if(leftTrigger.getValue() > 0.2){
+                speed = leftTrigger.getValue() * maxSpeed * -1.0;
                 //when right trigger is pressed past halfway, the intake spins at speed <speedValue>
             } else {
                 resetState();
@@ -86,3 +99,5 @@ public class Intake implements Subsystem {
     
     
 }
+
+//coutesy of Shane Thomas

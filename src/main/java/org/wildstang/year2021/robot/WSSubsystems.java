@@ -12,7 +12,7 @@ import org.wildstang.framework.core.Subsystems;
 public enum WSSubsystems implements Subsystems {
 
     // enumerate subsystems
-    TEST("Test Subsystem", TestSubsystem.class),
+    //TEST("Test Subsystem", TestSubsystem.class),
     DRIVE("Drivetrain", Drive.class),
     BALLPATH("Ballpath", Ballpath.class);
     

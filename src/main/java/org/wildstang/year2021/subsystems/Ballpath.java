@@ -15,9 +15,9 @@ import org.wildstang.framework.timer.WsTimer;
 
 /**
  * Class:       Intake.java
- * Inputs:      1 analog button
- * Outputs:     1 victor
- * Description: This turns on and off the intake & ball elevator based on an analog button. 
+ * Inputs:      3 digital buttons
+ * Outputs:     2 victors
+ * Description: This controls the ball elevator with 3 speeds (reverse, 0, and fullspeed) and controls the back hatch. 
  */
 
 public class Ballpath implements Subsystem {
@@ -25,6 +25,7 @@ public class Ballpath implements Subsystem {
     //Inputs
     private DigitalInput leftShoulder; // Left Shoulder Button
     private DigitalInput rightShoulder; // Right Shoulder Button
+    private DigitalInput reverseButton; // Diver Face Up Button
 
     //Outputs
     private VictorSPX intakeMotor;
@@ -36,27 +37,26 @@ public class Ballpath implements Subsystem {
     
     //Constants
     private final double FULL_SPEED = 1;
-    private final double HALF_SPEED = 1;
+    private final double HALF_SPEED = 0.5;
+    private final double REVERSE_SPEED = 1;
     private final double hatchMoveTime = 10;
-    private final double hatchWaitTime = 10;
 
     //Booleans
     private boolean timerStatus;
-    private boolean leftShoulderStatus;
 
     //Timer
     private WsTimer timer = new WsTimer();
 
 
     enum commands {
-            IDLE, LOWERING, LOWERED, PAUSED, RAISING, RAISED, RESET;
+            IDLE, RAISING, RAISED, PAUSED, LOWERING, LOWERED, RESET;
     }
     private commands currentCommand; // 0 = IDLE x
-                                     // 1 = LOWERING x
-                                     // 2 = LOWERED /
+                                     // 1 = RAISING x
+                                     // 2 = RAISED /
                                      // 3 = PAUSED /
-                                     // 4 = RAISING /
-                                     // 5 = RAISED /
+                                     // 4 = LOWERING /
+                                     // 5 = LOWERED /
                                      // 7 = RESET
 
 
@@ -82,8 +82,25 @@ public class Ballpath implements Subsystem {
         outputMotor.set(ControlMode.PercentOutput, outputMotorSpeed);
 
 
-        // ASK HOW TO IMPROVE !!!!!
+        
 
+        // Begin  from Idle -> Raising -> Paused
+        if (currentCommand == commands.RAISING) {
+            if (!timerStatus) {
+                timer.reset();
+                timer.start();
+                timerStatus = true;
+                outputMotorSpeed = -HALF_SPEED;
+            } else if (timer.hasPeriodPassed(hatchMoveTime)) {
+                currentCommand = commands.PAUSED;
+            }
+        }
+        if (currentCommand == commands.PAUSED) {
+            outputMotorSpeed = 0;
+            timerStatus = false;
+        }
+
+        // Change  from Lowering -> Reset -> Idle
         if (currentCommand == commands.LOWERING) {
             if (!timerStatus) {
                 timer.reset();
@@ -91,21 +108,10 @@ public class Ballpath implements Subsystem {
                 timerStatus = true;
                 outputMotorSpeed = HALF_SPEED;
             } else if (timer.hasPeriodPassed(hatchMoveTime)) {
-                currentCommand = commands.PAUSED;
-            }
-        }
-        if (currentCommand == commands.PAUSED) {
-            outputMotorSpeed = 0;
-            if (timer.hasPeriodPassed(hatchMoveTime + hatchWaitTime)) {
-                currentCommand = commands.RAISING;
-            }
-        }
-        if (currentCommand == commands.RAISING) {
-            outputMotorSpeed = -(HALF_SPEED);
-            if (timer.hasPeriodPassed(2*hatchMoveTime + hatchWaitTime)) {
                 currentCommand = commands.RESET;
             }
         }
+
         if (currentCommand == commands.RESET) {
             outputMotorSpeed = 0;
             timerStatus = false; 
@@ -117,15 +123,21 @@ public class Ballpath implements Subsystem {
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
+
         if (rightShoulder.getValue()) {
             intakeMotorSpeed = FULL_SPEED;
+        } else if (reverseButton.getValue()) { 
+            intakeMotorSpeed = REVERSE_SPEED;
         } else {
             intakeMotorSpeed = 0;
         }
 
-        if (currentCommand == commands.IDLE && leftShoulder.getValue() == true) {
+        if (currentCommand == commands.IDLE && leftShoulder.getValue()) {
+            currentCommand = commands.RAISING;
+        } else if (currentCommand == commands.PAUSED && leftShoulder.getValue()) {
             currentCommand = commands.LOWERING;
-        }    
+        }
+
     }
 
     // used for testing
@@ -137,7 +149,6 @@ public class Ballpath implements Subsystem {
     public void resetState() {
         intakeMotorSpeed = 0;
         outputMotorSpeed = 0;
-        leftShoulderStatus = false;
         timerStatus = false;
         currentCommand = commands.IDLE;
 

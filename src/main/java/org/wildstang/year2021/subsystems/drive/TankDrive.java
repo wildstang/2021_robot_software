@@ -33,14 +33,13 @@ public class TankDrive implements Subsystem {
     // states
     private double leftSpeed;
     private double rightSpeed;
-    private double multiplier = 0.8; // change to adjust max speed
+    private double multiplier = 0.5; // change to adjust max speed
 
     // initializes the subsystem
     public void init() {
         initInputs();
         initOutputs();
         resetState();
-        System.out.println("TankDrive initialized");
     }
 
     public void initInputs() {
@@ -68,16 +67,28 @@ public class TankDrive implements Subsystem {
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if (signal == leftJoystick) {
             if (leftJoystick.getValue() > 0.5) {
                 leftSpeed = leftJoystick.getValue() * multiplier;
+                System.out.println("Left forwards!");
             }
-        }
-        if (signal == rightJoystick) {
+            else if (leftJoystick.getValue() < -0.5) {
+                leftSpeed = leftJoystick.getValue() * multiplier;
+                System.out.println("Left backwards!");
+            }
+            else {
+                leftSpeed = 0.0;
+            }
             if (rightJoystick.getValue() > 0.5) {
                 rightSpeed = rightJoystick.getValue() * multiplier;
+                System.out.println("Right forwards!");
             }
-        }
+            else if (rightJoystick.getValue() < -0.5) {
+                rightSpeed = rightJoystick.getValue() * multiplier;
+                System.out.println("Right backwards!");
+            }
+            else {
+                rightSpeed = 0.0;
+            }
     }
 
     public void setLeftMotorSpeed(double s) {

@@ -43,17 +43,6 @@ public class Highball implements Subsystem {
     //Timer
     private WsTimer timer = new WsTimer();
 
-    enum commands {
-        IDLE, RAISING, RAISED, PAUSED, LOWERING, LOWERED, RESET;
-    }
-    private commands currentCommand; // 0 = IDLE x
-                                     // 1 = RAISING x
-                                     // 2 = RAISED /
-                                     // 3 = PAUSED /
-                                     // 4 = LOWERING /
-                                     // 5 = LOWERED /
-                                     // 7 = RESET
-
  
     // initializes the subsystem
     public void init() {
@@ -109,6 +98,10 @@ public class Highball implements Subsystem {
     // returns the unique name of the example
     public String getName() {
         return "Highball";
+    }
+
+    public void raiseArm(){
+        raising = true;
     }
 }
  

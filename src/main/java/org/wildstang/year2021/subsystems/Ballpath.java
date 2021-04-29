@@ -161,4 +161,12 @@ public class Ballpath implements Subsystem {
     public String getName() {
         return "Ballpath Subsystem";
     }
+
+    public void ballpathDeploy(){
+        intakeMotorSpeed = REVERSE_SPEED;
+    }
+    public void turnOffBallpath(){
+        intakeMotorSpeed = 0;
+    }
+
 }

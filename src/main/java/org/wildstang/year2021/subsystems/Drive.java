@@ -96,14 +96,7 @@ public class Drive implements Subsystem {
         if(forwardTranslationInput != 0) {
             leftSpeed = forwardTranslationInput * (RotationInput - 1) * -1;
             rightSpeed = forwardTranslationInput * (RotationInput + 1);
-            /*
-            if (Math.abs(leftSpeed) > 1) {
-                rightSpeed -= ((leftSpeed * 0.9999) % 1);
-            }
-            if (Math.abs(rightSpeed) > 1) {
-                leftSpeed -= ((rightSpeed * 0.9999) % 1);
-            }
-           */
+
         }   
         else {
             leftSpeed = -RotationInput;

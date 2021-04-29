@@ -47,20 +47,20 @@ public class Scoring implements Subsystem {
 
     private DigitalInput deployButton;
     private DigitalInput intakeButton;
+    private DigitalInput intakeReverseButton;
 
+    private double intakeSpeed = 0; 
 
 
     //motors
     public VictorSPX IntakeVictor;
     public VictorSPX IntakeDeployVictor; 
 
-    //inpts
-    public DigitalInput intakeToggle;
 
     // initializes the subsystem
     public void init() {
-        intakeToggle = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
-        intakeToggle.addInputListener(this);
+        deployButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
+        deployButton.addInputListener(this);
         intakeButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_RIGHT.getName());
         intakeButton.addInputListener(this);
         resetState();
@@ -68,15 +68,18 @@ public class Scoring implements Subsystem {
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
+        /*
         if (timer > 0) {
             IntakeDeployVictor.set(ControlMode.PercentOutput, intakeState.speed());
             timer--;
         }
+        IntakeVictor.set(ControlMode.PercentOutput, intakeSpeed);
+        */  
     }
 
     // respond to input updates     
     public void inputUpdate(Input signal) {
-        if (intakeToggle.getValue() && timer < 1) {
+        if (deployButton.getValue() && timer < 1) {
             if(intakeState == intakeStateEnum.CLOSED ) {
                 intakeState = intakeStateEnum.OPEN;
                 timer = DEPLOYTIME;
@@ -87,12 +90,17 @@ public class Scoring implements Subsystem {
             }
         }
 
-        if (intakeToggle.getValue()) {
-            IntakeVictor.set(ControlMode.PercentOutput, 1);
+
+        if(intakeButton.getValue()) {
+            intakeSpeed = 1.0;
+        }
+        else if(intakeReverseButton.getValue()) {
+            intakeSpeed = -1.0;
         }
         else {
-            IntakeVictor.set(ControlMode.PercentOutput, 0);
+            intakeSpeed = 0;
         }
+
     }
     
     // used for testing

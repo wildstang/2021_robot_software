@@ -2,9 +2,6 @@ package org.wildstang.year2021.robot;
 
 import org.wildstang.framework.auto.AutoManager;
 
-//import com.sun.management.GarbageCollectionNotificationInfo;
-//import com.sun.management.internal.GarbageCollectionNotifInfoCompositeData;
-
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.InputManager;
 import org.wildstang.framework.io.inputs.RemoteAnalogInput;
@@ -93,8 +90,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        //Drive drive = (Drive) Core.getSubsystemManager().getSubsystem(WSSubsystems.DRIVEBASE.getName());
-        //drive.setFullBrakeMode();
         resetRobotState();
 
     }

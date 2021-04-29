@@ -62,7 +62,6 @@ public class Arm implements Subsystem {
         } else {
             resetState();
         }
-                
     }
 
     // used for testing

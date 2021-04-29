@@ -25,10 +25,10 @@ public class TankDrive implements Subsystem {
     private AnalogInput rightJoystick;
 
     // outputs
-    private TalonSRX leftFrontMotor;
-    private VictorSPX leftBackMotor;
-    private TalonSRX rightFrontMotor;
-    private VictorSPX rightBackMotor;
+    private VictorSPX leftFrontMotor;
+    private TalonSRX leftBackMotor;
+    private VictorSPX rightFrontMotor;
+    private TalonSRX rightBackMotor;
 
     // states
     private double leftSpeed;
@@ -40,6 +40,7 @@ public class TankDrive implements Subsystem {
         initInputs();
         initOutputs();
         resetState();
+        System.out.println("TankDrive initialized");
     }
 
     public void initInputs() {
@@ -50,10 +51,10 @@ public class TankDrive implements Subsystem {
     }
 
     public void initOutputs() {
-        leftFrontMotor = new TalonSRX(CANConstants.LEFT_FRONT_DRIVE_TALON);
-        leftBackMotor = new VictorSPX(CANConstants.LEFT_REAR_DRIVE_VICTOR);
-        rightFrontMotor = new TalonSRX(CANConstants.RIGHT_FRONT_DRIVE_TALON);
-        rightBackMotor = new VictorSPX(CANConstants.RIGHT_REAR_DRIVE_VICTOR);
+        leftFrontMotor = new VictorSPX(CANConstants.LEFT_FRONT_DRIVE_VICTOR);
+        leftBackMotor = new TalonSRX(CANConstants.LEFT_REAR_DRIVE_TALON);
+        rightFrontMotor = new VictorSPX(CANConstants.RIGHT_FRONT_DRIVE_VICTOR);
+        rightBackMotor = new TalonSRX(CANConstants.RIGHT_REAR_DRIVE_TALON);
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)

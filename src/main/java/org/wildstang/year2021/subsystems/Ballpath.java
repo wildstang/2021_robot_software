@@ -14,10 +14,10 @@ import org.wildstang.year2021.robot.WSInputs;
 import org.wildstang.framework.timer.WsTimer;
 
 /**
- * Class:       Intake.java
+ * Class:       Ballpath.java
  * Inputs:      3 digital buttons
  * Outputs:     2 victors
- * Description: This controls the ball elevator with 3 speeds (reverse, 0, and fullspeed) and controls the back hatch. 
+ * Description: This controls the ball elevator w/ the right shoulder & top face-button, & controls the back hatch w/ the left shoulder. 
  */
 
 public class Ballpath implements Subsystem {
@@ -37,9 +37,10 @@ public class Ballpath implements Subsystem {
     
     //Constants
     private final double FULL_SPEED = 1;
-    private final double HALF_SPEED = 0.5;
-    private final double REVERSE_SPEED = 1;
-    private final double hatchMoveTime = 10;
+    private final double REVERSE_SPEED = -1;
+    private final double HATCH_OPEN_SPEED = 0.25;
+    private final double HATCH_CLOSE_SPEED = -0.25;
+    private final double HATCH_MOVE_TIME = 10;
 
     //Booleans
     private boolean timerStatus;
@@ -67,6 +68,8 @@ public class Ballpath implements Subsystem {
         leftShoulder.addInputListener(this);
         rightShoulder = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_SHOULDER.getName());
         rightShoulder.addInputListener(this);    
+        reverseButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_UP.getName());
+        reverseButton.addInputListener(this);
 
         // create motor controller object with CAN Constant
         intakeMotor = new VictorSPX(CANConstants.INTAKE_MOTOR);
@@ -90,8 +93,8 @@ public class Ballpath implements Subsystem {
                 timer.reset();
                 timer.start();
                 timerStatus = true;
-                outputMotorSpeed = -HALF_SPEED;
-            } else if (timer.hasPeriodPassed(hatchMoveTime)) {
+                outputMotorSpeed = HATCH_OPEN_SPEED;
+            } else if (timer.hasPeriodPassed(HATCH_MOVE_TIME)) {
                 currentCommand = commands.PAUSED;
             }
         }
@@ -106,8 +109,8 @@ public class Ballpath implements Subsystem {
                 timer.reset();
                 timer.start();
                 timerStatus = true;
-                outputMotorSpeed = HALF_SPEED;
-            } else if (timer.hasPeriodPassed(hatchMoveTime)) {
+                outputMotorSpeed = HATCH_CLOSE_SPEED;
+            } else if (timer.hasPeriodPassed(HATCH_MOVE_TIME)) {
                 currentCommand = commands.RESET;
             }
         }

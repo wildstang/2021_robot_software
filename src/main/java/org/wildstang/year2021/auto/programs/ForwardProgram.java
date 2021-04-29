@@ -22,7 +22,8 @@ public class ForwardProgram extends AutoProgram {
         // define a series of step
         addStep(new hopperOnStep());
         addStep(new intakeOnStep());
-        addStep (new DriveForwardStep(2));
+        //addStep (new DriveForwardStep(.5, 0.15));
+        addStep (new DriveForwardStep(4, 0.75));
         addStep(new StopStep());
         addStep(new intakeOffStep());
         addStep(new hopperOffStep());

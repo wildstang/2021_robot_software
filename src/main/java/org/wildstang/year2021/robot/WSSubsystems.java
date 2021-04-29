@@ -14,9 +14,9 @@ public enum WSSubsystems implements Subsystems {
 
     // enumerate subsystems
     DRIVEBASE("Drive Base", Drivebase.class),
-    INTAKE("Intake", Intake.class),
-    OUTAKE("Outake", Outake.class),
-    LIFT("Lift", Lift.class);
+    INTAKE("Intake", Intake.class);
+    //OUTAKE("Outake", Outake.class),
+    //LIFT("Lift", Lift.class);
     
     private String name;
     private Class<?> subsystemClass;

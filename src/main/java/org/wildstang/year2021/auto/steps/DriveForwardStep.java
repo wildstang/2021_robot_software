@@ -20,10 +20,11 @@ import org.wildstang.year2021.subsystems.Drivebase;
 public class DriveForwardStep extends DelayStep {
 
     private Drivebase drive;
+    private double speed;
 
-
-    public DriveForwardStep(double delay) {
+    public DriveForwardStep(double delay, double speed) {
         super(delay);
+        this.speed = speed;
     }
 
     public void initialize() {
@@ -36,7 +37,7 @@ public class DriveForwardStep extends DelayStep {
         // check if the timer has exceded the desired delay
         super.update();
         drive.setHeading(0);
-        drive.setThrottle(1);
+        drive.setThrottle(speed);
        
     }
 

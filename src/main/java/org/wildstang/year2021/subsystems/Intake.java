@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
-import org.wildstang.framework.io.inputs.DigitalInput;
+import org.wildstang.framework.io.inputs.AnalogInput;
 import org.wildstang.framework.subsystems.Subsystem;
 
 /**
@@ -27,8 +27,8 @@ import org.wildstang.framework.subsystems.Subsystem;
 public class Intake implements Subsystem {
 
     // inputs
-    private DigitalInput out;
-    private DigitalInput in;
+    private AnalogInput out;
+    private AnalogInput in;
 
     // outputs
     private VictorSPX motor;
@@ -37,12 +37,14 @@ public class Intake implements Subsystem {
     // states
     private double speed;
     private double hopperSpeed;
+    private final double maxSpeed = 0.75;
+
 
     // initializes the subsystem
     public void init() {
         // register button and attach input listener with WS Input
-        out = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
-        in = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_RIGHT.getName());
+        out = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_LEFT.getName());
+        in = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_RIGHT.getName());
         out.addInputListener(this);
         in.addInputListener(this);
 
@@ -67,12 +69,12 @@ public class Intake implements Subsystem {
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if (signal == out && out.getValue()) {
-            speed = -1;
+        if (signal == out && out.getValue() >0.25) {
+            speed = -maxSpeed;
             hopperSpeed = 0;
-        }else if(signal == in && in.getValue()){
-            speed = 1;
-            hopperSpeed = 1;
+        }else if(signal == in && in.getValue() < -0.25){
+            speed = maxSpeed;
+            hopperSpeed = 0.5;
         }else{
             speed = 0;
             hopperSpeed = 0;

@@ -51,7 +51,7 @@ public class Drivebase implements Subsystem {
     private double commandRotation;
     // states
     private double speed;
-    private final double offset = -0.028;
+    private final double offset = 0.017;
     private final double horizontalOffset = -0.15;
 
     // initializes the subsystem
@@ -66,11 +66,7 @@ public class Drivebase implements Subsystem {
         rotateInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_X.getName());
         rotateInput.addInputListener(this);
 
-        countClockInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_LEFT.getName());
-        countClockInput.addInputListener(this);
-
-        clockInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_RIGHT.getName());
-        clockInput.addInputListener(this);
+       
 
         // create motor controller object with CAN Constant
         motorLeftFront = new VictorSPX(CANConstants.LEFT_FRONT_DRIVE_TALON);

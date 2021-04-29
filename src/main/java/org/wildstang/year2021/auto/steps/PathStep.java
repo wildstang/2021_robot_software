@@ -1,7 +1,7 @@
 package org.wildstang.year2021.auto.steps;
 
 import org.wildstang.framework.auto.steps.AutoStep;
-import org.wildstang.framework.auto.subsystems.Drive;
+import org.wildstang.framework.subsystems.Drive;
 import org.wildstang.framework.timer.WsTimer;
 
 
@@ -63,7 +63,7 @@ public class PathStep extends AutoStep {
     private void UpdatePosAndHeading(double Dt){ //use circles and change in time to update position and heading
         double Dtheta = (MaxSpeed*Dt)*(Driver.rightSpeed - Driver.leftSpeed)/RobotWidth;
         NewHeading = Math.tan(Math.atan(Heading)+Dtheta);
-        double Dist = ((MAXspeed*Dt)*Driver.leftSpeed) + (Dtheta*RobotWidth*0.5);
+        double Dist = ((MaxSpeed*Dt)*Driver.leftSpeed) + (Dtheta*RobotWidth*0.5);
         double Theta = Math.atan(Heading);
         double NewTheta = Math.atan(NewHeading);
         if (Dtheta != 0){ //to prevent division by zero
@@ -80,7 +80,7 @@ public class PathStep extends AutoStep {
         Heading = NewHeading;
     }
     private void CheckPoint(){
-        double Distance = Math.sqrt(Math.pow(X-Xs[Counter],2)+Math.Pow(Y-Ys[Counter],2));
+        double Distance = Math.sqrt(Math.pow(X-Xs[Counter],2)+Math.pow(Y-Ys[Counter],2));
         double HeadErr = Math.abs(Heading-DyDx[Counter]);
         if ((HeadErr<AcceptableHeadingError)&&(Distance<AcceptableRadius)){
             Counter += 1;

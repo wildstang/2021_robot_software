@@ -42,9 +42,9 @@ public class Intake implements Subsystem {
     // initializes the subsystem
     public void init() {
         // register button and attach input listener with WS Input
-        rightTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_TRIGGER_RIGHT.getName());
+        rightTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_RIGHT_TRIGGER.getName());
         rightTrigger.addInputListener(this);
-        leftTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_TRIGGER_LEFT.getName());
+        leftTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_LEFT_TRIGGER.getName());
         leftTrigger.addInputListener(this);
 
         // create rollerMotor controller object with CAN Constant

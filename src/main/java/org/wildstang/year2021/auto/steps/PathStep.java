@@ -1,7 +1,7 @@
 package org.wildstang.year2021.auto.steps;
 
 import org.wildstang.framework.auto.steps.AutoStep;
-import org.wildstang.framework.subsystems.Drive;
+import org.wildstang.framework.subsystems.Drive; //this bit is throwing an error (sorry). I have no clue why.
 import org.wildstang.framework.timer.WsTimer;
 
 
@@ -43,12 +43,13 @@ public class PathStep extends AutoStep {
     private double lastTime = 0;
     private double ExDt;
     private double OtherConstant = 0.5;
-
+    
+    @Override
     public void initialize(double[] Xpts,double[] Ypts,double[] Dydxs) {
         ExDt = 0.01; //???
         Driver.leftSpeed = 0;
         Driver.rightSpeed = 0;
-        timer.Start();
+        timer.start();
         Counter = 1;
         DyDx = Dydxs;
         Xs = Xpts;
@@ -113,6 +114,7 @@ public class PathStep extends AutoStep {
 
 
     }
+    @Override
     public void update() {
         if (!First){
             double Dt = timer.get()-lastTime;
@@ -137,7 +139,7 @@ public class PathStep extends AutoStep {
         }
 
     }
-
+    @Override
     public String toString() {
         return "PathStep";
     }

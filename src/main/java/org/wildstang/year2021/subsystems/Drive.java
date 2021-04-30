@@ -28,8 +28,8 @@ public class Drive implements Subsystem {
     private TalonSRX rightMotor;
  
     // states
-    private double leftSpeed;
-    private double rightSpeed;
+    public double leftSpeed;
+    public double rightSpeed;
  
     // initializes the subsystem
     public void init() {

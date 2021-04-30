@@ -38,7 +38,7 @@ public class PathStep extends AutoStep {
     //other stuff
     private double DeltaX = 0; 
     private double DeltaY = 0;
-    private double PI = 3.1415;
+    private double PI = Math.PI;
     private boolean First;
     private double lastTime = 0;
     private double ExDt;

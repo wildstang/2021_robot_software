@@ -8,6 +8,7 @@ import java.util.Map;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -51,8 +52,13 @@ public class Drivebase implements Subsystem {
     private double commandRotation;
     // states
     private double speed;
-    private final double offset = 0.017;
+    private double offset = 0.017;
     private final double horizontalOffset = -0.15;
+
+    private ShuffleboardTab driveTab;
+    private NetworkTableEntry driveOffset;
+    private NetworkTableEntry maxSpeed;
+
 
     // initializes the subsystem
     public void init() {
@@ -66,7 +72,6 @@ public class Drivebase implements Subsystem {
         rotateInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_X.getName());
         rotateInput.addInputListener(this);
 
-       
 
         // create motor controller object with CAN Constant
         motorLeftFront = new VictorSPX(CANConstants.LEFT_FRONT_DRIVE_TALON);
@@ -74,6 +79,9 @@ public class Drivebase implements Subsystem {
         motorRightFront = new VictorSPX(CANConstants.RIGHT_FRONT_DRIVE_TALON);
         motorRightBack = new VictorSPX(CANConstants.RIGHT_BACK_DRIVE_TALON);
        
+       driveTab = Shuffleboard.getTab("SmartDashboard");
+       driveOffset = driveTab.add("Drive Offset", 1).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 0.1)).getEntry();
+       maxSpeed = driveTab.add("Max Speed", 1).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 1)).getEntry();
         
         resetState();
     }
@@ -84,7 +92,9 @@ public class Drivebase implements Subsystem {
         //double rightSpeed =  throttleInput;
   //System.out.println("drive");
         
-        
+        offset = driveOffset.getDouble(0);
+
+
         double hypot = Math.pow(commandHeading, 2) + Math.pow(commandThrottle, 2);
         
         
@@ -117,6 +127,7 @@ public class Drivebase implements Subsystem {
         lbSpeed = hypot * ((-Math.sin(thetaX) * (1-offset))+(Math.cos(thetaX)* (1+ horizontalOffset) )) - commandRotation;
         rbSpeed = hypot * ((Math.sin(thetaX) * (1 + offset))+(Math.cos(thetaX)* (1- horizontalOffset) )) - commandRotation;
 
+        //deadzones
         if(Math.abs(lfSpeed) < 0.05){
             lfSpeed = 0;
         }
@@ -131,6 +142,34 @@ public class Drivebase implements Subsystem {
         
         if(Math.abs(rbSpeed) < 0.05){
             rbSpeed = 0;
+        }
+        
+        SmartDashboard.putNumber("before max left", lfSpeed);
+        SmartDashboard.putNumber("before max left", lbSpeed);
+        //sets max speeds
+       
+        if(lfSpeed <= -maxSpeed.getDouble(1.0)){
+            lfSpeed = -maxSpeed.getDouble(1.0);
+        }else if( lfSpeed >= maxSpeed.getDouble(1.0)){
+            lfSpeed = maxSpeed.getDouble(1.0);
+        }
+
+        if(rfSpeed >= maxSpeed.getDouble(1.0) ){
+            rfSpeed = maxSpeed.getDouble(1.0);
+        } else if( rfSpeed <= -maxSpeed.getDouble(1.0)){
+            rfSpeed = -maxSpeed.getDouble(1.0);
+        }
+        
+        if(lbSpeed <= -maxSpeed.getDouble(1.0)){
+            lbSpeed = -maxSpeed.getDouble(1.0);
+        } else if( lbSpeed >= maxSpeed.getDouble(1.0)){
+            lbSpeed = maxSpeed.getDouble(1.0);
+        }
+        
+        if(rbSpeed >= maxSpeed.getDouble(1.0)){
+            rbSpeed = maxSpeed.getDouble(1.0);
+        }else if( rbSpeed <= -maxSpeed.getDouble(1.0)){
+            rbSpeed = -maxSpeed.getDouble(1.0);
         }
 
         SmartDashboard.putNumber("commandThrottle", commandThrottle);

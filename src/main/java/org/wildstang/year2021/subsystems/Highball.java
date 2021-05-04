@@ -17,7 +17,8 @@ import org.wildstang.framework.timer.WsTimer;
  * Class:       Highball.java
  * Inputs:      1 digital buttons
  * Outputs:     1 victors
- * Description: raises the arm once when the left face button is pressed
+ * Description: raises the arm once when the left face button is pressed.
+ * Lowers the arm if it is pressed again.
  */
 
 public class Highball implements Subsystem {
@@ -97,7 +98,7 @@ public class Highball implements Subsystem {
         if (leftButton.getValue() && raised == false && !lowering) {
             raising = true;
         }
-        if(leftButton.getValue()&& !raised && !raising){
+        if(leftButton.getValue()&& raised && !raising){
             lowering = true;
         }
         

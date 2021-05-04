@@ -9,13 +9,18 @@ import org.wildstang.year2021.auto.steps.PathStep;
  
  Hopefully makes the robot move through some points, ending about two units right, two units down relitive to its starting point. Ideally, it ends with about the same orientation.
  */
-public class ExampleAutoProgram extends AutoProgram {
+public class PathTestProgram extends AutoProgram {
 
     @Override
     protected void defineSteps() {
         // define a series of steps
+        double[] Xs ={0,2,2,0,-2};
+        double[] Ys = {0,0,2,0,-2};
+        double[] DyDxs = {0,0,999,-1,0};
         addStep(new DelayStep(5));
-        addStep(new PathStep(new double[]{0,2,2,0,-2},new double[]{0,0,2,0,-2},new double[]{0,0,999,-1,0}));
+        PathStep path = new PathStep();
+        path.PathStep(Xs,Ys,DyDxs);
+        addStep(path);
     }
 
     @Override

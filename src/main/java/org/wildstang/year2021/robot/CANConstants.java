@@ -13,9 +13,9 @@ public final class CANConstants {
     public static final int RightDriveTalon = 2; 
     public static final int CenterDriveTalon1 = 3;
     public static final int CenterDriveTalon2 = 4; 
-    public static final int Intake = 5;
+    public static final int Descoring = 5;
     public static final int IntakeDeplay = 6;  
     public static final int HighFuel = 7; 
-    public static final int Descoring = 8; 
+    public static final int Intake = 8; 
     
 }

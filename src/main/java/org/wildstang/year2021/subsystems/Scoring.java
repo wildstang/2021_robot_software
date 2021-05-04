@@ -37,77 +37,78 @@ public class Scoring implements Subsystem {
             return Speed;
         }
     }
-   
-    private static final int DEPLOYTIME = 30; 
-    private static final int AUTODEPLOYTIME = 5; 
-    
-    private int timer; 
 
     private intakeStateEnum intakeState; 
 
-    private DigitalInput deployButton;
+    private DigitalInput deployButtonDown;
     private DigitalInput intakeButton;
+    private DigitalInput outputButton; 
+    private DigitalInput deployButtonUp;
     private DigitalInput intakeReverseButton;
 
-    private double intakeSpeed = 0; 
-
+    private boolean intakeOn; 
+    private boolean outputOn; 
 
     //motors
-    public VictorSPX IntakeVictor;
-    public VictorSPX IntakeDeployVictor; 
+    public VictorSPX IntakeVictor; //intake = positive, output = negative 
+    public VictorSPX IntakeDeployVictor;  //up = negative, down = positve
 
 
     // initializes the subsystem
     public void init() {
-        deployButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
-        deployButton.addInputListener(this);
+        deployButtonUp = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_UP.getName());
+        deployButtonUp.addInputListener(this);
+        deployButtonDown = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
+        deployButtonDown.addInputListener(this);
         intakeButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_RIGHT.getName());
         intakeButton.addInputListener(this);
+        outputButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_DPAD_DOWN);
+        IntakeVictor = new VictorSPX(CANConstants.Intake);
+        IntakeDeployVictor = new VictorSPX(CANConstants.IntakeDeplay);
         resetState();
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        /*
-        if (timer > 0) {
-            IntakeDeployVictor.set(ControlMode.PercentOutput, intakeState.speed());
-            timer--;
+        if(intakeOn) {
+            IntakeVictor.set(ControlMode.PercentOutput, 0.5);
         }
-        IntakeVictor.set(ControlMode.PercentOutput, intakeSpeed);
-        */  
+        else if (outputOn) {
+            IntakeVictor.set(ControlMode.PercentOutput, -0.5);
+        }
+        else {
+            IntakeVictor.set(ControlMode.PercentOutput, 0);
+        }
+
+        
+
     }
 
     // respond to input updates     
     public void inputUpdate(Input signal) {
-        if (deployButton.getValue() && timer < 1) {
-            if(intakeState == intakeStateEnum.CLOSED ) {
-                intakeState = intakeStateEnum.OPEN;
-                timer = DEPLOYTIME;
-            }
-            else if (intakeState == intakeStateEnum.OPEN) {
-                intakeState = intakeStateEnum.CLOSED;
-                timer = DEPLOYTIME;
-            }
-        }
-
-
         if(intakeButton.getValue()) {
-            intakeSpeed = 1.0;
-        }
-        else if(intakeReverseButton.getValue()) {
-            intakeSpeed = -1.0;
-        }
-        else {
-            intakeSpeed = 0;
+            if (outputOn) {
+                outputOn = !outputOn;
+            }
+            intakeOn = !intakeOn;
         }
 
+        if(outputButton.getValue()) {
+            if (intakeOn) {
+                intakeOn = !intakeOn;
+            }
+            outputOn = !outputOn;
+        }
+
+        
     }
-    
+
     // used for testing
     public void selfTest() {}
 
     public void resetState() {
-        intakeState = intakeStateEnum.CLOSED; 
+        intakeOn = false; 
+        outputOn  = false; 
     }
 
     // returns the unique name of the example

@@ -14,6 +14,9 @@ import org.wildstang.framework.io.Input;
 import org.wildstang.framework.io.inputs.AnalogInput;
 import org.wildstang.framework.subsystems.Subsystem;
 
+import org.wildstang.framework.io.inputs.AnalogInput;
+import org.wildstang.framework.io.inputs.DigitalInput;
+
 /**
  * Class:       TestSubsystem.java
  * Inputs:      1 joystick
@@ -22,48 +25,26 @@ import org.wildstang.framework.subsystems.Subsystem;
  */
 public class HighFuel implements Subsystem {
 
-    // inputs
-    private AnalogInput joystick;
+    private DigitalInput clawDeploy; 
 
-    // outputs
-    private VictorSPX motor;
-
-    // states
-    private double speed;
-
-    // initializes the subsystem
     public void init() {
-        // register button and attach input listener with WS Input
-        joystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());
-        joystick.addInputListener(this);
 
-        // create motor controller object with CAN Constant
-        //motor = new TalonSRX(CANConstants.HighFuel);        
-        resetState();
     }
 
-    // update the subsystem everytime the framework updates (every ~0.02 seconds)
+    
     public void update() {
-        //motor.set(ControlMode.PercentOutput, speed);
+        
     }
 
-    // respond to input updates
     public void inputUpdate(Input signal) {
-        // check to see which input was updated
-        if (signal == joystick) {
-            speed = joystick.getValue();
-        }
+        
     }
-
-    // used for testing
     public void selfTest() {}
 
-    // resets all variables to the default state
     public void resetState() {
-        speed = 0.0;
+       
     }
 
-    // returns the unique name of the example
     public String getName() {
         return "High Fuel";
     }

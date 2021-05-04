@@ -15,7 +15,7 @@ public class ExampleAutoProgram extends AutoProgram {
     protected void defineSteps() {
         // define a series of steps
         addStep(new DelayStep(5));
-        addStep(new PathStep([0,2,2,0,-2],[0,0,2,0,-2],[0,0,999,-1,0]);
+        addStep(new PathStep(new double[]{0,2,2,0,-2},new double[]{0,0,2,0,-2},new double[]{0,0,999,-1,0});
     }
 
     @Override

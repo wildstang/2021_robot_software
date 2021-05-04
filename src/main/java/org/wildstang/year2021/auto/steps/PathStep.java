@@ -107,15 +107,18 @@ public class PathStep extends AutoStep {
         // DyDx = 3Ax^2 +2Bx + C
         //This rough approximation is probably wrong and/or horribly inefficient:
         double ExDeltaX = MaxSpeed*SpeedConstant*Dt/(Math.sqrt(1+Math.pow(Heading,2)));
+        if(DiffX<0){
+            ExDeltaX = -1*ExDeltaX;
+        }
        // double ExDeltaX = Math.tan(Heading)*((Driver.leftSpeed*MaxSpeed*Dt)+(RobotWidth/2))/(Math.sqrt(Math.pow(Heading,2)+1));
         double HeadingGoal = (3*A*Math.pow(ExDeltaX,2))+(2*B*ExDeltaX)+C;
         double DeltaThetaGoal = Math.atan(HeadingGoal)-Math.atan(Heading);
         double DthDt = DeltaThetaGoal/Dt;
-        double RminusL = RobotWidth*DthDt/MaxSpeed;
-        double L = -1*RminusL/2 + OtherConstant;
-        double R = RminusL/2 + OtherConstant;
-
-
+        double TurnRadius = (MaxSpeed*SpeedConstant*Dt/DeltaThetaGoal)-(RobotWidth/2)
+        double L = DeltaTheta*TurnRadius/(MaxSpeed*SpeedConstant*Dt);
+        double R = DeltaTheta*(TurnRadius+RobotWidth)/(MaxSpeed*SpeedConstant*Dt);
+        Driver.leftSpeed = L;
+        Driver.rightSpeed = R;
 
     }
     @Override

@@ -64,7 +64,7 @@ public class PathStep extends AutoStep {
         X = Xs[0];  
         First = true; 
         lastTime = 0;
-        OtherConstant = 0.5;
+       // OtherConstant = 0.5;
     }
     private void UpdatePosAndHeading(double Dt){ //use circles and change in time to update position and heading
         double Dtheta = (MaxSpeed*Dt)*(Driver.rightSpeed - Driver.leftSpeed)/RobotWidth;
@@ -116,8 +116,8 @@ public class PathStep extends AutoStep {
         double DeltaThetaGoal = Math.atan(HeadingGoal)-Math.atan(Heading);
         double DthDt = DeltaThetaGoal/Dt;
         double TurnRadius = (MaxSpeed*SpeedConstant*Dt/DeltaThetaGoal)-(RobotWidth/2);
-        double L = DeltaTheta*TurnRadius/(MaxSpeed*SpeedConstant*Dt);
-        double R = DeltaTheta*(TurnRadius+RobotWidth)/(MaxSpeed*SpeedConstant*Dt);
+        double L = DeltaThetaGoal*TurnRadius/(MaxSpeed*SpeedConstant*Dt);
+        double R = DeltaThetaGoal*(TurnRadius+RobotWidth)/(MaxSpeed*SpeedConstant*Dt);
         Driver.leftSpeed = L;
         Driver.rightSpeed = R;
 

@@ -39,7 +39,7 @@ public class Highball implements Subsystem {
     private boolean timerStatus;
     private boolean raising;
     private boolean raised;
-
+    private boolean lowering;
     //Timer
     private WsTimer timer = new WsTimer();
 
@@ -71,16 +71,34 @@ public class Highball implements Subsystem {
             } else if (timer.hasPeriodPassed(RAISE_TIME)) {
                 raised = true;
                 raising = false;
+                timerStatus = false;
             }
         }
+        else {if (lowering){
+            if(!timerStatus){
+                timer.reset();
+                timer.start();
+                timerStatus = true;
+                highballMotorSpeed = -1*LIFT_SPEED;
+            }else if(timer.hasPeriodPassed(RAISE_TIME)){
+                raised = false;
+                lowering = false;
+                timerStatus = false;
+            }
+        }}
+
     }
  
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if (leftButton.getValue() && raised == false) {
+        if (leftButton.getValue() && raised == false && !lowering) {
             raising = true;
         }
+        if(leftButton.getValue()&& !raised && !raising){
+            lowering = true;
+        }
+        
     }
  
     // used for testing

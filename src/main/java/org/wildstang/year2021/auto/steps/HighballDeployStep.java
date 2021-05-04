@@ -23,7 +23,10 @@ public class HighballDeployStep extends AutoStep {
 
     public void update() {
         // check if the timer has exceded the desired delay
-        setFinished(true);
+        if(HighArm.isRaised()){
+            setFinished(true);
+        }
+        HighArm.update();
         
     }
 

@@ -124,5 +124,8 @@ public class Highball implements Subsystem {
     public void raiseArm(){
         raising = true;
     }
+    public boolean isRaised(){
+        return raised;
+    }
 }
  

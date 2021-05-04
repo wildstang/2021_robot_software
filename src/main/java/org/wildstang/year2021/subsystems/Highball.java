@@ -72,6 +72,7 @@ public class Highball implements Subsystem {
                 raised = true;
                 raising = false;
                 timerStatus = false;
+                highballMotorSpeed = 0;
             }
         }
         else {if (lowering){
@@ -84,6 +85,7 @@ public class Highball implements Subsystem {
                 raised = false;
                 lowering = false;
                 timerStatus = false;
+                highballMotorSpeed = 0;
             }
         }}
 

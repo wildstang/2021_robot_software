@@ -10,7 +10,8 @@ This is a flexible drive step that tries to follow a path, given by two arrays c
 A gyroscope would improve accuracy, not implememnted here.
 I doubt it will be able to correctly follow long paths, but should be able to correctly preform smaller manuvers?
 Also will not necasarilly travel in strait lines, so perhaps shouldnt drive to close to wall.
-Note: headings are set up as slopes, not angles.
+Note: headings are set up as slopes, not angles. This also means more points may need to be added to a path to clarify which way the robot should be facing.
+It is also possible this step will refuse to turn the robot around, and will prefer driving backwards.
 */
 public class PathStep extends AutoStep {
 
@@ -42,7 +43,7 @@ public class PathStep extends AutoStep {
     private boolean First;
     private double lastTime = 0;
     private double ExDt;
-    private double OtherConstant = 0.5;
+   // private double OtherConstant = 0.5;
     
 
     public void PathStep(double[] Xpts, double[] Ypts, double[] Dydxs){
@@ -108,13 +109,13 @@ public class PathStep extends AutoStep {
         //This rough approximation is probably wrong and/or horribly inefficient:
         double ExDeltaX = MaxSpeed*SpeedConstant*Dt/(Math.sqrt(1+Math.pow(Heading,2)));
         if(DiffX<0){
-            ExDeltaX = -1*ExDeltaX;
+            ExDeltaX = -1*ExDeltaX; //this would cause odd behavior for paths between points where y not a function of x.
         }
        // double ExDeltaX = Math.tan(Heading)*((Driver.leftSpeed*MaxSpeed*Dt)+(RobotWidth/2))/(Math.sqrt(Math.pow(Heading,2)+1));
         double HeadingGoal = (3*A*Math.pow(ExDeltaX,2))+(2*B*ExDeltaX)+C;
         double DeltaThetaGoal = Math.atan(HeadingGoal)-Math.atan(Heading);
         double DthDt = DeltaThetaGoal/Dt;
-        double TurnRadius = (MaxSpeed*SpeedConstant*Dt/DeltaThetaGoal)-(RobotWidth/2)
+        double TurnRadius = (MaxSpeed*SpeedConstant*Dt/DeltaThetaGoal)-(RobotWidth/2);
         double L = DeltaTheta*TurnRadius/(MaxSpeed*SpeedConstant*Dt);
         double R = DeltaTheta*(TurnRadius+RobotWidth)/(MaxSpeed*SpeedConstant*Dt);
         Driver.leftSpeed = L;

@@ -13,9 +13,9 @@ import org.wildstang.framework.subsystems.Subsystem;
 
 /**
  * Class:       Intake.java
- * Inputs:      AnalogInput (Manipulator Left and Right trigger) 
+ * Inputs:      2 AnalogInput (Manipulator left trigger and right trigger) 
  * Outputs:     1 VictorSPX
- * Description: After pressing the left/right trigger by a certain amount (0.2), the intake roller will start moving at however far the trigger is pushed.
+ * Description: Right trigger to roll intake forwards, left trigger to roll intake backwards (if right trigger is not being pressed).
  */
 public class Intake implements Subsystem {
 
@@ -26,41 +26,42 @@ public class Intake implements Subsystem {
     // outputs
     private VictorSPX rollerMotor;
 
-    // states
-    private double speed;
-
-    //helpful variables
+    // variables
+    private double speed = 0.0;
     private double maxSpeed = 0.8;
 
     // initializes the subsystem
     public void init() {
-        // register button and attach input listener with WS Input
+        initInputs();
+        initOutputs();
+        resetState();
+    }
+
+    public void initInputs() {
         rightTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_RIGHT_TRIGGER.getName());
         rightTrigger.addInputListener(this);
         leftTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_LEFT_TRIGGER.getName());
         leftTrigger.addInputListener(this);
+    }
 
-        // create rollerMotor controller object with CAN Constant
+    public void initOutputs() {
         rollerMotor = new VictorSPX(CANConstants.INTAKE_ROLLER_VICTOR);
-
-        resetState();
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        rollerMotor.set(ControlMode.PercentOutput, speed);
+        rollerMotor.set(ControlMode.PercentOutput, speed*maxSpeed);
     }
 
     // respond to input updates
     public void inputUpdate(Input signal) {
-        // check to see which input was updated
         if (signal == rightTrigger || signal == leftTrigger) {
             if (rightTrigger.getValue() > 0.2) {
-                speed = rightTrigger.getValue() * maxSpeed;
-                // when right trigger is pressed 20%, the intake spins forward
+                speed = rightTrigger.getValue();
+                // when right trigger is pressed 20%, the intake spins forwards
             }
             else if (leftTrigger.getValue() > 0.2) {
-                speed = leftTrigger.getValue() * maxSpeed * -1.0;
+                speed = leftTrigger.getValue() * -1.0;
                 // when left trigger is pressed 20%, the intake spins backwards
             }
             else {

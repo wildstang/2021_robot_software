@@ -3,7 +3,6 @@ package org.wildstang.year2021.subsystems.hopper;
 import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
 
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
@@ -14,9 +13,9 @@ import org.wildstang.framework.subsystems.Subsystem;
 
 /**
  * Class:       Hopper.java
- * Inputs:      1 AnalogInput (Right Joystick)
+ * Inputs:      1 AnalogInput (Manipulator right joystick Y-axis)
  * Outputs:     1 VictorSPX
- * Description: Push right joystick up to roll hopper forwards, and down to roll it backwards.
+ * Description: Joystick up to roll hopper forwards, joystick down to roll it backwards.
  */
 public class Hopper implements Subsystem {
 
@@ -26,40 +25,46 @@ public class Hopper implements Subsystem {
     // outputs
     private VictorSPX motor;
 
-    // states
-    private double speed = 0;
-    private double multiplier = 1;
+    // variables
+    private double speed = 0.0;
+    private double maxSpeed = 1.0;
     
-
     // initializes the subsystem
     public void init() {
-        // register joystick and attach input listener with WS Input
+        initInputs();
+        initOutputs();
+        resetState();
+    }
+
+    public void initInputs() {
         rightJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_RIGHT_JOYSTICK_Y.getName());
         rightJoystick.addInputListener(this);
-        
-        // create motor controller object with CAN Constant
+    }
+
+    public void initOutputs() {
         motor = new VictorSPX(CANConstants.HOPPER_VICTOR);
-        resetState();
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-            motor.set(ControlMode.PercentOutput, speed*multiplier);
+        motor.set(ControlMode.PercentOutput, speed*maxSpeed);
     }
 
     // respond to input updates
     public void inputUpdate(Input signal) {
-        // check to see which input was updated
         if (signal == rightJoystick){
-            if (rightJoystick.getValue() > 0.5){
+            if (rightJoystick.getValue() > 0.4){
                 speed = 1.0;
             }
-            else if (rightJoystick.getValue() < -0.5){
+            else if (rightJoystick.getValue() < -0.4){
                 speed = -1.0; 
             }
             else {
                 resetState();
             }
+        }
+        else {
+            resetState();
         }
     }
 
@@ -71,7 +76,7 @@ public class Hopper implements Subsystem {
         speed = 0.0;
     }
 
-    // returns the unique name of the example
+    // returns the unique name of the subsystem
     public String getName() {
         return "Hopper";
     }

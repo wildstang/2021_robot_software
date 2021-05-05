@@ -14,7 +14,7 @@ import org.wildstang.framework.subsystems.Subsystem;
 
 /**
  * Class:       TankDrive.java
- * Inputs:      2 joysticks
+ * Inputs:      2 AnalogInput (Driver left joystick Y-axis and right joystick Y-axis)
  * Outputs:     2 TalonSRX (front), 2 VictorSPX (rear)
  * Description: A tank drive system that controls four motors.
  */
@@ -30,10 +30,14 @@ public class TankDrive implements Subsystem {
     private VictorSPX rightFrontMotor;
     private TalonSRX rightBackMotor;
 
-    // states
-    private double leftSpeed;
-    private double rightSpeed;
-    private double multiplier = 0.5; // change to adjust max speed
+    // variables
+    private double leftSpeed = 0.0;
+    private double rightSpeed = 0.0;
+    private double maxSpeed = 0.5; // change to adjust max speed
+
+    // deadzones must be positive double between 0.0 and 1.0
+    private double leftDeadzone = 0.4;
+    private double rightDeadzone = 0.4;
 
     // initializes the subsystem
     public void init() {
@@ -58,39 +62,41 @@ public class TankDrive implements Subsystem {
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        leftFrontMotor.set(ControlMode.PercentOutput, leftSpeed);
-        leftBackMotor.set(ControlMode.PercentOutput, leftSpeed);
-        rightFrontMotor.set(ControlMode.PercentOutput, rightSpeed);
-        rightBackMotor.set(ControlMode.PercentOutput, rightSpeed);
+        leftFrontMotor.set(ControlMode.PercentOutput, leftSpeed*maxSpeed);
+        leftBackMotor.set(ControlMode.PercentOutput, leftSpeed*maxSpeed);
+        rightFrontMotor.set(ControlMode.PercentOutput, rightSpeed*maxSpeed);
+        rightBackMotor.set(ControlMode.PercentOutput, rightSpeed*maxSpeed);
     }
 
     // respond to input updates
     public void inputUpdate(Input signal) {
-        // check to see which input was updated
-            if (leftJoystick.getValue() > 0.5) {
-                leftSpeed = leftJoystick.getValue() * multiplier;
-                System.out.println("Left forwards!");
-            }
-            else if (leftJoystick.getValue() < -0.5) {
-                leftSpeed = leftJoystick.getValue() * multiplier;
-                System.out.println("Left backwards!");
+        // update left motor speeds
+        if (signal == leftJoystick) {
+            if (Math.abs(leftJoystick.getValue()) > leftDeadzone) {
+                leftSpeed = leftJoystick.getValue();
             }
             else {
                 leftSpeed = 0.0;
             }
-            if (rightJoystick.getValue() > 0.5) {
-                rightSpeed = rightJoystick.getValue() * multiplier;
-                System.out.println("Right forwards!");
-            }
-            else if (rightJoystick.getValue() < -0.5) {
-                rightSpeed = rightJoystick.getValue() * multiplier;
-                System.out.println("Right backwards!");
+        }
+        else {
+            leftSpeed = 0.0;
+        }
+        // update right motor speeds
+        if (signal == rightJoystick) {
+            if (Math.abs(rightJoystick.getValue()) > rightDeadzone) {
+                rightSpeed = rightJoystick.getValue();
             }
             else {
                 rightSpeed = 0.0;
             }
+        }
+        else {
+            rightSpeed = 0.0;
+        }
     }
 
+    // helper methods for autonomous
     public void setLeftMotorSpeed(double s) {
         leftSpeed = s;
     }
@@ -99,6 +105,7 @@ public class TankDrive implements Subsystem {
         rightSpeed = s;
     }
 
+    // used for testing
     public void selfTest() {}
 
     // resets all variables to the default state
@@ -107,7 +114,7 @@ public class TankDrive implements Subsystem {
         rightSpeed = 0.0;
     }
 
-    // returns the unique name of the example
+    // returns the unique name of the subsystem
     public String getName() {
         return "Tank Drive";
     }

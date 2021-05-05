@@ -91,6 +91,12 @@ public class Drive implements Subsystem {
             rightSpeed = leftJoystick.getValue()*(rightSpeed/norm);
             leftSpeed = leftJoystick.getValue()*(leftSpeed/norm);
         }
+        if(Math.abs(leftSpeed)<0.08){
+            leftSpeed = 0;
+        }
+        if(Math.abs(rightSpeed)<0.08){
+            rightSpeed = 0;
+        }
     }
  
     // used for testing

@@ -40,7 +40,7 @@ public class Ballpath implements Subsystem {
     private final double REVERSE_SPEED = -1;
     private final double HATCH_OPEN_SPEED = 0.25;
     private final double HATCH_CLOSE_SPEED = -0.25;
-    private final double HATCH_MOVE_TIME = 10;
+    private final double HATCH_MOVE_TIME = 1;
 
     //Booleans
     private boolean timerStatus;

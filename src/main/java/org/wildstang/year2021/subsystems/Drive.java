@@ -16,9 +16,10 @@ import org.wildstang.year2021.robot.WSInputs;
  * Class:       Drive.java
  * Inputs:      2 joystick
  * Outputs:     2 Victor SPX
- * Description: This the drive train subsystem that controls 2 motors with 2 joysticks.
- 
- Update: added alternate mode and deadband
+ * Description: This the drive train subsystem that controls 2 motors with 2 joysticks. 
+ * Default mode uses vertical positions of joysticks for motor powers.
+ * Alternate mode uses left joystick for throttle, and right joystick horizontal axis for steering.
+ * Click select to change modes.
  */
 public class Drive implements Subsystem {
  
@@ -115,6 +116,17 @@ public class Drive implements Subsystem {
         rightSpeed = 0;
         altControl = false;
         lastValue = false;
+        ResetEncoders();
+    }
+    public void ResetEncoders(){
+        leftMotor.getSensorCollection().setQuadraturePosition(0,0);
+        rightMotor.getSensorCollection().setQuadraturePosition(0,0);
+    }
+    public double GetRightEncoder(){
+        return rightMotor.getSensorCollection().getQuadraturePosition();
+    }
+    public double GetLeftEncoder(){
+        return leftMotor.getSensorCollection().getQuadraturePosition();
     }
  
     // returns the unique name of the example

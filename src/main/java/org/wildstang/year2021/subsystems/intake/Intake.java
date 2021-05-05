@@ -13,16 +13,11 @@ import org.wildstang.framework.subsystems.Subsystem;
 
 /**
  * Class:       Intake.java
- * Inputs:      AnalogInput (Right trigger) 
+ * Inputs:      AnalogInput (Manipulator Left and Right trigger) 
  * Outputs:     1 VictorSPX
- * Description: After pressing the right trigger by a certain amount (0.2), the intake roller will start moving at however far the trigger is pushed.
+ * Description: After pressing the left/right trigger by a certain amount (0.2), the intake roller will start moving at however far the trigger is pushed.
  */
 public class Intake implements Subsystem {
-
-
-    /**
-     *
-     */
 
     // inputs
     private AnalogInput rightTrigger;
@@ -30,14 +25,12 @@ public class Intake implements Subsystem {
 
     // outputs
     private VictorSPX rollerMotor;
-   
 
     // states
     private double speed;
-    
 
     //helpful variables
-    private double maxSpeed = 0.8; //this is just where we can set a consecutive speed, for convinience, instead of changing the speed in each area implemented every time we change it
+    private double maxSpeed = 0.8;
 
     // initializes the subsystem
     public void init() {
@@ -61,21 +54,16 @@ public class Intake implements Subsystem {
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if (signal == rightTrigger) {
-            if(rightTrigger.getValue() > 0.2){
+        if (signal == rightTrigger || signal == leftTrigger) {
+            if (rightTrigger.getValue() > 0.2) {
                 speed = rightTrigger.getValue() * maxSpeed;
-                //when right trigger is pressed past halfway, the intake spins at speed <speedValue>
-            } else {
-                resetState();
+                // when right trigger is pressed 20%, the intake spins forward
             }
-        } else {
-            resetState();
-        }
-        if (signal == leftTrigger) {
-            if(leftTrigger.getValue() > 0.2){
+            else if (leftTrigger.getValue() > 0.2) {
                 speed = leftTrigger.getValue() * maxSpeed * -1.0;
-                //when right trigger is pressed past halfway, the intake spins at speed <speedValue>
-            } else {
+                // when left trigger is pressed 20%, the intake spins backwards
+            }
+            else {
                 resetState();
             }
         } else {
@@ -95,9 +83,6 @@ public class Intake implements Subsystem {
     public String getName() {
         return "Intake";
     }
-
-    
-    
 }
 
 //coutesy of Shane Thomas

@@ -18,10 +18,10 @@ public class PathStep extends AutoStep {
     WsTimer timer = new WsTimer();
     Drive Driver = new Drive();
     //paramaters
-    public double MaxSpeed = 20; //Fix this value
+    public double MaxSpeed = 5; //Fix this value
     public double AcceptableRadius =  0.1;
     public double AcceptableHeadingError =  0.1;
-    public double RobotWidth =  0.5; //Fix this value.
+    public double RobotWidth =  1.34733441667; //Fix this value.
     
     public double SpeedConstant =  0.05; //later should be replaced with array like headings
 

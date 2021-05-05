@@ -11,13 +11,14 @@ import org.wildstang.framework.subsystems.Subsystem;
 import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
  
-
+ 
 /**
  * Class:       Drive.java
  * Inputs:      2 joystick
  * Outputs:     2 Victor SPX
  * Description: This the drive train subsystem that controls 2 motors with 2 joysticks.
- Update: 
+ 
+ Update: added alternate mode and deadband
  */
 public class Drive implements Subsystem {
  
@@ -38,6 +39,8 @@ public class Drive implements Subsystem {
 
     private boolean altControl; //is it on alternate control mode?
     private boolean lastValue; 
+
+    public double DeadBand = 0.08;
     // initializes the subsystem
     public void init() {
         // create motor controller object with CAN Constant
@@ -77,6 +80,12 @@ public class Drive implements Subsystem {
         if(!altControl){
             leftSpeed = leftJoystick.getValue();
             rightSpeed = rightJoystick.getValue();
+            if(Math.abs(leftSpeed)<DeadBand){
+                leftSpeed = 0;
+            }
+            if(Math.abs(rightSpeed)<DeadBand){
+                rightSpeed = 0;
+            }
         }
         else{
             if (!quickButton.getValue()){
@@ -90,12 +99,10 @@ public class Drive implements Subsystem {
             double norm = 0.5*(Math.abs(leftSpeed)+Math.abs(rightSpeed));
             rightSpeed = leftJoystick.getValue()*(rightSpeed/norm);
             leftSpeed = leftJoystick.getValue()*(leftSpeed/norm);
-        }
-        if(Math.abs(leftSpeed)<0.08){
-            leftSpeed = 0;
-        }
-        if(Math.abs(rightSpeed)<0.08){
-            rightSpeed = 0;
+            if(Math.abs(leftJoystick.getValue())<DeadBand){
+                rightSpeed = 0;
+                leftSpeed = 0;
+            }
         }
     }
  

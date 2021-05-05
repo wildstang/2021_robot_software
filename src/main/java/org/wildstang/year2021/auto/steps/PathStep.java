@@ -1,29 +1,32 @@
 package org.wildstang.year2021.auto.steps;
 
 import org.wildstang.framework.auto.steps.AutoStep;
-import org.wildstang.year2021.subsystems.Drive; //this bit is throwing an error (sorry). I have no clue why.
+import org.wildstang.year2021.subsystems.Drive; 
 import org.wildstang.framework.timer.WsTimer;
 
 
 /**
 This is a flexible drive step that tries to follow a path, given by two arrays containing points and an array containing angles the robot should be at.
+Also array containing speedconstants as percent of max speed
 A gyroscope would improve accuracy, not implememnted here.
 I doubt it will be able to correctly follow long paths, but should be able to correctly preform smaller manuvers?
 Also will not necasarilly travel in strait lines, so perhaps shouldnt drive to close to wall.
 Angles are in radians!!!
+Mesurements are in feet.
 */
 public class PathStep extends AutoStep {
 
     WsTimer timer = new WsTimer();
     Drive Driver = new Drive();
+    private double PI = Math.PI;
     //paramaters
-    public double MaxSpeed = 5; //Fix this value. No longer needed.
-    public double AcceptableRadius =  0.1;
-    public double AcceptableHeadingError =  0.1;
-    public double RobotWidth =  1.34733441667; //Fix this value.
+    public double MaxSpeed = 5; //obsolete?
+    public double AcceptableRadius =  0.1; 
+    public double AcceptableHeadingError =  PI/32; //5.625 degrees
+    public double RobotWidth =  1.34733441667; //ish
     public double WheelRadius = 0.5; //Fix this value
     
-    public double SpeedConstant =  0.1; //later should be replaced with array like headings
+    public double SpeedConstant;
     
     // to keep track of position and heading
     public double X = 0; 
@@ -36,25 +39,27 @@ public class PathStep extends AutoStep {
     private double[] Xs;
     private double[] Ys;
     private double[] As;
+    private double[] Vs;
     private int Counter = 1; //index of next point
     //other stuff
     private double DeltaX = 0; 
     private double DeltaY = 0;
-    private double PI = Math.PI;
     private boolean First;
     private double lastTime = 0;
     private double ExDt;
    // private double OtherConstant = 0.5;
     private double[] LastEncPos = {0,0};
 
-    public void PathStep(double[] Xpts, double[] Ypts, double[] Angles){
+    public void PathStep(double[] Xpts, double[] Ypts, double[] Angles,double[] Speeds){
         Xs = Xpts;
         Ys = Ypts;
         As = Angles;
+        Vs = Speeds;
         Heading = Math.tan(As[0]); // initial position and heading given by first elements of Xs,Ys,DyDx
         Y = Ys[0];
         X = Xs[0];  
         Angle = As[0];
+        SpeedConstant = Vs[1]; //speed with which to go to first point
     }
 
     @Override
@@ -106,6 +111,7 @@ public class PathStep extends AutoStep {
         double HeadErr = Math.abs(Angle-As[Counter]);
         if ((HeadErr<AcceptableHeadingError)&&(Distance<AcceptableRadius)){
             Counter += 1;
+            SpeedConstant = Vs[Counter];
         }
     }
     private void OutputUpdate(double Dt){  
@@ -152,7 +158,7 @@ public class PathStep extends AutoStep {
 
     }
     @Override
-    public void update() {
+    public void update(){
         if (!First){
             double Dt = timer.get()-lastTime;
             ExDt = ((ExDt*9)+Dt)/10; //running avg of update time

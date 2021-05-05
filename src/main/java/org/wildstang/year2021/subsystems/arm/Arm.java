@@ -20,13 +20,14 @@ import org.wildstang.framework.subsystems.Subsystem;
 public class Arm implements Subsystem {
 
     // inputs
-    private AnalogInput controllerStick;
+    private AnalogInput leftJoystick;
 
     // outputs
     private VictorSPX motor;
 
     // states
     private double speed = 0.0;
+    private double maxSpeed = 0.8;
 
     // initializes the subsystem
     public void init() {
@@ -36,8 +37,8 @@ public class Arm implements Subsystem {
     }
 
     public void initInputs() {
-        controllerStick = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_LEFT_JOYSTICK_Y.getName());
-        controllerStick.addInputListener(this);
+        leftJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_LEFT_JOYSTICK_Y.getName());
+        leftJoystick.addInputListener(this);
     }
 
     public void initOutputs() {
@@ -46,14 +47,14 @@ public class Arm implements Subsystem {
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        motor.set(ControlMode.PercentOutput, speed);
+        motor.set(ControlMode.PercentOutput, speed*maxSpeed);
     }
 
     // respond to input updates
     public void inputUpdate(Input signal) {
-        // check to see if the stick has been moved enough to warrent the arm to move
-        if (signal == controllerStick) {
-            double stickValue = controllerStick.getValue();
+        // check to see if the stick has been moved enough to warrant the arm to move
+        if (signal == leftJoystick) {
+            double stickValue = leftJoystick.getValue();
             if (Math.abs(stickValue) >= 0.4) {
                 speed = stickValue;
             } else {

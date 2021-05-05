@@ -13,7 +13,7 @@ public class DriveBackwardsStep extends AutoStep {
     
     public DriveBackwardsStep(double s) {
         if (s <= 1.0 || s >= -1.0) {
-            speed = -Math.abs(s);
+            speed = s;
         }  
         else {
             speed = 0.0;

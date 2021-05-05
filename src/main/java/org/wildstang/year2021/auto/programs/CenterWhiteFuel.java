@@ -1,11 +1,14 @@
 package org.wildstang.year2021.auto.programs;
 
 import org.wildstang.framework.auto.AutoProgram;
+import org.wildstang.year2021.auto.steps.DelayStep;
+import org.wildstang.year2021.auto.steps.RunIntakeStep;
+import org.wildstang.year2021.auto.steps.DriveForwardsStep;
 import org.wildstang.year2021.auto.steps.DriveBackwardsStep;
 import org.wildstang.year2021.auto.steps.DriveLeftBackwardsStep;
+import org.wildstang.year2021.auto.steps.DriveRightForwardsStep;
 import org.wildstang.year2021.auto.steps.ArmUpwardsStep;
 import org.wildstang.year2021.auto.steps.ArmDownwardsStep;
-import org.wildstang.year2021.auto.steps.DelayStep;
 
 /**
  * This is the framework of an Autonomous Program.
@@ -13,25 +16,32 @@ import org.wildstang.year2021.auto.steps.DelayStep;
  * These programs work by defining a series of steps in the "defineSteps" functions.
  * The "toString" function defines a name for the program.
  */
-public class RetrieveBlackFuel extends AutoProgram {
+public class CenterWhiteFuel extends AutoProgram {
 
     @Override
     protected void defineSteps() {
-        // move backwards
-        addStep(new DriveBackwardsStep(1.0));
+        // starts the roller and drives towards the center
+        addStep(new DriveForwardsStep());
+        addStep(new RunIntakeStep());
         addStep(new DelayStep(2));
-        addStep(new DriveBackwardsStep(0.0));
-        addStep(new DelayStep(0.5));
-        // align with black fuel cell tower
-        addStep(new DriveLeftBackwardsStep(1.0));
-        addStep(new DelayStep(0.5));
-        addStep(new DriveLeftBackwardsStep(0.0));
-        addStep(new DelayStep(0.5));
-        // approach black fuel cell tower
-        addStep(new DriveBackwardsStep(0.5));
+        // stops driving forward and pauses for a second to gather balls, then turns off the intake
+        addStep(new DriveForwardsStep(0));
+        addStep(new DelayStep(2));
+        addStep(new RunIntakeStep(0));
+        // drives backwards to prepare to spin
+        addStep(new DriveBackwardsStep(1));
         addStep(new DelayStep(1));
-        addStep(new DriveBackwardsStep(0.0));
+        addStep(new DriveBackwardsStep(0));
+        // spins, then stops
+        addStep(new DriveLeftBackwardsStep());
+        addStep(new DriveRightForwardsStep());
+        addStep(new DelayStep(2));
+        addStep(new DriveLeftBackwardsStep(0));
+        addStep(new DriveRightForwardsStep(0));
+        // Drives back to tower
+        addStep(new DriveBackwardsStep());
         addStep(new DelayStep(0.5));
+        addStep(new DriveBackwardsStep(0));
         // lift arm
         addStep(new ArmUpwardsStep());
         addStep(new DelayStep(1));
@@ -48,7 +58,7 @@ public class RetrieveBlackFuel extends AutoProgram {
 
     @Override
     public String toString() {
-        return "RetrieveBlackFuel";
+        return "CenterWhiteFuel";
     }
 
 }

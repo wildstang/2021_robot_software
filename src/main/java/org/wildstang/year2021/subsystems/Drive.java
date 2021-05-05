@@ -18,7 +18,7 @@ import org.wildstang.year2021.robot.WSInputs;
  * Outputs:     2 Victor SPX
  * Description: This the drive train subsystem that controls 2 motors with 2 joysticks. 
  * Default mode uses vertical positions of joysticks for motor powers.
- * Alternate mode uses left joystick for throttle, and right joystick horizontal axis for steering.
+ * Alternate mode uses left joystick for throttle,  right joystick horizontal axis for steering, and face down for quickturn.
  * Click select to change modes.
  */
 public class Drive implements Subsystem {
@@ -61,7 +61,7 @@ public class Drive implements Subsystem {
         selectMode.addInputListener(this);
 
         quickButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
-        selectMode.addInputListener(this);
+        quickButton.addInputListener(this);
         resetState();
     }
  
@@ -78,7 +78,7 @@ public class Drive implements Subsystem {
             altControl = !altControl;  
         }
         lastValue = selectMode.getValue();
-        if(!altControl){
+        if(!altControl){ //two throttle mode
             leftSpeed = leftJoystick.getValue();
             rightSpeed = rightJoystick.getValue();
             if(Math.abs(leftSpeed)<DeadBand){
@@ -88,7 +88,7 @@ public class Drive implements Subsystem {
                 rightSpeed = 0;
             }
         }
-        else{
+        else{ //throttle and steer mode
             if (!quickButton.getValue()){
             leftSpeed = (1-rightHorizontal.getValue());
             rightSpeed = (1+rightHorizontal.getValue());

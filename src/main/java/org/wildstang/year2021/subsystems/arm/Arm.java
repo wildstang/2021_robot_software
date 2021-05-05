@@ -13,9 +13,9 @@ import org.wildstang.framework.subsystems.Subsystem;
 
 /**
  * Class:       Arm.java
- * Inputs:      1 AnalogInput (Manipulator left joystick up and down)
+ * Inputs:      1 AnalogInput (Manipulator left joystick Y-axis)
  * Outputs:     1 VictorSPX
- * Description: Joystick up runs the motor one way to lift the arm, joystick down runs the motor the oppposite way to lower the arm
+ * Description: Joystick up lifts the arm, joystick down lowers the arm.
  */
 public class Arm implements Subsystem {
 
@@ -25,7 +25,7 @@ public class Arm implements Subsystem {
     // outputs
     private VictorSPX motor;
 
-    // states
+    // variables
     private double speed = 0.0;
     private double maxSpeed = 0.8;
 
@@ -52,10 +52,9 @@ public class Arm implements Subsystem {
 
     // respond to input updates
     public void inputUpdate(Input signal) {
-        // check to see if the stick has been moved enough to warrant the arm to move
         if (signal == leftJoystick) {
             double stickValue = leftJoystick.getValue();
-            if (Math.abs(stickValue) >= 0.4) {
+            if (Math.abs(stickValue) > 0.4) {
                 speed = stickValue;
             } else {
                 resetState();
@@ -63,6 +62,11 @@ public class Arm implements Subsystem {
         } else {
             resetState();
         }
+    }
+
+    // helper method for autonomous
+    public void setArmSpeed(double s) {
+        speed = s;
     }
 
     // used for testing
@@ -73,12 +77,8 @@ public class Arm implements Subsystem {
         speed = 0.0;
     }
 
-    // returns the unique name of the example
+    // returns the unique name of the subsystem
     public String getName() {
         return "Arm";
-    }
-
-    public void setArmSpeed(double armSpeed) {
-        speed = armSpeed;
     }
 }

@@ -28,13 +28,13 @@ public class Hopper implements Subsystem {
 
     // states
     private double speed = 0;
-    private double multiplier = 10;
+    private double multiplier = 1;
     
 
     // initializes the subsystem
     public void init() {
         // register joystick and attach input listener with WS Input
-        rightJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_Y.getName());
+        rightJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_RIGHT_JOYSTICK_Y.getName());
         rightJoystick.addInputListener(this);
         
         // create motor controller object with CAN Constant
@@ -51,18 +51,17 @@ public class Hopper implements Subsystem {
     public void inputUpdate(Input signal) {
         // check to see which input was updated
         if (signal == rightJoystick){
-            
-                if(rightJoystick.getValue() > 0.5){
+            if (rightJoystick.getValue() > 0.5){
                 speed = 1.0;
-                }
-                
-                if(rightJoystick.getValue() < -0.5){
-                speed = -1.0; 
-                }
             }
+            else if (rightJoystick.getValue() < -0.5){
+                speed = -1.0; 
+            }
+            else {
+                resetState();
+            }
+        }
     }
-            
-    
 
     // used for testing
     public void selfTest() {}

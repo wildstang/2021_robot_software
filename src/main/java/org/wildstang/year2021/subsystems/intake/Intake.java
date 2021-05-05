@@ -80,7 +80,7 @@ public class Intake implements Subsystem {
         speed = 0.0;
     }
 
-    // returns the unique name of the example
+    // returns the unique name of the subsystem
     public String getName() {
         return "Intake";
     }

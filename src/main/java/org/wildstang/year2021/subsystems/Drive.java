@@ -27,6 +27,7 @@ public class Drive implements Subsystem {
 
     private AnalogInput rightHorizontal;
     private DigitalInput selectMode;
+    private DigitalInput quickButton; //for alt controls
     // outputs
     private TalonSRX leftMotor; 
     private TalonSRX rightMotor;
@@ -54,6 +55,9 @@ public class Drive implements Subsystem {
         
         selectMode = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SELECT.getName());
         selectMode.addInputListener(this);
+
+        quickButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
+        selectMode.addInputListener(this);
         resetState();
     }
  
@@ -75,8 +79,14 @@ public class Drive implements Subsystem {
             rightSpeed = rightJoystick.getValue();
         }
         else{
+            if (!quickButton.getValue()){
             leftSpeed = (1-rightHorizontal.getValue());
             rightSpeed = (1+rightHorizontal.getValue());
+            }
+            else{ //when quickturning, pivot without moving forward
+                leftSpeed = (-1*rightHorizontal.getValue());
+                rightSpeed = (rightHorizontal.getValue());
+            }
             double norm = 0.5*(Math.abs(leftSpeed)+Math.abs(rightSpeed));
             rightSpeed = leftJoystick.getValue()*(rightSpeed/norm);
             leftSpeed = leftJoystick.getValue()*(leftSpeed/norm);

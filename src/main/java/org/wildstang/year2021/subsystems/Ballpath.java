@@ -12,7 +12,7 @@ import org.wildstang.framework.subsystems.Subsystem;
 import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
 import org.wildstang.framework.timer.WsTimer;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  * Class:       Ballpath.java
  * Inputs:      3 digital buttons
@@ -84,7 +84,8 @@ public class Ballpath implements Subsystem {
         intakeMotor.set(ControlMode.PercentOutput, intakeMotorSpeed);
         outputMotor.set(ControlMode.PercentOutput, outputMotorSpeed);
 
-
+        SmartDashboard.putNumber("intake speed",intakeMotorSpeed);
+        SmartDashboard.putNumber("out hatch speed",outputMotorSpeed);
         
 
         // Begin  from Idle -> Raising -> Paused

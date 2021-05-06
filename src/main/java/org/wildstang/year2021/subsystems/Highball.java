@@ -11,6 +11,7 @@ import org.wildstang.framework.subsystems.Subsystem;
 import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
 import org.wildstang.framework.timer.WsTimer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  
 
 /**
@@ -62,7 +63,7 @@ public class Highball implements Subsystem {
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
         highballMotor.set(ControlMode.PercentOutput, highballMotorSpeed);
-
+        SmartDashboard.putNumber("highbell motor speed",highballMotorSpeed);
         if (raising) {
             if (!timerStatus) {
                 timer.reset();

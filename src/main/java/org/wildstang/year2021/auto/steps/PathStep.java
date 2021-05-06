@@ -3,6 +3,7 @@ package org.wildstang.year2021.auto.steps;
 import org.wildstang.framework.auto.steps.AutoStep;
 import org.wildstang.year2021.subsystems.Drive; 
 import org.wildstang.framework.timer.WsTimer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 /**
@@ -175,6 +176,18 @@ public class PathStep extends AutoStep {
         }
         LastEncPos[0] = Driver.GetLeftEncoder();
         LastEncPos[1] = Driver.GetRightEncoder();
+        SmartDashboard.putNumber("Point Number",Counter);
+        SmartDashboard.putNumber("current X coord",X);
+        SmartDashboard.putNumber("current Y coord",Y);
+        SmartDashboard.putNumber("goal X",Xs[Counter]);
+        SmartDashboard.putNumber("goal Y",Ys[Counter]);
+        SmartDashboard.putNumber("goal Angle",As[Counter]);
+        SmartDashboard.putNumber("Angle",Angle);
+        SmartDashboard.putNumber("goal Speed",Vs[Counter]);
+        SmartDashboard.putNumberArray("Path X",Xs);
+        SmartDashboard.putNumberArray("Path Y",Ys);
+        SmartDashboard.putNumberArray("Path A",As);
+        SmartDashboard.putNumberArray("Path S",Vs);
 
     }
     @Override

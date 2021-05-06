@@ -10,6 +10,7 @@ import org.wildstang.framework.io.inputs.DigitalInput;
 import org.wildstang.framework.subsystems.Subsystem;
 import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
  
 /**
@@ -75,6 +76,12 @@ public class Drive implements Subsystem {
     public void update() {
         leftMotor.set(ControlMode.PercentOutput, leftSpeed);
         rightMotor.set(ControlMode.PercentOutput, -rightSpeed);
+
+        SmartDashboard.putNumber("left speed", leftSpeed);
+        SmartDashboard.putNumber("right speed", rightSpeed);
+        SmartDashboard.putNumber("gyro reading", gyro.getValue());
+        SmartDashboard.putNumber("left encoder",leftMotor.getSensorCollection().getQuadraturePosition());
+        SmartDashboard.putNumber("right encoder",rightMotor.getSensorCollection().getQuadraturePosition());
     }
  
     // respond to input updates

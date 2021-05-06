@@ -10,6 +10,7 @@ import org.wildstang.framework.io.inputs.DigitalInput;
 import org.wildstang.framework.subsystems.Subsystem;
 import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
+
  
 /**
  * Class:       Drive.java
@@ -30,6 +31,8 @@ public class Drive implements Subsystem {
     private DigitalInput selectMode;
     private DigitalInput quickButton; //for alt controls
 
+    private AnalogInput gyro;
+
     // outputs
     private TalonSRX leftMotor; 
     private TalonSRX rightMotor;
@@ -46,6 +49,7 @@ public class Drive implements Subsystem {
         // create motor controller object with CAN Constant
         leftMotor = new TalonSRX(CANConstants.DRIVE_LEFT);
         rightMotor = new TalonSRX(CANConstants.DRIVE_RIGHT);
+
  
         // register button and attach input listener with WS Input
         leftJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());
@@ -61,6 +65,9 @@ public class Drive implements Subsystem {
 
         quickButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
         quickButton.addInputListener(this);
+
+        gyro = (AnalogInput) Core.getInputManager().getInput(WSInputs.GYRO.getName());
+
         resetState();
     }
  
@@ -125,6 +132,9 @@ public class Drive implements Subsystem {
     }
     public double GetLeftEncoder(){
         return leftMotor.getSensorCollection().getQuadraturePosition();
+    }
+    public double GetGyroValue(){
+        return gyro.getValue();
     }
 
     // returns the unique name of the example

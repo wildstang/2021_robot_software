@@ -7,28 +7,27 @@ import org.wildstang.year2021.auto.steps.PathStep;
  For testing PathStep.
  - set RobotWidth and WheelRadius to reasonable values with correct units in PathStep before running.
  
- Hopefully makes the robot move through some points, ending about two units right, two units down relitive to its starting point. Ideally, it ends with about the same orientation.
- Should be really slow.
+ Hopefully makes the robot do doughnuts counterclockwise.
  */
-public class PathTestProgram extends AutoProgram {
+public class Doughnuts extends AutoProgram {
     double PI = Math.PI;
     @Override
     protected void defineSteps() {
 
         // define a series of steps
-        double[] Xs ={0,2,2,0,-2};
-        double[] Ys = {0,0,2,0,-2};
-        double[] DyDxs = {0,0,PI/2,(5/4)*PI,0};
-        double[] Speeds = {0.1,0.1,0.1,0.1,0.1};
-        addStep(new DelayStep(5));
+        double[] Xs ={0,-2,-4,-2,0,-2,-4,-2,0};
+        double[] Ys = {0,2,0,-2,0,2,0,-2,0};
+        double[] Angles = {0,0.5*PI,PI,1.5*PI,0,0.5*PI,PI,1.5*PI,0};
+        double[] Speeds = {0.6,0.6,0.6,0.6,0.6};
+        addStep(new DelayStep(3));
         PathStep path = new PathStep();
-        path.PathStep(Xs,Ys,DyDxs,Speeds);
+        path.PathStep(Xs,Ys,Angles,Speeds);
         addStep(path);
     }
 
     @Override
     public String toString() {
-        return "PathTestProgram";
+        return "Doughnuts";
     }
 
 }

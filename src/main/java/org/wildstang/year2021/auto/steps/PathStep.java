@@ -48,6 +48,8 @@ public class PathStep extends AutoStep {
     private double ExDt;
     private double[] LastEncPos = {0,0};
     private double MaxSpeed = 5; //avg calculated speed ft/s at max percent. TBD: Fix intial value!
+    private double GyroValue; //not used yet, may be used for angle later.
+    private double GyroOffset;
     public void PathStep(double[] Xpts, double[] Ypts, double[] Angles,double[] Speeds){
         Xs = Xpts;
         Ys = Ypts;
@@ -153,9 +155,12 @@ public class PathStep extends AutoStep {
             double Dt = timer.get()-lastTime;
             ExDt = ((ExDt*9)+Dt)/10; //running avg of update time
             UpdatePosAndHeading(Dt);
+            GyroValue = Driver.GetGyroValue()+GyroOffset;
         }
         else{
             First = false;
+            GyroOffset = As[Counter]-Driver.GetGyroValue();
+            GyroValue = As[Counter];
         }
         lastTime = timer.get();
         CheckPoint();

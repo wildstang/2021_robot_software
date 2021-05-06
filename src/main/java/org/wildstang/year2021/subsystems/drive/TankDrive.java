@@ -10,19 +10,21 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
 import org.wildstang.framework.io.inputs.AnalogInput;
+import org.wildstang.framework.io.inputs.DigitalInput;
 import org.wildstang.framework.subsystems.Subsystem;
 
 /**
  * Class:       TankDrive.java
- * Inputs:      2 AnalogInput (Driver left joystick Y-axis and right joystick Y-axis)
+ * Inputs:      2 AnalogInput (Driver left joystick Y-axis and right joystick Y-axis), 1 DigitalInput (Driver A button)
  * Outputs:     2 TalonSRX (front), 2 VictorSPX (rear)
- * Description: A tank drive system that controls four motors.
+ * Description: Left joystick controls left motors, right joystick controls right motors, A button toggles turbo
  */
 public class TankDrive implements Subsystem {
 
     // inputs
     private AnalogInput leftJoystick;
     private AnalogInput rightJoystick;
+    private DigitalInput turboButton;
 
     // outputs
     private VictorSPX leftFrontMotor;
@@ -31,9 +33,12 @@ public class TankDrive implements Subsystem {
     private TalonSRX rightBackMotor;
 
     // variables
+    private boolean turboStatus = false;
     private double leftSpeed = 0.0;
     private double rightSpeed = 0.0;
-    private double maxSpeed = 0.5; // change to adjust max speed
+    private double normalSpeed = 0.5; // max speed when turbo is off
+    private double turboSpeed = 1.0; // max speed when turbo is on
+    private double maxSpeed = normalSpeed; // max speed is normal by default
 
     // deadzones must be positive double between 0.0 and 1.0
     private double leftDeadzone = 0.4;
@@ -51,6 +56,8 @@ public class TankDrive implements Subsystem {
         leftJoystick.addInputListener(this);
         rightJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_Y.getName());
         rightJoystick.addInputListener(this);
+        turboButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
+        turboButton.addInputListener(this);
     }
 
     public void initOutputs() {
@@ -94,6 +101,17 @@ public class TankDrive implements Subsystem {
         else {
             rightSpeed = 0.0;
         }
+        // update max speed
+        if (signal == turboButton) {
+            if (!turboStatus) {
+                turboStatus = true;
+                maxSpeed = turboSpeed;
+            }
+            else {
+                turboStatus = false;
+                maxSpeed = normalSpeed;
+            }
+        }
     }
 
     // helper methods for autonomous
@@ -112,6 +130,8 @@ public class TankDrive implements Subsystem {
     public void resetState() {
         leftSpeed = 0.0;
         rightSpeed = 0.0;
+        maxSpeed = normalSpeed;
+        turboStatus = false;
     }
 
     // returns the unique name of the subsystem

@@ -11,7 +11,6 @@ import org.wildstang.framework.subsystems.Subsystem;
 import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
  
- 
 /**
  * Class:       Drive.java
  * Inputs:      2 joystick
@@ -30,6 +29,7 @@ public class Drive implements Subsystem {
     private AnalogInput rightHorizontal;
     private DigitalInput selectMode;
     private DigitalInput quickButton; //for alt controls
+
     // outputs
     private TalonSRX leftMotor; 
     private TalonSRX rightMotor;
@@ -39,7 +39,6 @@ public class Drive implements Subsystem {
     public double rightSpeed;
 
     private boolean altControl; //is it on alternate control mode?
-    private boolean lastValue; 
 
     public double DeadBand = 0.08;
     // initializes the subsystem
@@ -74,10 +73,10 @@ public class Drive implements Subsystem {
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if ((selectMode.getValue() != lastValue)&&(selectMode.getValue())){
+        if ((signal == selectMode)&&(selectMode.getValue())){
             altControl = !altControl;  
         }
-        lastValue = selectMode.getValue();
+       
         if(!altControl){ //two throttle mode
             leftSpeed = leftJoystick.getValue();
             rightSpeed = rightJoystick.getValue();
@@ -115,7 +114,6 @@ public class Drive implements Subsystem {
         leftSpeed = 0;
         rightSpeed = 0;
         altControl = false;
-        lastValue = false;
         ResetEncoders();
     }
     public void ResetEncoders(){
@@ -128,7 +126,7 @@ public class Drive implements Subsystem {
     public double GetLeftEncoder(){
         return leftMotor.getSensorCollection().getQuadraturePosition();
     }
- 
+
     // returns the unique name of the example
     public String getName() {
         return "Drivetrain";

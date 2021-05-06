@@ -172,13 +172,13 @@ public class PathStep extends AutoStep {
         if(Counter >= Xs.length){
             Driver.leftSpeed = 0; //stop if done with path
             Driver.rightSpeed = 0;
-            Driver.update();
+          //  Driver.update();
             setFinished(true);
             
         }
         else{
         OutputUpdate(ExDt);
-        Driver.update(); // move the robot :)
+       // Driver.update(); // move the robot :)
         }
         LastEncPos[0] = Driver.GetLeftEncoder();
         LastEncPos[1] = Driver.GetRightEncoder();

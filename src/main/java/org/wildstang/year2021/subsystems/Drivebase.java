@@ -80,7 +80,7 @@ public class Drivebase implements Subsystem {
         motorRightBack = new VictorSPX(CANConstants.RIGHT_BACK_DRIVE_TALON);
        
        driveTab = Shuffleboard.getTab("SmartDashboard");
-       driveOffset = driveTab.add("Drive Offset", 1).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 0.1)).getEntry();
+       driveOffset = driveTab.add("Drive Offset", 0.017).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", -0.1, "max", 0.1)).getEntry();
        maxSpeed = driveTab.add("Max Speed", 1).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 1)).getEntry();
         
         resetState();
@@ -99,6 +99,8 @@ public class Drivebase implements Subsystem {
         
         
         hypot = Math.sqrt(hypot);
+        
+        hypot *= maxSpeed.getDouble(1.0);
        // System.out.println(hypot);
 
         double thetaX = Math.asin(commandThrottle/hypot);
@@ -148,29 +150,7 @@ public class Drivebase implements Subsystem {
         SmartDashboard.putNumber("before max left", lbSpeed);
         //sets max speeds
        
-        if(lfSpeed <= -maxSpeed.getDouble(1.0)){
-            lfSpeed = -maxSpeed.getDouble(1.0);
-        }else if( lfSpeed >= maxSpeed.getDouble(1.0)){
-            lfSpeed = maxSpeed.getDouble(1.0);
-        }
-
-        if(rfSpeed >= maxSpeed.getDouble(1.0) ){
-            rfSpeed = maxSpeed.getDouble(1.0);
-        } else if( rfSpeed <= -maxSpeed.getDouble(1.0)){
-            rfSpeed = -maxSpeed.getDouble(1.0);
-        }
         
-        if(lbSpeed <= -maxSpeed.getDouble(1.0)){
-            lbSpeed = -maxSpeed.getDouble(1.0);
-        } else if( lbSpeed >= maxSpeed.getDouble(1.0)){
-            lbSpeed = maxSpeed.getDouble(1.0);
-        }
-        
-        if(rbSpeed >= maxSpeed.getDouble(1.0)){
-            rbSpeed = maxSpeed.getDouble(1.0);
-        }else if( rbSpeed <= -maxSpeed.getDouble(1.0)){
-            rbSpeed = -maxSpeed.getDouble(1.0);
-        }
 
         SmartDashboard.putNumber("commandThrottle", commandThrottle);
         SmartDashboard.putNumber("commandHeading", commandHeading);

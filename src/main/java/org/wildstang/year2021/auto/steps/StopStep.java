@@ -31,6 +31,7 @@ public class StopStep extends AutoStep {
     public void update() {
         // check if the timer has exceded the desired delay
         drive.setThrottle(0);
+        drive.setHeading(0);
         setFinished(true);
 
         

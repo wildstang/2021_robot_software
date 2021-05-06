@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import edu.wpi.first.networktables.NetworkTableEntry;
 
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -39,6 +40,9 @@ public class Intake implements Subsystem {
     private double hopperSpeed;
     private final double maxSpeed = 0.75;
 
+    private ShuffleboardTab intakeTab;
+    private NetworkTableEntry intakeMaxSpeed;
+    private NetworkTableEntry hopperMaxSpeed;
 
     // initializes the subsystem
     public void init() {
@@ -51,6 +55,10 @@ public class Intake implements Subsystem {
         // create motor controller object with CAN Constant
       
         speed = 0;
+
+       intakeTab = Shuffleboard.getTab("Intake Tab");
+       intakeMaxSpeed = intakeTab.add("Intake Max Speed", 0.017).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", -0.1, "max", 0.1)).getEntry();
+       hopperMaxSpeed = intakeTab.add("Hopper Max Speed", 1).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 1)).getEntry();
 
         motor = new VictorSPX(CANConstants.INTAKE_TALON);
         hopperMotor = new VictorSPX(CANConstants.HOPPER_TALON);

@@ -8,6 +8,7 @@ import org.wildstang.year2021.auto.steps.intakeOffStep;
 import org.wildstang.year2021.auto.steps.hopperOffStep;
 import org.wildstang.year2021.auto.steps.hopperOnStep;
 import org.wildstang.year2021.auto.steps.intakeOnStep;
+import org.wildstang.year2021.auto.steps.DriveAngleStep;
 
 /**
  * This is the framework of an Autonomous Program.
@@ -20,10 +21,11 @@ public class ForwardProgram extends AutoProgram {
     @Override
     protected void defineSteps() {
         // define a series of step
-        addStep(new hopperOnStep());
-        addStep(new intakeOnStep());
+        //addStep(new hopperOnStep());
+        //addStep(new intakeOnStep());
         //addStep (new DriveForwardStep(.5, 0.15));
-        addStep (new DriveForwardStep(4, 0.75));
+        //addStep (new DriveForwardStep(4, 0.75));
+        addStep(new DriveAngleStep(3,1,1));
         addStep(new StopStep());
         addStep(new intakeOffStep());
         addStep(new hopperOffStep());

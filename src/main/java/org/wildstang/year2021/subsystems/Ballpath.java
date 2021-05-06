@@ -135,9 +135,9 @@ public class Ballpath implements Subsystem {
             intakeMotorSpeed = 0;
         }
 
-        if (currentCommand == commands.IDLE && leftShoulder.getValue()) {
+        if (currentCommand == commands.IDLE && leftShoulder.getValue()&& signal == leftShoulder) {
             currentCommand = commands.RAISING;
-        } else if (currentCommand == commands.PAUSED && leftShoulder.getValue()) {
+        } else if (currentCommand == commands.PAUSED && leftShoulder.getValue()&& signal == leftShoulder) {
             currentCommand = commands.LOWERING;
         }
 

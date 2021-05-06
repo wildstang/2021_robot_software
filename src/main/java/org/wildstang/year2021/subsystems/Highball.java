@@ -95,10 +95,10 @@ public class Highball implements Subsystem {
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if (leftButton.getValue() && raised == false && !lowering) {
+        if (leftButton.getValue() && raised == false && !lowering && signal == leftButton) {
             raising = true;
         }
-        if(leftButton.getValue()&& raised && !raising){
+        if(leftButton.getValue()&& raised && !raising&& signal == leftButton){
             lowering = true;
         }
         

@@ -1,8 +1,11 @@
 package org.wildstang.year2021.auto.programs;
 
 import org.wildstang.framework.auto.AutoProgram;
+import org.wildstang.year2021.auto.steps.DriveForwardsStep;
 import org.wildstang.year2021.auto.steps.DriveBackwardsStep;
+import org.wildstang.year2021.auto.steps.DriveLeftForwardsStep;
 import org.wildstang.year2021.auto.steps.DriveLeftBackwardsStep;
+import org.wildstang.year2021.auto.steps.DriveRightForwardsStep;
 import org.wildstang.year2021.auto.steps.ArmUpwardsStep;
 import org.wildstang.year2021.auto.steps.ArmDownwardsStep;
 import org.wildstang.year2021.auto.steps.DelayStep;
@@ -13,21 +16,33 @@ import org.wildstang.year2021.auto.steps.DelayStep;
  * These programs work by defining a series of steps in the "defineSteps" functions.
  * The "toString" function defines a name for the program.
  */
-public class RetrieveBlackFuel extends AutoProgram {
+public class RetrieveWhiteFuelRight extends AutoProgram {
 
     @Override
     protected void defineSteps() {
-        // move backwards
-        addStep(new DriveBackwardsStep(1.0));
-        addStep(new DelayStep(2));
-        addStep(new DriveBackwardsStep(0.0));
+        // move forwards away from the black fuel cell tower
+        addStep(new DriveForwardsStep(1.0));
+        addStep(new DelayStep(1.0));
+        addStep(new DriveForwardsStep(0.0));
         addStep(new DelayStep(0.5));
-        // align with black fuel cell tower
+        // turn back to the starting position
+        addStep(new DriveLeftForwardsStep(1.0));
+        addStep(new DelayStep(0.5));
+        addStep(new DriveLeftForwardsStep(0.0));
+        addStep(new DelayStep(0.5));
+        // cross the field
+        addStep(new DriveForwardsStep(1.0));
+        addStep(new DelayStep(4));
+        addStep(new DriveForwardsStep(1.0));
+        addStep(new DelayStep(0.5));
+        // rotate the robot so that the back end/arm is aligned with the white fuel cell tower
         addStep(new DriveLeftBackwardsStep(1.0));
-        addStep(new DelayStep(0.5));
+        addStep(new DriveRightForwardsStep(1.0));
+        addStep(new DelayStep(1));
         addStep(new DriveLeftBackwardsStep(0.0));
+        addStep(new DriveRightForwardsStep(0.0));
         addStep(new DelayStep(0.5));
-        // approach black fuel cell tower
+        // approach white fuel cell tower
         addStep(new DriveBackwardsStep(0.5));
         addStep(new DelayStep(1));
         addStep(new DriveBackwardsStep(0.0));
@@ -43,12 +58,11 @@ public class RetrieveBlackFuel extends AutoProgram {
         addStep(new ArmDownwardsStep());
         addStep(new DelayStep(1));
         addStep(new ArmDownwardsStep(0.0));
-        addStep(new DelayStep(0.5));
     }
 
     @Override
     public String toString() {
-        return "RetrieveBlackFuel";
+        return "RetrieveWhiteFuelRight";
     }
 
 }

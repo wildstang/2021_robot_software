@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
 import org.wildstang.framework.io.inputs.AnalogInput;
+import org.wildstang.framework.io.inputs.DigitalInput;
 import org.wildstang.framework.subsystems.Subsystem;
 
 /**
@@ -20,8 +21,8 @@ import org.wildstang.framework.subsystems.Subsystem;
 public class Intake implements Subsystem {
 
     // inputs
-    private AnalogInput rightTrigger;
-    private AnalogInput leftTrigger;
+    private DigitalInput rightShoulder;
+    private DigitalInput leftShoulder;
 
     // outputs
     private VictorSPX rollerMotor;
@@ -38,10 +39,10 @@ public class Intake implements Subsystem {
     }
 
     public void initInputs() {
-        rightTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_RIGHT_TRIGGER.getName());
-        rightTrigger.addInputListener(this);
-        leftTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_LEFT_TRIGGER.getName());
-        leftTrigger.addInputListener(this);
+        rightShoulder = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_SHOULDER.getName());
+        rightShoulder.addInputListener(this);
+        leftShoulder = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_SHOULDER.getName());
+        leftShoulder.addInputListener(this);
     }
 
     public void initOutputs() {
@@ -55,9 +56,9 @@ public class Intake implements Subsystem {
 
     // respond to input updates
     public void inputUpdate(Input signal) {
-        if (signal == rightTrigger) {
-            if (rightTrigger.getValue() > 0.2) {
-                speed = rightTrigger.getValue();
+        if (signal == rightShoulder) {
+            if (rightShoulder.getValue()) {
+                speed = -1.0;
                 System.out.println("Intake forwards!");
                 // when right trigger is pressed 20%, the intake spins forwards
             }
@@ -67,9 +68,9 @@ public class Intake implements Subsystem {
         } else {
             resetState();
         }
-        if (signal == leftTrigger) {
-            if (leftTrigger.getValue() > 0.2) {
-                speed = leftTrigger.getValue() * -1.0;
+        if (signal == leftShoulder) {
+            if (leftShoulder.getValue()) {
+                speed = 1.0;
                 System.out.println("Intake backwards!");
                 // when left trigger is pressed 20%, the intake spins backwards
             }

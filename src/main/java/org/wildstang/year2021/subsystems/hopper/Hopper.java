@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
 import org.wildstang.framework.io.inputs.AnalogInput;
+import org.wildstang.framework.io.inputs.DigitalInput;
 import org.wildstang.framework.subsystems.Subsystem;
 
 /**
@@ -20,7 +21,7 @@ import org.wildstang.framework.subsystems.Subsystem;
 public class Hopper implements Subsystem {
 
     // inputs
-    private AnalogInput rightJoystick;
+    private DigitalInput outtakeButton;
 
     // outputs
     private VictorSPX motor;
@@ -37,8 +38,8 @@ public class Hopper implements Subsystem {
     }
 
     public void initInputs() {
-        rightJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_RIGHT_JOYSTICK_Y.getName());
-        rightJoystick.addInputListener(this);
+        outtakeButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_RIGHT.getName());
+        outtakeButton.addInputListener(this);
     }
 
     public void initOutputs() {
@@ -52,12 +53,9 @@ public class Hopper implements Subsystem {
 
     // respond to input updates
     public void inputUpdate(Input signal) {
-        if (signal == rightJoystick){
-            if (rightJoystick.getValue() > 0.4){
+        if (signal == outtakeButton){
+            if (outtakeButton.getValue()){
                 speed = 1.0;
-            }
-            else if (rightJoystick.getValue() < -0.4){
-                speed = -1.0; 
             }
             else {
                 resetState();

@@ -14,9 +14,9 @@ import org.wildstang.framework.subsystems.Subsystem;
 
 /**
  * Class:       Intake.java
- * Inputs:      2 AnalogInput (Manipulator left trigger and right trigger) 
+ * Inputs:      2 DigitalInput (Driver left shoulder and right shoulder) 
  * Outputs:     1 VictorSPX
- * Description: Right trigger to roll intake forwards, left trigger to roll intake backwards (if right trigger is not being pressed).
+ * Description: Left shoulder to toggle intake backwards, right shoulder to toggle intake forwards
  */
 public class Intake implements Subsystem {
 
@@ -30,6 +30,7 @@ public class Intake implements Subsystem {
     // variables
     private double speed = 0.0;
     private double maxSpeed = 0.5;
+    private int intakeStatus = 0; // 0 - off; 1 - forwards; 2 - backwards
 
     // initializes the subsystem
     public void init() {
@@ -57,26 +58,30 @@ public class Intake implements Subsystem {
     // respond to input updates
     public void inputUpdate(Input signal) {
         if (signal == rightShoulder) {
-            if (rightShoulder.getValue()) {
-                speed = -1.0;
-                System.out.println("Intake forwards!");
-                // when right trigger is pressed 20%, the intake spins forwards
+            if (intakeStatus == 1) {
+                intakeStatus = 0;
             }
             else {
-                resetState();
+                intakeStatus = 1;
             }
-        } else {
-            resetState();
         }
         if (signal == leftShoulder) {
-            if (leftShoulder.getValue()) {
-                speed = 1.0;
-                System.out.println("Intake backwards!");
-                // when left trigger is pressed 20%, the intake spins backwards
+            if (intakeStatus == 2) {
+                intakeStatus = 0;
             }
             else {
-                resetState();
+                intakeStatus = 2;
             }
+        }
+        // set speed based on status
+        if (intakeStatus == 1) {
+            speed = -1.0;
+        }
+        else if (intakeStatus == 2) {
+            speed = 1.0;
+        }
+        else {
+            speed = 0.0;
         }
     }
 

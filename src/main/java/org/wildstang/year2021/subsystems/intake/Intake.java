@@ -28,7 +28,7 @@ public class Intake implements Subsystem {
 
     // variables
     private double speed = 0.0;
-    private double maxSpeed = 0.8;
+    private double maxSpeed = 0.5;
 
     // initializes the subsystem
     public void init() {
@@ -55,20 +55,27 @@ public class Intake implements Subsystem {
 
     // respond to input updates
     public void inputUpdate(Input signal) {
-        if (signal == rightTrigger || signal == leftTrigger) {
+        if (signal == rightTrigger) {
             if (rightTrigger.getValue() > 0.2) {
                 speed = rightTrigger.getValue();
+                System.out.println("Intake forwards!");
                 // when right trigger is pressed 20%, the intake spins forwards
-            }
-            else if (leftTrigger.getValue() > 0.2) {
-                speed = leftTrigger.getValue() * -1.0;
-                // when left trigger is pressed 20%, the intake spins backwards
             }
             else {
                 resetState();
             }
         } else {
             resetState();
+        }
+        if (signal == leftTrigger) {
+            if (leftTrigger.getValue() > 0.2) {
+                speed = leftTrigger.getValue() * -1.0;
+                System.out.println("Intake backwards!");
+                // when left trigger is pressed 20%, the intake spins backwards
+            }
+            else {
+                resetState();
+            }
         }
     }
 

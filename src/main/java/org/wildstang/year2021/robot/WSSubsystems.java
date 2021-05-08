@@ -15,7 +15,7 @@ public enum WSSubsystems implements Subsystems {
     // enumerate subsystems
     TANKDRIVE("Tank Drive", TankDrive.class),
     ARM("Arm", Arm.class),
-    //HOPPER("Hopper", Hopper.class),
+    HOPPER("Hopper", Hopper.class),
     INTAKE("Intake", Intake.class);
     
     private String name;

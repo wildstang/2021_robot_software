@@ -36,8 +36,8 @@ public class TankDrive implements Subsystem {
     private boolean turboStatus = false;
     private double leftSpeed = 0.0;
     private double rightSpeed = 0.0;
-    private double normalSpeed = 0.5; // max speed when turbo is off
-    private double turboSpeed = 1.0; // max speed when turbo is on
+    private double normalSpeed = 1.0; // max speed when turbo is off
+    private double turboSpeed = 0.0; // max speed when turbo is on
     private double maxSpeed = normalSpeed; // max speed is normal by default
 
     // deadzones must be positive double between 0.0 and 1.0
@@ -80,7 +80,7 @@ public class TankDrive implements Subsystem {
         // update left motor speeds
         if (signal == leftJoystick) {
             if (Math.abs(leftJoystick.getValue()) > leftDeadzone) {
-                leftSpeed = leftJoystick.getValue();
+                leftSpeed = leftJoystick.getValue()*-1.0;
             }
             else {
                 leftSpeed = 0.0;

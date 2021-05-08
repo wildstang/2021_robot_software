@@ -92,25 +92,15 @@ public class TankDrive implements Subsystem {
         // tank drive
         if (!isArcade) {
             // update left motor speeds
-            if (signal == leftJoystick) {
-                if (Math.abs(leftJoystick.getValue()) > leftDeadzone) {
-                    leftSpeed = leftJoystick.getValue()*-1.0;
-                }
-                else {
-                    leftSpeed = 0.0;
-                }
+            if (Math.abs(leftJoystick.getValue()) > leftDeadzone) {
+                leftSpeed = leftJoystick.getValue()*-1.0;
             }
             else {
                 leftSpeed = 0.0;
             }
             // update right motor speeds
-            if (signal == rightJoystickY) {
-                if (Math.abs(rightJoystickY.getValue()) > rightDeadzone) {
-                    rightSpeed = rightJoystickY.getValue();
-                }
-                else {
-                    rightSpeed = 0.0;
-                }
+            if (Math.abs(rightJoystickY.getValue()) > rightDeadzone) {
+                rightSpeed = rightJoystickY.getValue();
             }
             else {
                 rightSpeed = 0.0;

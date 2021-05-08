@@ -24,6 +24,8 @@ public class Outake implements Subsystem {
     // inputs
     private DigitalInput up;
     private DigitalInput down;
+    private DigitalInput manipUp;
+    private DigitalInput manipDown;
     private DigitalInput limit;
 
     // outputs
@@ -35,14 +37,19 @@ public class Outake implements Subsystem {
     // initializes the subsystem
     public void init() {
         // register button and attach input listener with WS Input
-        down = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_LEFT.getName());
-        up = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_UP.getName());
+        down = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SHOULDER_LEFT.getName());
+        up = (DigitalInput) Core.getInputManager().getInput(WSInputs. DRIVER_SHOULDER_RIGHT.getName());
         limit = (DigitalInput) Core.getInputManager().getInput(WSInputs.OUTAKE_LIMIT.getName());
 
+        manipUp = (DigitalInput) Core.getInputManager().getInput(WSInputs. MANIPULATOR_SHOULDER_RIGHT.getName());
+        manipDown = (DigitalInput) Core.getInputManager().getInput(WSInputs. MANIPULATOR_SHOULDER_LEFT.getName());
         
         limit.addInputListener(this);
         up.addInputListener(this);
         down.addInputListener(this);
+        manipUp.addInputListener(this);
+        manipDown.addInputListener(this);
+
 
         // create motor controller object with CAN Constant
       
@@ -60,10 +67,10 @@ public class Outake implements Subsystem {
     public void inputUpdate(Input signal) {
         // check to see which input was updated
      
-        if ((signal == up || signal == limit) && up.getValue() && limit.getValue()) {
-            speed = 1;
-        }else if(signal == down && down.getValue()){
-            speed = -1;
+        if (((signal == up || signal == limit) && up.getValue() && limit.getValue()) || ((signal == manipUp || signal == limit) && manipUp.getValue() && limit.getValue())) {
+            speed = 0.5;
+        }else if((signal == down && down.getValue()) || (signal == manipDown && manipDown.getValue())){
+            speed = -0.5;
         }else{
             speed = 0;
         }

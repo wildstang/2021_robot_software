@@ -30,6 +30,8 @@ public class Intake implements Subsystem {
     // inputs
     private AnalogInput out;
     private AnalogInput in;
+    private AnalogInput manipOut;
+    private AnalogInput manipIn;
 
     // outputs
     private VictorSPX motor;
@@ -51,6 +53,11 @@ public class Intake implements Subsystem {
         in = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_RIGHT.getName());
         out.addInputListener(this);
         in.addInputListener(this);
+
+        manipOut = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_TRIGGER_LEFT.getName());
+        manipIn = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_TRIGGER_RIGHT.getName());
+        manipOut.addInputListener(this);
+        manipIn.addInputListener(this);
 
         // create motor controller object with CAN Constant
       
@@ -77,10 +84,10 @@ public class Intake implements Subsystem {
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if (signal == out && out.getValue() >0.25) {
+        if ((signal == out && out.getValue() >0.25) || (signal == manipOut && manipOut.getValue() >0.25)) {
             speed = -maxSpeed;
             hopperSpeed = 0;
-        }else if(signal == in && in.getValue() < -0.25){
+        }else if((signal == in && in.getValue() < -0.25) || (signal == manipIn && manipIn.getValue() < -0.25)){
             speed = maxSpeed;
             hopperSpeed = 0.5;
         }else{

@@ -33,10 +33,6 @@ public class StopStep extends AutoStep {
         drive.setThrottle(0);
         drive.setHeading(0);
         setFinished(true);
-
-        
-        
-
        
     }
 

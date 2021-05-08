@@ -35,8 +35,8 @@ public class Lift implements Subsystem {
     // initializes the subsystem
     public void init() {
         // register button and attach input listener with WS Input
-        up = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_DPAD_UP.getName());
-        down = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_DPAD_DOWN.getName());
+        up = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_DPAD_UP.getName());
+        down = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_DPAD_DOWN.getName());
         limit = (DigitalInput) Core.getInputManager().getInput(WSInputs.LIFT_LIMIT.getName());
 
         

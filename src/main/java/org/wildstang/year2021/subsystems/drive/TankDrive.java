@@ -23,8 +23,10 @@ public class TankDrive implements Subsystem {
 
     // inputs
     private AnalogInput leftJoystick;
-    private AnalogInput rightJoystick;
+    private AnalogInput rightJoystickY;
+    private AnalogInput rightJoystickX;
     private DigitalInput turboButton;
+    private DigitalInput switchButton;
 
     // outputs
     private VictorSPX leftFrontMotor;
@@ -34,6 +36,7 @@ public class TankDrive implements Subsystem {
 
     // variables
     private boolean turboStatus = false;
+    private boolean isArcade = false;
     private double leftSpeed = 0.0;
     private double rightSpeed = 0.0;
     private double normalSpeed = 1.0; // max speed when turbo is off
@@ -54,10 +57,14 @@ public class TankDrive implements Subsystem {
     public void initInputs() {
         leftJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());
         leftJoystick.addInputListener(this);
-        rightJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_Y.getName());
-        rightJoystick.addInputListener(this);
+        rightJoystickY = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_Y.getName());
+        rightJoystickY.addInputListener(this);
+        rightJoystickX = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_X.getName());
+        rightJoystickX.addInputListener(this);
         turboButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
         turboButton.addInputListener(this);
+        switchButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_LEFT.getName());
+        switchButton.addInputListener(this);
     }
 
     public void initOutputs() {
@@ -77,41 +84,68 @@ public class TankDrive implements Subsystem {
 
     // respond to input updates
     public void inputUpdate(Input signal) {
-        // update left motor speeds
-        if (signal == leftJoystick) {
-            if (Math.abs(leftJoystick.getValue()) > leftDeadzone) {
-                leftSpeed = leftJoystick.getValue()*-1.0;
+        if (signal == switchButton) {
+            isArcade = !isArcade;
+            System.out.println("isArcade = " + isArcade);
+        }
+
+        // tank drive
+        if (!isArcade) {
+            // update left motor speeds
+            if (signal == leftJoystick) {
+                if (Math.abs(leftJoystick.getValue()) > leftDeadzone) {
+                    leftSpeed = leftJoystick.getValue()*-1.0;
+                }
+                else {
+                    leftSpeed = 0.0;
+                }
             }
             else {
                 leftSpeed = 0.0;
             }
-        }
-        else {
-            leftSpeed = 0.0;
-        }
-        // update right motor speeds
-        if (signal == rightJoystick) {
-            if (Math.abs(rightJoystick.getValue()) > rightDeadzone) {
-                rightSpeed = rightJoystick.getValue();
+            // update right motor speeds
+            if (signal == rightJoystickY) {
+                if (Math.abs(rightJoystickY.getValue()) > rightDeadzone) {
+                    rightSpeed = rightJoystickY.getValue();
+                }
+                else {
+                    rightSpeed = 0.0;
+                }
             }
             else {
                 rightSpeed = 0.0;
             }
         }
+        // arcade drive
         else {
-            rightSpeed = 0.0;
-        }
-        // update max speed
-        if (signal == turboButton) {
-            if (!turboStatus) {
-                turboStatus = true;
-                maxSpeed = turboSpeed;
+            if (!turboButton.getValue()) {
+                leftSpeed = (1.0 - rightJoystickX.getValue());
+                rightSpeed = (1.0 + rightJoystickX.getValue());
             }
             else {
-                turboStatus = false;
-                maxSpeed = normalSpeed;
+                leftSpeed = (rightJoystickX.getValue()*-1.0);
+                rightSpeed = (rightJoystickX.getValue());
+            }
+            double avg = (Math.abs(leftSpeed)+Math.abs(rightSpeed))*0.5;
+            leftSpeed = leftJoystick.getValue()*(leftSpeed/avg);
+            rightSpeed = leftJoystick.getValue()*(rightSpeed/avg);
+            if (Math.abs(leftJoystick.getValue()) < leftDeadzone){
+                leftSpeed = 0.0;
+                rightSpeed = 0.0;
             }
         }
+
+        // update max speed
+        // if (signal == turboButton) {
+        //     if (!turboStatus) {
+        //         turboStatus = true;
+        //         maxSpeed = turboSpeed;
+        //     }
+        //     else {
+        //         turboStatus = false;
+        //         maxSpeed = normalSpeed;
+        //     }
+        // }
     }
 
     // helper methods for autonomous
@@ -132,10 +166,11 @@ public class TankDrive implements Subsystem {
         rightSpeed = 0.0;
         maxSpeed = normalSpeed;
         turboStatus = false;
+        isArcade = false;
     }
 
     // returns the unique name of the subsystem
     public String getName() {
-        return "Tank Drive";
+        return "Drive";
     }
 }

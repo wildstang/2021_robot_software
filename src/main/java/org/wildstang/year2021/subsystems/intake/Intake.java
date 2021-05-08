@@ -80,6 +80,11 @@ public class Intake implements Subsystem {
         }
     }
 
+    // helper methods for autonomous
+    public void setIntakeSpeed(double i){
+        speed = i;
+    }
+
     // used for testing
     public void selfTest() {}
 

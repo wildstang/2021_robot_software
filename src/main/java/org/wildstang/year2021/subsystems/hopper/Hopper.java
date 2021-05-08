@@ -14,9 +14,9 @@ import org.wildstang.framework.subsystems.Subsystem;
 
 /**
  * Class:       Hopper.java
- * Inputs:      1 AnalogInput (Manipulator right joystick Y-axis)
+ * Inputs:      1 DigitalInput (Manipulator face right)
  * Outputs:     1 VictorSPX
- * Description: Joystick up to roll hopper forwards, joystick down to roll it backwards.
+ * Description: Hold manipulator face right to run outtake
  */
 public class Hopper implements Subsystem {
 
@@ -38,7 +38,7 @@ public class Hopper implements Subsystem {
     }
 
     public void initInputs() {
-        outtakeButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_RIGHT.getName());
+        outtakeButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_FACE_RIGHT.getName());
         outtakeButton.addInputListener(this);
     }
 

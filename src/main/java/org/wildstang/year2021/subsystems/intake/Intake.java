@@ -14,7 +14,7 @@ import org.wildstang.framework.subsystems.Subsystem;
 
 /**
  * Class:       Intake.java
- * Inputs:      2 DigitalInput (Driver left shoulder and right shoulder) 
+ * Inputs:      2 DigitalInput (Manipulator left shoulder and right shoulder) 
  * Outputs:     1 VictorSPX
  * Description: Left shoulder to toggle intake backwards, right shoulder to toggle intake forwards
  */
@@ -40,9 +40,9 @@ public class Intake implements Subsystem {
     }
 
     public void initInputs() {
-        rightShoulder = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_SHOULDER.getName());
+        rightShoulder = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_RIGHT_SHOULDER.getName());
         rightShoulder.addInputListener(this);
-        leftShoulder = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_SHOULDER.getName());
+        leftShoulder = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_LEFT_SHOULDER.getName());
         leftShoulder.addInputListener(this);
     }
 

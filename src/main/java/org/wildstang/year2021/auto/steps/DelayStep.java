@@ -32,6 +32,7 @@ public class DelayStep extends AutoStep {
         // check if the timer has exceded the desired delay
         if (timer.get() >= delay) {
             setFinished(true);
+            System.out.println("delay stop");
         }
     }
 
@@ -39,5 +40,4 @@ public class DelayStep extends AutoStep {
         // give it a name
         return "DelayStep";
     }
-
 }

@@ -6,6 +6,7 @@ import org.wildstang.year2021.robot.WSInputs;
 import java.util.Map;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
@@ -24,8 +25,9 @@ import org.wildstang.framework.subsystems.Subsystem;
 public class Scoring implements Subsystem {
 
     private enum intakeStateEnum {
-        CLOSED (1),
-        OPEN (-1);
+        INTAKE (1),
+        OUTPUT (-1),
+        OFF (0);
 
         private final double Speed; 
 
@@ -39,76 +41,64 @@ public class Scoring implements Subsystem {
     }
 
     private intakeStateEnum intakeState; 
+    private double deploySpeed; 
+    private double deployStickValue;
 
     private DigitalInput deployButtonDown;
     private DigitalInput intakeButton;
     private DigitalInput outputButton; 
-    private DigitalInput deployButtonUp;
-    private DigitalInput intakeReverseButton;
 
-    private boolean intakeOn; 
-    private boolean outputOn; 
+    private AnalogInput deployStick; 
 
     //motors
     public VictorSPX IntakeVictor; //intake = positive, output = negative 
     public VictorSPX IntakeDeployVictor;  //up = negative, down = positve
 
 
+
+
+
     // initializes the subsystem
     public void init() {
-        deployButtonUp = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_UP.getName());
-        deployButtonUp.addInputListener(this);
-        deployButtonDown = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
-        deployButtonDown.addInputListener(this);
-        intakeButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_RIGHT.getName());
+        intakeButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_FACE_RIGHT.getName());
         intakeButton.addInputListener(this);
-        outputButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_DPAD_DOWN);
+        outputButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_FACE_DOWN.getName());
+        outputButton.addInputListener(this);
+        deployStick = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_LEFT_JOYSTICK_Y.getName());
+        deployStick.addInputListener(this);
         IntakeVictor = new VictorSPX(CANConstants.Intake);
         IntakeDeployVictor = new VictorSPX(CANConstants.IntakeDeplay);
+        IntakeDeployVictor.setInverted(true);
+        intakeState = intakeStateEnum.OFF;
+        deploySpeed = 0; 
+        
         resetState();
     }
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        if(intakeOn) {
-            IntakeVictor.set(ControlMode.PercentOutput, 0.5);
-        }
-        else if (outputOn) {
-            IntakeVictor.set(ControlMode.PercentOutput, -0.5);
-        }
-        else {
-            IntakeVictor.set(ControlMode.PercentOutput, 0);
-        }
-
-        
-
+        IntakeVictor.set(ControlMode.PercentOutput, intakeState.speed());
+        IntakeDeployVictor.set(ControlMode.PercentOutput, deploySpeed);
     }
 
     // respond to input updates     
     public void inputUpdate(Input signal) {
-        if(intakeButton.getValue()) {
-            if (outputOn) {
-                outputOn = !outputOn;
-            }
-            intakeOn = !intakeOn;
-        }
+        deployStickValue = deployStick.getValue();
+        if(intakeButton.getValue()) intakeState = intakeStateEnum.INTAKE;
+        else if(outputButton.getValue()) intakeState = intakeStateEnum.OUTPUT;
+        else intakeState = intakeStateEnum.OFF;
 
-        if(outputButton.getValue()) {
-            if (intakeOn) {
-                intakeOn = !intakeOn;
-            }
-            outputOn = !outputOn;
-        }
-
-        
+        if (deployStickValue > 0.1 || deployStickValue < -0.1) deploySpeed = deployStickValue/1.5;
+        else deploySpeed = 0; 
     }
 
     // used for testing
     public void selfTest() {}
 
     public void resetState() {
-        intakeOn = false; 
-        outputOn  = false; 
+        intakeState = intakeStateEnum.OFF;
+        deployStickValue = 0;
+        deploySpeed = 0;
     }
 
     // returns the unique name of the example

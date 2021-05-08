@@ -16,6 +16,8 @@ import org.wildstang.framework.io.inputs.AnalogInput;
 import org.wildstang.framework.subsystems.Subsystem;
 import org.wildstang.year2021.robot.CANConstants;
 
+
+
 /**
  * Class:       TestSubsystem.java
  * Inputs:      1 joystick
@@ -27,7 +29,11 @@ public class Drive implements Subsystem {
     //MM_DRIVE(3, new PIDConstants(0.0, .2, 0.001, 2));
 
     // constants 
-     private double SPEED_MOD;
+    private double SPEED_MOD;
+
+    public boolean isAuto = false; 
+
+
 
     // inputs
     private AnalogInput forwardTranslationStick;
@@ -38,13 +44,15 @@ public class Drive implements Subsystem {
     double sidewaysTranslationInput;
     double RotationInput; 
 
-    double leftSpeed;
-    double rightSpeed;
-    double centerSpeed;
+    double leftSpeed = 0;
+    double rightSpeed = 0;
+    double centerSpeed = 0;
 
     double rotationMod; 
     double leftOverflow;
     double rightOverflow;
+
+
 
     // outputs
     private VictorSPX leftMotor;
@@ -53,7 +61,7 @@ public class Drive implements Subsystem {
     private VictorSPX centerFollower;
 
 
-    public double LogInput(AnalogInput stick) {
+    private double LogInput(AnalogInput stick) {
         if (stick.getValue() > 0.1) {
             return Math.pow(stick.getValue(), 2);
         }
@@ -68,6 +76,7 @@ public class Drive implements Subsystem {
 
     // initializes the subsystem
     public void init() {
+
         // register button and attach input listener with WS Input
         forwardTranslationStick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());
         sidewaysTranslationStick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_X.getName());
@@ -91,21 +100,35 @@ public class Drive implements Subsystem {
         resetState();
     }
 
+    private double cap(double value, double max) {
+        if (value > max) {
+            return max; 
+        }
+        else if (value < (max * -1)) {
+            return (max * -1);
+        }
+        return value; 
+    }
+    
+    private double getAbsVelocity(double x, double y) {
+        double absx = Math.abs(x);
+        double absy = Math.abs(y);
+        if(absx > absy) {
+            return absx;
+        }
+        return absy;
+    }
+
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
-        if(forwardTranslationInput != 0) {
-            leftSpeed = forwardTranslationInput * (RotationInput - 1) * -1;
-            rightSpeed = forwardTranslationInput * (RotationInput + 1);
+        if(!isAuto) {
+            leftSpeed = cap(forwardTranslationInput + RotationInput, getAbsVelocity(RotationInput, forwardTranslationInput));
+            rightSpeed = cap(forwardTranslationInput - RotationInput, getAbsVelocity(RotationInput, forwardTranslationInput));  
+            leftMotor.set(ControlMode.PercentOutput, leftSpeed);
+            rightMotor.set(ControlMode.PercentOutput, rightSpeed);
+            centerMotor.set(ControlMode.PercentOutput, (sidewaysTranslationInput * -1));
 
-        }   
-        else {
-            leftSpeed = -RotationInput;
-            rightSpeed = RotationInput;
         }
-        
-        leftMotor.set(ControlMode.PercentOutput, leftSpeed);
-        rightMotor.set(ControlMode.PercentOutput, rightSpeed);
-        centerMotor.set(ControlMode.PercentOutput, (sidewaysTranslationInput * -1));
     }
 
     // respond to input updates
@@ -120,7 +143,12 @@ public class Drive implements Subsystem {
 
     // resets all variables to the default state
     public void resetState() {
-        
+    }
+
+    public void setSpeed(double left, double right) {
+        leftMotor.set(ControlMode.PercentOutput, left);
+        rightMotor.set(ControlMode.PercentOutput, right);   
+        System.out.println("Set Speed to " + left);      
     }
 
     // returns the unique name of the example

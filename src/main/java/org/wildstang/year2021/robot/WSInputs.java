@@ -118,7 +118,7 @@ public enum WSInputs implements Inputs {
     // ---------------------------------
     // Manipulator Joysticks
     // ---------------------------------
-    MANIPULATOR_LEFT_JOYSTICK_Y  ("Manipulator left joystick y",
+    MANIPULATOR_LEFT_JOYSTICK_Y  ("Intake Deploy Stick",
             WSInputType.JS_JOYSTICK, new WsJSJoystickInputConfig(1, JoystickConstants.LEFT_JOYSTICK_Y),  true), 
     MANIPULATOR_LEFT_JOYSTICK_X  ("Manipulator left joystick x",
             WSInputType.JS_JOYSTICK, new WsJSJoystickInputConfig(1, JoystickConstants.LEFT_JOYSTICK_X),  true), 
@@ -142,13 +142,13 @@ public enum WSInputs implements Inputs {
     // ---------------------------------
     // Manipulator Buttons
     // ---------------------------------
-    MANIPULATOR_FACE_DOWN             ("Manipulator face down",
+    MANIPULATOR_FACE_DOWN             ("Output Button",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(1, 0),                                 false), 
-    MANIPULATOR_FACE_LEFT             ("Manipulator face left",
+    MANIPULATOR_FACE_LEFT             ("Claw Deploy",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(1, 2),                                 false), 
-    MANIPULATOR_FACE_RIGHT            ("Manipulator face right",
+    MANIPULATOR_FACE_RIGHT            ("Intake Button",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(1, 1),                                 false), 
-    MANIPULATOR_FACE_UP               ("Manipulator face up",
+    MANIPULATOR_FACE_UP               ("Claw Retract",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(1, 3),                                 false), 
     MANIPULATOR_LEFT_SHOULDER         ("Manipulator left shoulder",
             WSInputType.JS_BUTTON,   new WsJSButtonInputConfig(1, 4),                                 false), 

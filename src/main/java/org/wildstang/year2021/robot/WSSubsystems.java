@@ -12,7 +12,8 @@ public enum WSSubsystems implements Subsystems {
     // enumerate subsystem
     DRIVE("Drive", Drive.class),
     HIGH_FUEL("High Fuel", HighFuel.class),
-    SCORING("Scoring", Scoring.class);
+    SCORING("Scoring", Scoring.class),
+    DESCORING("Descoring", Descoring.class);
     
     private String name;
     private Class<?> subsystemClass;

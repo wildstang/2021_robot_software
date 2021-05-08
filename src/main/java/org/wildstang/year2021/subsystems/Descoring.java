@@ -29,63 +29,39 @@ import org.wildstang.framework.subsystems.Subsystem;
  * Outputs:     1 talon
  * Description: This is a testing subsystem that controls a single motor with a joystick.
  */
-public class HighFuel implements Subsystem {
+public class Descoring implements Subsystem {
 
-    static int OPENTIME = 30;
+    private AnalogInput controlStick;
+    private VictorSPX descoringMotor;
+    private double speed;
 
-    public boolean isAuto;
-
-    private DigitalInput clawDeploy; 
-    private DigitalInput clawRelease; 
-    private VictorSPX clawVictor; 
-    private boolean deployed;
-    //private WsTimer timer; 
-
-
-    public void init() {
-        clawDeploy = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_FACE_UP.getName());
-        clawDeploy.addInputListener(this);
-        clawRelease = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_FACE_LEFT.getName());
-        clawRelease.addInputListener(this);
-        clawVictor = new VictorSPX(CANConstants.HighFuel);
-        deployed = false; 
-        isAuto = false; 
-        //timer.start();
+    public void init() {   
+        controlStick = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_RIGHT_JOYSTICK_X.getName());
+        controlStick.addInputListener(this);
+        speed = 0; 
+        descoringMotor = new VictorSPX(CANConstants.Descoring);
         
     }
 
     public void update() {
-        if(!isAuto) {
-            if(clawRelease.getValue()) {
-                clawVictor.set(ControlMode.PercentOutput, 1);
-            }
-            else if (clawDeploy.getValue()) {
-                clawVictor.set(ControlMode.PercentOutput, -1);
-            }
-            else {
-                clawVictor.set(ControlMode.PercentOutput, 0);
-            }
-        }
+        if(speed > 0.1 || speed < -0.1) descoringMotor.set(ControlMode.PercentOutput, speed);
+        else descoringMotor.set(ControlMode.PercentOutput, 0);
     }
 
     public void inputUpdate(Input signal) {
-        
+        speed = controlStick.getValue();
     }
 
     public void selfTest() {
 
     }
 
-    public void openClaw(double speed) {
-        clawVictor.set(ControlMode.PercentOutput, speed);
-    }
-
     public void resetState() {
-       deployed = false; 
-       
+       speed = 0; 
+       descoringMotor.set(ControlMode.PercentOutput, 0);
     }
 
     public String getName() {
-        return "High Fuel";
+        return "Descoring";
     }
 }

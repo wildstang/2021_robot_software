@@ -60,7 +60,7 @@ public class Drive implements Subsystem {
         rightHorizontal = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_X.getName());
         rightHorizontal.addInputListener(this);
         
-        selectMode = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SELECT.getName());
+        selectMode = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_START.getName());
         selectMode.addInputListener(this);
         quickButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
         quickButton.addInputListener(this);
@@ -83,7 +83,7 @@ public class Drive implements Subsystem {
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if ( selectMode.getValue()) {
+        if (selectMode.getValue()&&(signal == selectMode)) {
             altControl = !altControl;  
         }
         
@@ -97,15 +97,19 @@ public class Drive implements Subsystem {
 
         } else { //throttle and steer mode
             if (!quickButton.getValue()) {
-            leftSpeed = (1-rightHorizontal.getValue());
-            rightSpeed = (1+rightHorizontal.getValue());
+            leftSpeed = (1+rightHorizontal.getValue());
+            rightSpeed = (1-rightHorizontal.getValue());
+
+            if (leftSpeed>1){ leftSpeed = 1;}
+            if (rightSpeed>1){ rightSpeed = 1;}
+            
             } else { //when quickturning, pivot without moving forward
                 leftSpeed = (-1*rightHorizontal.getValue());
                 rightSpeed = (rightHorizontal.getValue());
             }
-            double norm = 0.5*(Math.abs(leftSpeed)+Math.abs(rightSpeed));
-            rightSpeed = leftJoystick.getValue()*(rightSpeed/norm);
-            leftSpeed = leftJoystick.getValue()*(leftSpeed/norm);
+            //double norm = 0.5*(Math.abs(leftSpeed)+Math.abs(rightSpeed));
+            rightSpeed = leftJoystick.getValue()*(rightSpeed);
+            leftSpeed = leftJoystick.getValue()*(leftSpeed);
             if (Math.abs(leftJoystick.getValue())<DeadBand) {
                 rightSpeed = 0;
                 leftSpeed = 0;

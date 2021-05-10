@@ -28,7 +28,7 @@ public class OtherTestProgram extends AutoProgram {
 
     @Override
     public String toString() {
-        return "Doughnuts";
+        return "OtherTestProgram";
     }
 
 }

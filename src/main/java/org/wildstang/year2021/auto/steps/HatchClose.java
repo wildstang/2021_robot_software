@@ -3,31 +3,31 @@ package org.wildstang.year2021.auto.steps;
 import org.wildstang.year2021.robot.WSSubsystems;
 import org.wildstang.framework.auto.steps.AutoStep;
 import org.wildstang.framework.core.Core;
-import org.wildstang.year2021.subsystems.Highball;
+import org.wildstang.year2021.subsystems.Ballpath;
+
 
 
 /**
  * 
  */
-public class HighballDeployStep extends AutoStep {
-
-    private Highball HighArm;
+public class HatchClose extends AutoStep {
+    
+    private Ballpath Hatch;
 
     public void initialize() {
-        HighArm = (Highball) Core.getSubsystemManager().getSubsystem(WSSubsystems.HIGHBALL.getName());
-
-        HighArm.raiseArm();
+        Hatch = (Ballpath) Core.getSubsystemManager().getSubsystem(WSSubsystems.BALLPATH.getName());
+        Hatch.turnOnBallpath();
+        setFinished(true);
     }
 
     public void update() {
         // check if the timer has exceded the desired delay
-        setFinished(true);
         
     }
 
     public String toString() {
         // give it a name
-        return "HighballDeployStep";
+        return "HatchClose";
     }
 
 }

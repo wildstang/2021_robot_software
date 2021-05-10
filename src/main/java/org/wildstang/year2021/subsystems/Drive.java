@@ -32,7 +32,7 @@ public class Drive implements Subsystem {
     private DigitalInput selectMode;
     private DigitalInput quickButton; //for alt controls
 
-    private AnalogInput gyro;
+    //private AnalogInput gyro;
 
     // outputs
     private TalonSRX leftMotor; 
@@ -57,17 +57,13 @@ public class Drive implements Subsystem {
         leftJoystick.addInputListener(this);
         rightJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_Y.getName());
         rightJoystick.addInputListener(this);
-
         rightHorizontal = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_X.getName());
         rightHorizontal.addInputListener(this);
         
         selectMode = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SELECT.getName());
         selectMode.addInputListener(this);
-
         quickButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
         quickButton.addInputListener(this);
-
-        gyro = (AnalogInput) Core.getInputManager().getInput(WSInputs.GYRO.getName());
 
         resetState();
     }
@@ -79,7 +75,7 @@ public class Drive implements Subsystem {
 
         SmartDashboard.putNumber("left speed", leftSpeed);
         SmartDashboard.putNumber("right speed", rightSpeed);
-        SmartDashboard.putNumber("gyro reading", gyro.getValue());
+        //SmartDashboard.putNumber("gyro reading", gyro.getValue());
         SmartDashboard.putNumber("left encoder",leftMotor.getSensorCollection().getQuadraturePosition());
         SmartDashboard.putNumber("right encoder",rightMotor.getSensorCollection().getQuadraturePosition());
     }
@@ -87,33 +83,30 @@ public class Drive implements Subsystem {
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if ((signal == selectMode)&&(selectMode.getValue())){
+        if ( selectMode.getValue()) {
             altControl = !altControl;  
         }
-       
-        if(!altControl){ //two throttle mode
+        
+        if (!altControl) { //two throttle mode
             leftSpeed = leftJoystick.getValue();
             rightSpeed = rightJoystick.getValue();
-            if(Math.abs(leftSpeed)<DeadBand){
-                leftSpeed = 0;
-            }
-            if(Math.abs(rightSpeed)<DeadBand){
-                rightSpeed = 0;
-            }
-        }
-        else{ //throttle and steer mode
-            if (!quickButton.getValue()){
+            if (Math.abs(leftSpeed)<DeadBand) 
+                {  leftSpeed = 0;  }
+            if (Math.abs(rightSpeed)<DeadBand) 
+                {  rightSpeed = 0;  }
+
+        } else { //throttle and steer mode
+            if (!quickButton.getValue()) {
             leftSpeed = (1-rightHorizontal.getValue());
             rightSpeed = (1+rightHorizontal.getValue());
-            }
-            else{ //when quickturning, pivot without moving forward
+            } else { //when quickturning, pivot without moving forward
                 leftSpeed = (-1*rightHorizontal.getValue());
                 rightSpeed = (rightHorizontal.getValue());
             }
             double norm = 0.5*(Math.abs(leftSpeed)+Math.abs(rightSpeed));
             rightSpeed = leftJoystick.getValue()*(rightSpeed/norm);
             leftSpeed = leftJoystick.getValue()*(leftSpeed/norm);
-            if(Math.abs(leftJoystick.getValue())<DeadBand){
+            if (Math.abs(leftJoystick.getValue())<DeadBand) {
                 rightSpeed = 0;
                 leftSpeed = 0;
             }
@@ -130,6 +123,7 @@ public class Drive implements Subsystem {
         altControl = false;
         ResetEncoders();
     }
+
     public void ResetEncoders(){
         leftMotor.getSensorCollection().setQuadraturePosition(0,0);
         rightMotor.getSensorCollection().setQuadraturePosition(0,0);
@@ -141,12 +135,24 @@ public class Drive implements Subsystem {
         return leftMotor.getSensorCollection().getQuadraturePosition();
     }
     public double GetGyroValue(){
-        return gyro.getValue();
+        //return gyro.getValue();
+        return 0;
+    }
+
+    public void SetBothSpeeds(double speedR, double speedL){
+        rightSpeed = speedR;
+        leftSpeed = speedL;
+    }
+    public void SetRightSpeed(double speed){
+        rightSpeed = speed;
+    }
+    public void SetLeftSpeed(double speed){
+        leftSpeed = speed;
     }
 
     // returns the unique name of the example
     public String getName() {
-        return "Drivetrain";
+        return "Drive";
     }
 }
  

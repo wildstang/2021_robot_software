@@ -84,9 +84,6 @@ public class Ballpath implements Subsystem {
         intakeMotor.set(ControlMode.PercentOutput, intakeMotorSpeed);
         outputMotor.set(ControlMode.PercentOutput, outputMotorSpeed);
 
-        SmartDashboard.putNumber("intake speed",intakeMotorSpeed);
-        SmartDashboard.putNumber("out hatch speed",outputMotorSpeed);
-        
 
         // Begin  from Idle -> Raising -> Paused
         if (currentCommand == commands.RAISING) {
@@ -104,6 +101,7 @@ public class Ballpath implements Subsystem {
             timerStatus = false;
         }
 
+        
         // Change  from Lowering -> Reset -> Idle
         if (currentCommand == commands.LOWERING) {
             if (!timerStatus) {
@@ -160,7 +158,7 @@ public class Ballpath implements Subsystem {
 
     // returns the unique name of the example
     public String getName() {
-        return "Ballpath Subsystem";
+        return "Ballpath";
     }
 
     public void ballpathDeploy(){
@@ -169,5 +167,11 @@ public class Ballpath implements Subsystem {
     public void turnOffBallpath(){
         intakeMotorSpeed = 0;
     }
+    public void turnOnBallpath(){
+        intakeMotorSpeed = FULL_SPEED;
+    }
+
+    
+
 
 }

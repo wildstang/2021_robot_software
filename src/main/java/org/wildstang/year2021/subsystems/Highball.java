@@ -99,7 +99,7 @@ public class Highball implements Subsystem {
         if (leftButton.getValue() && raised == false && !lowering && signal == leftButton) {
             raising = true;
         }
-        if(leftButton.getValue()&& raised && !raising&& signal == leftButton){
+        if(leftButton.getValue() && raised && !raising&& signal == leftButton){
             lowering = true;
         }
         

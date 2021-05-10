@@ -21,8 +21,8 @@ public class OtherTestProgram extends AutoProgram {
         double[] Angles = {0,0.5*PI,1.5*PI,1.5*PI,0.5*PI,0.5*PI,1.5*PI,1.5*PI,0};
         double[] Speeds = {0.6,0.6,0.3,0.6,0.3,0.6,0.3,0.6,0.3};
         addStep(new DelayStep(3));
-        PathStep path = new PathStep();
-        path.PathStep(Xs,Ys,Angles,Speeds);
+        PathStep path = new PathStep(Xs,Ys,Angles,Speeds);
+        //path.PathStep(Xs,Ys,Angles,Speeds);
         addStep(path);
     }
 

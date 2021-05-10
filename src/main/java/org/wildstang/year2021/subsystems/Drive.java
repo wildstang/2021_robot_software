@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * Description: This the drive train subsystem that controls 2 motors with 2 joysticks. 
  * Default mode uses vertical positions of joysticks for motor powers.
  * Alternate mode uses left joystick for throttle,  right joystick horizontal axis for steering, and face down for quickturn.
- * Click select to change modes.
+ * Click start to change modes.
  */
 public class Drive implements Subsystem {
  

@@ -51,7 +51,7 @@ public class PathStep extends AutoStep {
     private double MaxSpeed = 5; //avg calculated speed ft/s at max percent. TBD: Fix intial value!
     private double GyroValue; //not used yet, may be used for angle later.
     private double GyroOffset;
-    public void PathStep(double[] Xpts, double[] Ypts, double[] Angles,double[] Speeds){
+    public PathStep(double[] Xpts, double[] Ypts, double[] Angles,double[] Speeds){
         Xs = Xpts;
         Ys = Ypts;
         As = Angles;

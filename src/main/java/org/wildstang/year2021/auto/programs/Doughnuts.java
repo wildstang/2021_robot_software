@@ -20,8 +20,8 @@ public class Doughnuts extends AutoProgram {
         double[] Angles = {0,0.5*PI,PI,1.5*PI,0,0.5*PI,PI,1.5*PI,0};
         double[] Speeds = {0.6,0.6,0.6,0.6,0.6};
         addStep(new DelayStep(3));
-        PathStep path = new PathStep();
-        path.PathStep(Xs,Ys,Angles,Speeds);
+        PathStep path = new PathStep(Xs,Ys,Angles,Speeds);
+        //path.PathStep(Xs,Ys,Angles,Speeds);
         addStep(path);
     }
 

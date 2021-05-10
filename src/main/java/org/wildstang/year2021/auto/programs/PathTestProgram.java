@@ -21,8 +21,8 @@ public class PathTestProgram extends AutoProgram {
         double[] DyDxs = {0,0,PI/2,(5/4)*PI,0};
         double[] Speeds = {0.1,0.1,0.1,0.1,0.1};
         addStep(new DelayStep(5));
-        PathStep path = new PathStep();
-        path.PathStep(Xs,Ys,DyDxs,Speeds);
+        PathStep path = new PathStep(Xs,Ys,DyDxs,Speeds);
+        //path.PathStep(Xs,Ys,DyDxs,Speeds);
         addStep(path);
     }
 

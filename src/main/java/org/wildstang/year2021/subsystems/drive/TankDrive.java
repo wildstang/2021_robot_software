@@ -13,6 +13,8 @@ import org.wildstang.framework.io.inputs.AnalogInput;
 import org.wildstang.framework.io.inputs.DigitalInput;
 import org.wildstang.framework.subsystems.Subsystem;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * Class:       TankDrive.java
  * Inputs:      2 AnalogInput (Driver left joystick Y-axis and right joystick Y-axis), 1 DigitalInput (Driver A button)
@@ -76,6 +78,9 @@ public class TankDrive implements Subsystem {
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
+        SmartDashboard.putNumber("leftSpeed", leftSpeed);
+        SmartDashboard.putNumber("rightSpeed", rightSpeed);
+
         leftFrontMotor.set(ControlMode.PercentOutput, leftSpeed*maxSpeed);
         leftBackMotor.set(ControlMode.PercentOutput, leftSpeed*maxSpeed);
         rightFrontMotor.set(ControlMode.PercentOutput, rightSpeed*maxSpeed);
@@ -161,6 +166,6 @@ public class TankDrive implements Subsystem {
 
     // returns the unique name of the subsystem
     public String getName() {
-        return "Drive";
+        return "Tank Drive";
     }
 }

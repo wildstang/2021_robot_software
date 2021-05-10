@@ -1,17 +1,20 @@
 package org.wildstang.year2021.auto.steps;
 
 import org.wildstang.framework.auto.steps.AutoStep;
+import org.wildstang.framework.core.Core;
+import org.wildstang.year2021.robot.WSSubsystems;
 import org.wildstang.year2021.subsystems.drive.TankDrive;
 
 public class DriveBackwardsStep extends AutoStep {
-    TankDrive drive = new TankDrive();
-    double speed = 0.0;
+    private TankDrive drive;
+    private double speed = 0.0;
 
     public DriveBackwardsStep() {
         this(-1.0);
     }
     
     public DriveBackwardsStep(double s) {
+        drive = (TankDrive) Core.getSubsystemManager().getSubsystem(WSSubsystems.TANKDRIVE.getName());
         if (s <= 1.0 || s >= -1.0) {
             speed = -Math.abs(s);
         }  
@@ -21,6 +24,8 @@ public class DriveBackwardsStep extends AutoStep {
     }
 
     public void initialize() {
+        
+
         drive.setLeftMotorSpeed(speed);
         drive.setRightMotorSpeed(speed);
     }

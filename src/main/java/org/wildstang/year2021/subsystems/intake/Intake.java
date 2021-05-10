@@ -9,26 +9,28 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
 import org.wildstang.framework.io.inputs.AnalogInput;
+import org.wildstang.framework.io.inputs.DigitalInput;
 import org.wildstang.framework.subsystems.Subsystem;
 
 /**
  * Class:       Intake.java
- * Inputs:      2 AnalogInput (Manipulator left trigger and right trigger) 
+ * Inputs:      2 DigitalInput (Manipulator left shoulder and right shoulder) 
  * Outputs:     1 VictorSPX
- * Description: Right trigger to roll intake forwards, left trigger to roll intake backwards (if right trigger is not being pressed).
+ * Description: Left shoulder to toggle intake backwards, right shoulder to toggle intake forwards
  */
 public class Intake implements Subsystem {
 
     // inputs
-    private AnalogInput rightTrigger;
-    private AnalogInput leftTrigger;
+    private DigitalInput rightShoulder;
+    private DigitalInput leftShoulder;
 
     // outputs
     private VictorSPX rollerMotor;
 
     // variables
     private double speed = 0.0;
-    private double maxSpeed = 0.8;
+    private double maxSpeed = 0.5;
+    private int intakeStatus = 0; // 0 - off; 1 - forwards; 2 - backwards
 
     // initializes the subsystem
     public void init() {
@@ -38,10 +40,10 @@ public class Intake implements Subsystem {
     }
 
     public void initInputs() {
-        rightTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_RIGHT_TRIGGER.getName());
-        rightTrigger.addInputListener(this);
-        leftTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_LEFT_TRIGGER.getName());
-        leftTrigger.addInputListener(this);
+        rightShoulder = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_RIGHT_SHOULDER.getName());
+        rightShoulder.addInputListener(this);
+        leftShoulder = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_LEFT_SHOULDER.getName());
+        leftShoulder.addInputListener(this);
     }
 
     public void initOutputs() {
@@ -55,21 +57,37 @@ public class Intake implements Subsystem {
 
     // respond to input updates
     public void inputUpdate(Input signal) {
-        if (signal == rightTrigger || signal == leftTrigger) {
-            if (rightTrigger.getValue() > 0.2) {
-                speed = rightTrigger.getValue();
-                // when right trigger is pressed 20%, the intake spins forwards
-            }
-            else if (leftTrigger.getValue() > 0.2) {
-                speed = leftTrigger.getValue() * -1.0;
-                // when left trigger is pressed 20%, the intake spins backwards
+        if (signal == rightShoulder) {
+            if (intakeStatus == 1) {
+                intakeStatus = 0;
             }
             else {
-                resetState();
+                intakeStatus = 1;
             }
-        } else {
-            resetState();
         }
+        if (signal == leftShoulder) {
+            if (intakeStatus == 2) {
+                intakeStatus = 0;
+            }
+            else {
+                intakeStatus = 2;
+            }
+        }
+        // set speed based on status
+        if (intakeStatus == 1) {
+            speed = -1.0;
+        }
+        else if (intakeStatus == 2) {
+            speed = 1.0;
+        }
+        else {
+            speed = 0.0;
+        }
+    }
+
+    // helper methods for autonomous
+    public void setIntakeSpeed(double i){
+        speed = i;
     }
 
     // used for testing

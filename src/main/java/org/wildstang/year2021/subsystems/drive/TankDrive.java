@@ -13,6 +13,8 @@ import org.wildstang.framework.io.inputs.AnalogInput;
 import org.wildstang.framework.io.inputs.DigitalInput;
 import org.wildstang.framework.subsystems.Subsystem;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * Class:       TankDrive.java
  * Inputs:      2 AnalogInput (Driver left joystick Y-axis and right joystick Y-axis), 1 DigitalInput (Driver A button)
@@ -23,8 +25,10 @@ public class TankDrive implements Subsystem {
 
     // inputs
     private AnalogInput leftJoystick;
-    private AnalogInput rightJoystick;
+    private AnalogInput rightJoystickY;
+    private AnalogInput rightJoystickX;
     private DigitalInput turboButton;
+    private DigitalInput switchButton;
 
     // outputs
     private VictorSPX leftFrontMotor;
@@ -34,10 +38,11 @@ public class TankDrive implements Subsystem {
 
     // variables
     private boolean turboStatus = false;
+    private boolean isArcade = false;
     private double leftSpeed = 0.0;
     private double rightSpeed = 0.0;
-    private double normalSpeed = 0.5; // max speed when turbo is off
-    private double turboSpeed = 1.0; // max speed when turbo is on
+    private double normalSpeed = 1.0; // max speed when turbo is off
+    private double turboSpeed = 0.0; // max speed when turbo is on
     private double maxSpeed = normalSpeed; // max speed is normal by default
 
     // deadzones must be positive double between 0.0 and 1.0
@@ -54,10 +59,14 @@ public class TankDrive implements Subsystem {
     public void initInputs() {
         leftJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_JOYSTICK_Y.getName());
         leftJoystick.addInputListener(this);
-        rightJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_Y.getName());
-        rightJoystick.addInputListener(this);
+        rightJoystickY = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_Y.getName());
+        rightJoystickY.addInputListener(this);
+        rightJoystickX = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_X.getName());
+        rightJoystickX.addInputListener(this);
         turboButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
         turboButton.addInputListener(this);
+        switchButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_LEFT.getName());
+        switchButton.addInputListener(this);
     }
 
     public void initOutputs() {
@@ -69,6 +78,9 @@ public class TankDrive implements Subsystem {
 
     // update the subsystem everytime the framework updates (every ~0.02 seconds)
     public void update() {
+        SmartDashboard.putNumber("leftSpeed", leftSpeed);
+        SmartDashboard.putNumber("rightSpeed", rightSpeed);
+
         leftFrontMotor.set(ControlMode.PercentOutput, leftSpeed*maxSpeed);
         leftBackMotor.set(ControlMode.PercentOutput, leftSpeed*maxSpeed);
         rightFrontMotor.set(ControlMode.PercentOutput, rightSpeed*maxSpeed);
@@ -77,41 +89,58 @@ public class TankDrive implements Subsystem {
 
     // respond to input updates
     public void inputUpdate(Input signal) {
-        // update left motor speeds
-        if (signal == leftJoystick) {
+        if (signal == switchButton) {
+            isArcade = !isArcade;
+            System.out.println("isArcade = " + isArcade);
+        }
+
+        // tank drive
+        if (!isArcade) {
+            // update left motor speeds
             if (Math.abs(leftJoystick.getValue()) > leftDeadzone) {
-                leftSpeed = leftJoystick.getValue();
+                leftSpeed = leftJoystick.getValue()*-1.0;
             }
             else {
                 leftSpeed = 0.0;
             }
-        }
-        else {
-            leftSpeed = 0.0;
-        }
-        // update right motor speeds
-        if (signal == rightJoystick) {
-            if (Math.abs(rightJoystick.getValue()) > rightDeadzone) {
-                rightSpeed = rightJoystick.getValue();
+            // update right motor speeds
+            if (Math.abs(rightJoystickY.getValue()) > rightDeadzone) {
+                rightSpeed = rightJoystickY.getValue();
             }
             else {
                 rightSpeed = 0.0;
             }
         }
+        // arcade drive
         else {
-            rightSpeed = 0.0;
-        }
-        // update max speed
-        if (signal == turboButton) {
-            if (!turboStatus) {
-                turboStatus = true;
-                maxSpeed = turboSpeed;
+            if (!turboButton.getValue()) {
+                leftSpeed = (1.0 - rightJoystickX.getValue());
+                rightSpeed = (1.0 + rightJoystickX.getValue());
             }
             else {
-                turboStatus = false;
-                maxSpeed = normalSpeed;
+                leftSpeed = (rightJoystickX.getValue()*-1.0);
+                rightSpeed = (rightJoystickX.getValue());
+            }
+            double avg = (Math.abs(leftSpeed)+Math.abs(rightSpeed))*0.5;
+            leftSpeed = leftJoystick.getValue()*(leftSpeed/avg);
+            rightSpeed = leftJoystick.getValue()*(rightSpeed/avg);
+            if (Math.abs(leftJoystick.getValue()) < leftDeadzone){
+                leftSpeed = 0.0;
+                rightSpeed = 0.0;
             }
         }
+
+        // update max speed
+        // if (signal == turboButton) {
+        //     if (!turboStatus) {
+        //         turboStatus = true;
+        //         maxSpeed = turboSpeed;
+        //     }
+        //     else {
+        //         turboStatus = false;
+        //         maxSpeed = normalSpeed;
+        //     }
+        // }
     }
 
     // helper methods for autonomous
@@ -132,6 +161,7 @@ public class TankDrive implements Subsystem {
         rightSpeed = 0.0;
         maxSpeed = normalSpeed;
         turboStatus = false;
+        isArcade = false;
     }
 
     // returns the unique name of the subsystem

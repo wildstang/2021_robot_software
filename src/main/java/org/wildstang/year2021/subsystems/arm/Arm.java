@@ -27,7 +27,7 @@ public class Arm implements Subsystem {
 
     // variables
     private double speed = 0.0;
-    private double maxSpeed = 0.8;
+    private double maxSpeed = 0.4;
 
     // initializes the subsystem
     public void init() {
@@ -54,7 +54,7 @@ public class Arm implements Subsystem {
     public void inputUpdate(Input signal) {
         if (signal == leftJoystick) {
             double stickValue = leftJoystick.getValue();
-            if (Math.abs(stickValue) > 0.4) {
+            if (Math.abs(stickValue) > 0.3) {
                 speed = stickValue;
             } else {
                 resetState();

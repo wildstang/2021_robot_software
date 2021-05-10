@@ -9,18 +9,19 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
 import org.wildstang.framework.io.inputs.AnalogInput;
+import org.wildstang.framework.io.inputs.DigitalInput;
 import org.wildstang.framework.subsystems.Subsystem;
 
 /**
  * Class:       Hopper.java
- * Inputs:      1 AnalogInput (Manipulator right joystick Y-axis)
+ * Inputs:      1 DigitalInput (Manipulator face right)
  * Outputs:     1 VictorSPX
- * Description: Joystick up to roll hopper forwards, joystick down to roll it backwards.
+ * Description: Hold manipulator face right to run outtake
  */
 public class Hopper implements Subsystem {
 
     // inputs
-    private AnalogInput rightJoystick;
+    private DigitalInput outtakeButton;
 
     // outputs
     private VictorSPX motor;
@@ -37,8 +38,8 @@ public class Hopper implements Subsystem {
     }
 
     public void initInputs() {
-        rightJoystick = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_RIGHT_JOYSTICK_Y.getName());
-        rightJoystick.addInputListener(this);
+        outtakeButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_FACE_RIGHT.getName());
+        outtakeButton.addInputListener(this);
     }
 
     public void initOutputs() {
@@ -52,12 +53,9 @@ public class Hopper implements Subsystem {
 
     // respond to input updates
     public void inputUpdate(Input signal) {
-        if (signal == rightJoystick){
-            if (rightJoystick.getValue() > 0.4){
+        if (signal == outtakeButton){
+            if (outtakeButton.getValue()){
                 speed = 1.0;
-            }
-            else if (rightJoystick.getValue() < -0.4){
-                speed = -1.0; 
             }
             else {
                 resetState();

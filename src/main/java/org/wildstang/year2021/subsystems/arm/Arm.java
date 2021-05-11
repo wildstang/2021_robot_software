@@ -27,7 +27,7 @@ public class Arm implements Subsystem {
 
     // variables
     private double speed = 0.0;
-    private double maxSpeed = 0.4;
+    private double maxSpeed = 1.0;
 
     // initializes the subsystem
     public void init() {

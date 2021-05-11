@@ -81,8 +81,8 @@ public class TankDrive implements Subsystem {
         SmartDashboard.putNumber("leftSpeed", leftSpeed);
         SmartDashboard.putNumber("rightSpeed", rightSpeed);
 
-        leftFrontMotor.set(ControlMode.PercentOutput, leftSpeed*maxSpeed);
-        leftBackMotor.set(ControlMode.PercentOutput, leftSpeed*maxSpeed);
+        leftFrontMotor.set(ControlMode.PercentOutput, leftSpeed*maxSpeed*-1.0);
+        leftBackMotor.set(ControlMode.PercentOutput, leftSpeed*maxSpeed*-1.0);
         rightFrontMotor.set(ControlMode.PercentOutput, rightSpeed*maxSpeed);
         rightBackMotor.set(ControlMode.PercentOutput, rightSpeed*maxSpeed);
     }
@@ -98,7 +98,7 @@ public class TankDrive implements Subsystem {
         if (!isArcade) {
             // update left motor speeds
             if (Math.abs(leftJoystick.getValue()) > leftDeadzone) {
-                leftSpeed = leftJoystick.getValue()*-1.0;
+                leftSpeed = leftJoystick.getValue();
             }
             else {
                 leftSpeed = 0.0;
@@ -118,7 +118,7 @@ public class TankDrive implements Subsystem {
                 rightSpeed = (1.0 + rightJoystickX.getValue());
             }
             else {
-                leftSpeed = (rightJoystickX.getValue()*-1.0);
+                leftSpeed = (rightJoystickX.getValue());
                 rightSpeed = (rightJoystickX.getValue());
             }
             double avg = (Math.abs(leftSpeed)+Math.abs(rightSpeed))*0.5;

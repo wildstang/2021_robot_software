@@ -36,6 +36,6 @@ public class GetFuelMabye extends AutoProgram {
 
     @Override
     public String toString() {
-        return "GetFuelMabyeProgram";
+        return "GetFuelMabye";
     }
 }

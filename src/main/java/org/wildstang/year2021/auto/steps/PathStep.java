@@ -117,7 +117,6 @@ public class PathStep extends AutoStep {
         double HeadErr = Math.abs(Angle-As[Counter]);
         if ((HeadErr<AcceptableHeadingError)&&(Distance<AcceptableRadius)){
             Counter += 1;
-            SpeedConstant = Vs[Counter];
         }
     }
     private void OutputUpdate(double Dt){  
@@ -176,6 +175,7 @@ public class PathStep extends AutoStep {
             
         }
         else{
+        SpeedConstant = Vs[Counter];
         OutputUpdate(ExDt);
         }
         LastEncPos[0] = Driver.GetLeftEncoder();

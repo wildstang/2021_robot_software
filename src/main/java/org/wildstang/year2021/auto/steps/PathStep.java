@@ -4,6 +4,9 @@ import org.wildstang.framework.auto.steps.AutoStep;
 import org.wildstang.year2021.subsystems.Drive; 
 import org.wildstang.framework.timer.WsTimer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.wildstang.framework.core.Core;
+
+import org.wildstang.year2021.robot.WSSubsystems;
 
 
 /**
@@ -18,7 +21,7 @@ Mesurements are in feet.
 public class PathStep extends AutoStep {
 
     WsTimer timer = new WsTimer();
-    Drive Driver = new Drive();
+    Drive Driver;
     private double PI = Math.PI;
     //paramaters
     public double AcceptableRadius =  0.1; 
@@ -52,6 +55,7 @@ public class PathStep extends AutoStep {
     private double GyroValue; //not used yet, may be used for angle later.
     private double GyroOffset;
     public PathStep(double[] Xpts, double[] Ypts, double[] Angles,double[] Speeds){
+        Driver = (Drive) Core.getSubsystemManager().getSubsystem(WSSubsystems.DRIVE.getName());
         Xs = Xpts;
         Ys = Ypts;
         As = Angles;
@@ -102,10 +106,10 @@ public class PathStep extends AutoStep {
         Y += DeltaY;
         Angle = NewAngle;
         if(Angle>2*PI){
-            Angle = Angle-2*PI;
+            Angle = Angle-(2*PI);
         }
         if(Angle<0){
-            Angle = Angle+2*PI;
+            Angle = Angle+(2*PI);
         }
     }
     private void CheckPoint(){

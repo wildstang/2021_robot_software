@@ -32,6 +32,9 @@ public class Lift implements Subsystem {
     // states
     private double speed;
 
+    private double maxupspeed = 0.5;
+    private double maxdownspeed = -.25;
+
     // initializes the subsystem
     public void init() {
         // register button and attach input listener with WS Input
@@ -57,16 +60,16 @@ public class Lift implements Subsystem {
     }
 
     public void deployLift(){
-        speed = 1;
+        speed = maxupspeed;
     }
 
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
         if ((signal == up || signal == limit) && up.getValue() && limit.getValue()) {
-            speed = 1;
+            speed = maxupspeed;
         }else if(signal == down && down.getValue()){
-            speed = -1;
+            speed = maxdownspeed;
         }else{
             speed = 0;
         }

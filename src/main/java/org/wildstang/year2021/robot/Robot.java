@@ -11,6 +11,10 @@ import org.wildstang.framework.io.inputs.RemoteAnalogInput;
 import org.wildstang.framework.timer.WsTimer;
 import org.wildstang.hardware.crio.RoboRIOInputFactory;
 import org.wildstang.hardware.crio.RoboRIOOutputFactory;
+import org.wildstang.year2021.auto.programs.Deploys;
+import org.wildstang.year2021.auto.programs.AutoPath1;
+import org.wildstang.year2021.auto.programs.ExampleAutoProgram;
+import org.wildstang.year2021.auto.programs.PathTestProgram;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -21,10 +25,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.lang.management.ManagementFactory;
 import java.util.List;
 import java.lang.management.GarbageCollectorMXBean;
-
-import org.wildstang.year2021.auto.programs.ExampleAutoProgram;
-import org.wildstang.year2021.auto.programs.Deploys;
-import org.wildstang.year2021.auto.programs.PathTestProgram;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -54,6 +54,7 @@ public class Robot extends TimedRobot {
         AutoManager.getInstance().addProgram(new ExampleAutoProgram());
         AutoManager.getInstance().addProgram(new Deploys());
         AutoManager.getInstance().addProgram(new PathTestProgram());
+        AutoManager.getInstance().addProgram(new AutoPath1());
         
     }
 

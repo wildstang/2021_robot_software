@@ -34,8 +34,8 @@ public class Highball implements Subsystem {
     private double highballMotorSpeed;
 
     //Constants
-    private final double LIFT_SPEED = 0.25;
-    private final double RAISE_TIME = 5;
+    private final double LIFT_SPEED = 0.85;
+    private final double RAISE_TIME = .75;
     
     //States
     private boolean timerStatus;

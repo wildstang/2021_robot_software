@@ -23,6 +23,7 @@ public class AutoPath1 extends AutoProgram {
     protected void defineSteps() {
         // define a series of steps
         addStep(new HighballDeployStep());
+
         addStep(new DriveStriaghtStep(0.75));
         addStep(new DelayStep(1));
         addStep(new DriveStopStep());

@@ -26,6 +26,7 @@ public class Ballpath implements Subsystem {
     private DigitalInput leftShoulder; // Left Shoulder Button
     private DigitalInput rightShoulder; // Right Shoulder Button
     private DigitalInput reverseButton; // Diver Face Up Button
+    private DigitalInput dpadLeftButton; // Diver D-pad Button left
 
     //Outputs
     private VictorSPX intakeMotor;
@@ -36,17 +37,23 @@ public class Ballpath implements Subsystem {
     private double outputMotorSpeed;
     
     //Constants
-    private final double FULL_SPEED = 1;
-    private final double REVERSE_SPEED = -1;
-    private final double HATCH_OPEN_SPEED = 0.25;
-    private final double HATCH_CLOSE_SPEED = -0.25;
-    private final double HATCH_MOVE_TIME = 1;
+    private final double FULL_SPEED = .5; //1
+    private final double REVERSE_SPEED = -.5;
+    private final double HATCH_OPEN_SPEED = 0.5; //.25
+    private final double HATCH_CLOSE_SPEED = -0.4;
+    private final double HATCH_MOVE_TIME = .75; //1
+    private final double RESET_TIME = 1.35; //1
+    
 
     //Booleans
     private boolean timerStatus;
+    private boolean calStatus;
+    private boolean hatchCalabration;
+    private boolean running;
 
     //Timer
     private WsTimer timer = new WsTimer();
+    private WsTimer calTimer = new WsTimer(); //calibration timer
 
 
     enum commands {
@@ -70,12 +77,15 @@ public class Ballpath implements Subsystem {
         rightShoulder.addInputListener(this);    
         reverseButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_UP.getName());
         reverseButton.addInputListener(this);
+        dpadLeftButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_DPAD_LEFT.getName());
+        dpadLeftButton.addInputListener(this);
 
         // create motor controller object with CAN Constant
         intakeMotor = new VictorSPX(CANConstants.INTAKE_MOTOR);
         outputMotor = new VictorSPX(CANConstants.OUTPUT_MOTOR);
 
         timer.start();
+        calTimer.start();
         resetState();
     }
 
@@ -120,6 +130,23 @@ public class Ballpath implements Subsystem {
             currentCommand = commands.IDLE;
         }
           
+
+        if (hatchCalabration) { //while you hold left dpad
+            outputMotorSpeed = HATCH_OPEN_SPEED; //lift 
+            running = true;
+        } else if (running && !hatchCalabration) { //auto reset
+            outputMotorSpeed = HATCH_CLOSE_SPEED;
+            if (calStatus == false) {
+                calTimer.reset();
+                calTimer.start();
+                calStatus = true;
+            } else if (calTimer.hasPeriodPassed(RESET_TIME)) {
+                running = false;
+            }
+        } else {
+            outputMotorSpeed = 0;
+            running = false;
+        }
     }
 
     // respond to input updates
@@ -134,12 +161,17 @@ public class Ballpath implements Subsystem {
             intakeMotorSpeed = 0;
         }
 
-        if (currentCommand == commands.IDLE && leftShoulder.getValue()&& signal == leftShoulder) {
+        if (currentCommand == commands.IDLE && leftShoulder.getValue() && signal == leftShoulder) {
             currentCommand = commands.RAISING;
-        } else if (currentCommand == commands.PAUSED && leftShoulder.getValue()&& signal == leftShoulder) {
+        } else if (currentCommand == commands.PAUSED && leftShoulder.getValue() && signal == leftShoulder) {
             currentCommand = commands.LOWERING;
         }
 
+        if (dpadLeftButton.getValue()) {
+            hatchCalabration = true;
+        } else {
+            hatchCalabration = false;
+        }
     }
 
     // used for testing
@@ -152,6 +184,9 @@ public class Ballpath implements Subsystem {
         intakeMotorSpeed = 0;
         outputMotorSpeed = 0;
         timerStatus = false;
+        calStatus = false;
+        hatchCalabration = false;
+        running = false;
         currentCommand = commands.IDLE;
 
     }

@@ -50,7 +50,7 @@ public class Highball implements Subsystem {
     public void init() {
  
         // register button and attach input listener with WS Input
-        leftButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_LEFT.getName());
+        leftButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_FACE_LEFT.getName());
         leftButton.addInputListener(this);
         
         // create motor controller object with CAN Constant

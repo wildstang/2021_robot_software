@@ -71,13 +71,13 @@ public class Ballpath implements Subsystem {
     // initializes the subsystem
     public void init() {
         // register button and attach input listener with WS Input
-        leftShoulder = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_SHOULDER.getName());
+        leftShoulder = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_LEFT_SHOULDER.getName());
         leftShoulder.addInputListener(this);
-        rightShoulder = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_SHOULDER.getName());
+        rightShoulder = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_RIGHT_SHOULDER.getName());
         rightShoulder.addInputListener(this);    
-        reverseButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_UP.getName());
+        reverseButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_FACE_UP.getName());
         reverseButton.addInputListener(this);
-        dpadLeftButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_DPAD_LEFT.getName());
+        dpadLeftButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_DPAD_LEFT.getName());
         dpadLeftButton.addInputListener(this);
 
         // create motor controller object with CAN Constant
@@ -204,6 +204,12 @@ public class Ballpath implements Subsystem {
     }
     public void turnOnBallpath(){
         intakeMotorSpeed = FULL_SPEED;
+    }
+    public void openHatch(){
+        currentCommand = commands.RAISING;
+    }
+    public void closeHatch(){
+        currentCommand = commands.LOWERING;
     }
 
     

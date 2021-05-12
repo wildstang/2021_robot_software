@@ -16,7 +16,7 @@ public class HatchClose extends AutoStep {
 
     public void initialize() {
         Hatch = (Ballpath) Core.getSubsystemManager().getSubsystem(WSSubsystems.BALLPATH.getName());
-        Hatch.turnOnBallpath();
+        Hatch.closeHatch();
         setFinished(true);
     }
 

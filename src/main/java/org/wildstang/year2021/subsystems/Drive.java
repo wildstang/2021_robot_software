@@ -32,6 +32,8 @@ public class Drive implements Subsystem {
     private DigitalInput selectMode;
     private DigitalInput quickButton; //for alt controls
 
+    private AnalogInput rightTrigger;
+    private AnalogInput leftTrigger;
     //private AnalogInput gyro;
 
     // outputs
@@ -44,7 +46,7 @@ public class Drive implements Subsystem {
 
     private boolean altControl; //is it on alternate control mode?
 
-    public double DeadBand = 0.08;
+    public double DeadBand = 0.04;
     // initializes the subsystem
     public void init() {
         // create motor controller object with CAN Constant
@@ -59,12 +61,16 @@ public class Drive implements Subsystem {
         rightJoystick.addInputListener(this);
         rightHorizontal = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_X.getName());
         rightHorizontal.addInputListener(this);
+
+        rightTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_TRIGGER.getName());
+        rightTrigger.addInputListener(this);
+        leftTrigger = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_TRIGGER.getName());
+        leftTrigger.addInputListener(this);
         
         selectMode = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_START.getName());
         selectMode.addInputListener(this);
         quickButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_DOWN.getName());
         quickButton.addInputListener(this);
-
         resetState();
     }
  
@@ -94,7 +100,7 @@ public class Drive implements Subsystem {
                 {  leftSpeed = 0;  }
             if (Math.abs(rightSpeed)<DeadBand) 
                 {  rightSpeed = 0;  }
-
+        
         } else { //throttle and steer mode
             if (!quickButton.getValue()) {
             leftSpeed = (1+rightHorizontal.getValue());
@@ -114,6 +120,14 @@ public class Drive implements Subsystem {
                 rightSpeed = 0;
                 leftSpeed = 0;
             }
+        }
+        if(rightTrigger.getValue()>DeadBand){
+            leftSpeed = rightTrigger.getValue();
+            rightSpeed = -1*rightTrigger.getValue();
+        }
+        else if(leftTrigger.getValue()>DeadBand){
+            leftSpeed = -1*leftTrigger.getValue();
+            rightSpeed = leftTrigger.getValue();
         }
     }
  

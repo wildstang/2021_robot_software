@@ -133,7 +133,7 @@ public class Drive implements Subsystem {
         rightMotor.getSensorCollection().setQuadraturePosition(0,0);
     }
     public double GetRightEncoder(){
-        return rightMotor.getSensorCollection().getQuadraturePosition();
+        return -1*rightMotor.getSensorCollection().getQuadraturePosition(); //inverted because motor is running oppisite direction
     }
     public double GetLeftEncoder(){
         return leftMotor.getSensorCollection().getQuadraturePosition();

@@ -24,7 +24,7 @@ public class PathStep extends AutoStep {
     Drive Driver;
     private double PI = Math.PI;
     //paramaters
-    public double AcceptableRadius =  0.1; 
+    public double AcceptableRadius =  0.3; //3.6 inches
     public double AcceptableHeadingError =  PI/32; //5.625 degrees
     public double RobotWidth =  1.34733441667; //ish
     public double WheelRadius = 1.0/6.0; //Fix this value
@@ -126,7 +126,8 @@ public class PathStep extends AutoStep {
         double DiffY = Ys[Counter]-Y;
 
         double Dist = Math.sqrt(Math.pow(DiffX,2)+Math.pow(DiffY,2));
-        double DDx = -1*Math.cos(As[Counter])*Dist*0.5; //aim for point offset from target to get approach angle.
+        double sign = SpeedConstant/Math.abs(SpeedConstant);
+        double DDx = -1*sign*Math.cos(As[Counter])*Dist*0.5; //aim for point offset from target to get approach angle.
         double DDy = Math.tan(As[Counter])*DDx;
         DiffX += DDx;
         DiffY += DDy;

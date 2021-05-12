@@ -17,33 +17,31 @@ import org.wildstang.year2021.subsystems.Drivebase;
  * When the step is initialized a timer is started.
  * When the step is updated, the time is checked. If the time excedes the delay, the step if set to finished.
  */
-public class DriveForwardStep extends DelayStep {
+public class PivotStep extends DelayStep {
 
-    protected Drivebase drive;
-    private double speed;
+    protected Drivebase pivot;
+    //private double speed;
 
-    public DriveForwardStep(double delay, double speed) {
+    public PivotStep(double delay) {
         super(delay);
-        this.speed = speed;
+        //this.speed = speed;
     }
 
     public void initialize() {
         // start the timer
         super.initialize();
-        drive = (Drivebase) Core.getSubsystemManager().getSubsystem(WSSubsystems.DRIVEBASE.getName());
+        pivot = (Drivebase) Core.getSubsystemManager().getSubsystem(WSSubsystems.DRIVEBASE.getName());
     }
 
     public void update() {
         // check if the timer has exceded the desired delay
         super.update();
-        drive.setHeading(0);
-        drive.setThrottle(speed);
-       
+        pivot.setRotation(-1);
     }
 
     public String toString() {
         // give it a name
-        return "Drive Forward";
+        return "Pivot";
     }
 
 }

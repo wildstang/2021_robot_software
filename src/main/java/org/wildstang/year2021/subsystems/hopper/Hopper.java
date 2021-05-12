@@ -69,6 +69,11 @@ public class Hopper implements Subsystem {
     // used for testing
     public void selfTest() {}
 
+    // helper methods for autonomous
+    public void setHopperSpeed(double i) {
+        speed = i;
+    }
+
     // resets all variables to the default state
     public void resetState() {
         speed = 0.0;

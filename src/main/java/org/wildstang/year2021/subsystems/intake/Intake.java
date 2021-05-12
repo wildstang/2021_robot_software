@@ -29,7 +29,7 @@ public class Intake implements Subsystem {
 
     // variables
     private double speed = 0.0;
-    private double maxSpeed = 0.35;
+    private double maxSpeed = 0.32;
     private int intakeStatus = 0; // 0 - off; 1 - forwards; 2 - backwards
 
     // initializes the subsystem
@@ -86,7 +86,7 @@ public class Intake implements Subsystem {
     }
 
     // helper methods for autonomous
-    public void setIntakeSpeed(double i){
+    public void setIntakeSpeed(double i) {
         speed = i;
     }
 

@@ -19,30 +19,30 @@ public class MainAutoProgram extends AutoProgram {
 
     @Override
     protected void defineSteps() {
+        // lift arm ~0s
+        addStep(new ArmUpwardsStep());
         // deploy intake
         addStep(new RunIntakeStep(1.0));
         addStep(new DelayStep(1.0));
         addStep(new RunIntakeStep(0.0));
         // move backwards
         addStep(new DriveBackwardsStep(0.3));
-        addStep(new DelayStep(1));
+        addStep(new DelayStep(1.0));
         addStep(new DriveBackwardsStep(0.0));
-        addStep(new DelayStep(0.5));
-        // align with black fuel cell tower
+        // wait for arm to finish lifting ~2s
+        addStep(new DelayStep(3.0));
+        // align with black fuel cell tower ~5s
         addStep(new DriveLeftBackwardsStep(0.4));
         addStep(new DelayStep(0.83));
         addStep(new DriveLeftBackwardsStep(0.0));
-        addStep(new DelayStep(0.5));
-        // approach black fuel cell tower
+        addStep(new DelayStep(0.17));
+        // approach black fuel cell tower ~6s
         addStep(new DriveBackwardsStep(0.3));
         addStep(new DelayStep(0.5));
         addStep(new DriveBackwardsStep(0.0));
-        addStep(new DelayStep(0.5));
-        // lift arm
-        addStep(new ArmUpwardsStep());
-        addStep(new DelayStep(3));
+        // wait ~7s then stop arm
+        addStep(new DelayStep(1.5));
         addStep(new ArmUpwardsStep(0.0));
-        addStep(new DelayStep(0.5));
         // wait for ball to roll down into hopper
         addStep(new DelayStep(1));
         // move forwards a bit
@@ -52,7 +52,7 @@ public class MainAutoProgram extends AutoProgram {
         addStep(new DelayStep(0.5));
         // lower arm
         addStep(new ArmDownwardsStep());
-        addStep(new DelayStep(3));
+        addStep(new DelayStep(8));
         addStep(new ArmDownwardsStep(0.0));
         addStep(new DelayStep(0.5));
     }

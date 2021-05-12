@@ -64,9 +64,9 @@ public class Lift implements Subsystem {
     public void inputUpdate(Input signal) {
         // check to see which input was updated
         if ((signal == up || signal == limit) && up.getValue() && limit.getValue()) {
-            speed = 1;
+            speed = 0.5;
         }else if(signal == down && down.getValue()){
-            speed = -1;
+            speed = -0.5;
         }else{
             speed = 0;
         }

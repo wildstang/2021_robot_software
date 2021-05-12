@@ -16,16 +16,14 @@ import org.wildstang.year2021.auto.steps.DriveAngleStep;
  * These programs work by defining a series of steps in the "defineSteps" functions.
  * The "toString" function defines a name for the program.
  */
-public class ForwardProgram extends AutoProgram {
+public class SpecialFuel extends AutoProgram {
 
     @Override
     protected void defineSteps() {
         // define a series of step
-        addStep(new hopperOnStep());
-        addStep(new intakeOnStep());
-        //addStep (new DriveForwardStep(.5, 0.15));
-        addStep (new DriveForwardStep(3, 0.75));
-        //addStep(new DriveAngleStep(3,1,1));
+        addStep(new DriveAngleStep(0.25,1,1));
+        addStep(new DriveForwardStep(0.15, -0.4));
+        addStep(new DriveAngleStep(3,1,1));
         addStep(new StopStep());
         addStep(new intakeOffStep());
         addStep(new hopperOffStep());

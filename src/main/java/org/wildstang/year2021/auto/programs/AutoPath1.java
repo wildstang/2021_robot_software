@@ -22,11 +22,11 @@ public class AutoPath1 extends AutoProgram {
     @Override
     protected void defineSteps() {
         // define a series of steps
-        addStep(new HighballDeployStep());
+        //addStep(new HighballDeployStep());
 
-        addStep(new DriveStriaghtStep(0.75));
-        addStep(new DelayStep(1));
-        addStep(new DriveStopStep());
+        //addStep(new DriveStriaghtStep(0.75));
+        //addStep(new DelayStep(1));
+        //addStep(new DriveStopStep());
 
         //addStep(new DriveTurnStep(-.25, .25)); //180 (high ball)
         //addStep(new DelayStep(1));
@@ -36,8 +36,9 @@ public class AutoPath1 extends AutoProgram {
         //addStep(new DelayStep(1));
         //addStep(new DriveStopStep());
 
-        //addStep(new IntakeDeployStep());
-        
+        addStep(new IntakeDeployStep());
+        addStep(new DelayStep(1));
+        addStep(new IntakeOffStep());
         
         //turn pivot
         //addStep(new IntakeOnStep());

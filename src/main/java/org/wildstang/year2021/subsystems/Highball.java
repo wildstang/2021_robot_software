@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Highball implements Subsystem {
  
     //Inputs
-    private DigitalInput leftButton; // Left Face Button
+    private DigitalInput leftButton; // Left Face Button (MANIPULATOR)
  
     //Motors
     private VictorSPX highballMotor; // idk what the motor type is
@@ -35,22 +35,29 @@ public class Highball implements Subsystem {
 
     //Constants
     private final double LIFT_SPEED = 0.85;
-    private final double RAISE_TIME = .75;
+    private final double RAISE_TIME = .5;
     
     //States
     private boolean timerStatus;
-    private boolean raising;
-    private boolean raised;
-    private boolean lowering;
+
     //Timer
     private WsTimer timer = new WsTimer();
+
+    enum commands {
+        IDLE, RAISING, RAISED, LOWERING, LOWERED;   
+    }
+    private commands currentCommand; // 0 = IDLE x
+                                     // 1 = RAISING x
+                                     // 2 = RAISED /
+                                     // 3 = LOWERING
+                                     // 3 = LOWERED
 
  
     // initializes the subsystem
     public void init() {
  
         // register button and attach input listener with WS Input
-        leftButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_FACE_LEFT.getName());
+        leftButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_FACE_LEFT.getName());
         leftButton.addInputListener(this);
         
         // create motor controller object with CAN Constant
@@ -64,43 +71,60 @@ public class Highball implements Subsystem {
     public void update() {
         highballMotor.set(ControlMode.PercentOutput, highballMotorSpeed);
         SmartDashboard.putNumber("highbell motor speed",highballMotorSpeed);
-        if (raising) {
+
+        if (currentCommand == commands.IDLE) {
+            highballMotorSpeed = 0;
+            timerStatus = false;
+        }
+        // Begin  from Idle -> Raising -> Raised
+        if (currentCommand == commands.RAISING) {
             if (!timerStatus) {
                 timer.reset();
                 timer.start();
                 timerStatus = true;
                 highballMotorSpeed = LIFT_SPEED;
             } else if (timer.hasPeriodPassed(RAISE_TIME)) {
-                raised = true;
-                raising = false;
-                timerStatus = false;
-                highballMotorSpeed = 0;
+                currentCommand = commands.RAISED;
             }
         }
-        else {if (lowering){
-            if(!timerStatus){
+        if (currentCommand == commands.RAISED) {
+            highballMotorSpeed = 0;
+            timerStatus = false;
+        }
+
+        // Begin  from RAISED -> LOWERING -> LOWERED -> IDLE
+        
+            //CURRENTLY DISABLED
+
+        if (currentCommand == commands.LOWERING) {
+            if (!timerStatus) {
                 timer.reset();
                 timer.start();
                 timerStatus = true;
-                highballMotorSpeed = -1*LIFT_SPEED;
-            }else if(timer.hasPeriodPassed(RAISE_TIME)){
-                raised = false;
-                lowering = false;
-                timerStatus = false;
-                highballMotorSpeed = 0;
+                highballMotorSpeed = -LIFT_SPEED;
+            } else if (timer.hasPeriodPassed(RAISE_TIME)) {
+                currentCommand = commands.LOWERED;
             }
-        }}
+        }
+        if (currentCommand == commands.LOWERED) {
+            highballMotorSpeed = 0;
+            timerStatus = false;
+            currentCommand = commands.IDLE;
+        }
+        
 
+        
+        
     }
  
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if (leftButton.getValue() && raised == false && !lowering && signal == leftButton) {
-            raising = true;
-        }
-        if(leftButton.getValue() && raised && !raising&& signal == leftButton){
-            lowering = true;
+        if (leftButton.getValue() && currentCommand == commands.IDLE) {
+            currentCommand = commands.RAISING;
+            }
+        if(leftButton.getValue() && currentCommand == commands.RAISED){ //DISABLED
+            //currentCommand = commands.LOWERING;
         }
         
     }
@@ -111,10 +135,8 @@ public class Highball implements Subsystem {
     // resets all variables to the default state
     public void resetState() {
         highballMotorSpeed = 0;
-        timerStatus = false;
-        raising = false;
-        raised = false;
-
+        timerStatus = false;    
+        currentCommand = commands.IDLE;
     }
  
     // returns the unique name of the example
@@ -123,10 +145,16 @@ public class Highball implements Subsystem {
     }
 
     public void raiseArm(){
-        raising = true;
+        if (currentCommand == commands.IDLE) {
+            currentCommand = commands.RAISING;
+        }
     }
     public boolean isRaised(){
-        return raised;
+        if (currentCommand == commands.RAISED) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
  

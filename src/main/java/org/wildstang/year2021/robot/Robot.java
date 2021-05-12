@@ -26,6 +26,11 @@ import java.lang.management.ManagementFactory;
 import java.util.List;
 import java.lang.management.GarbageCollectorMXBean;
 
+import org.wildstang.year2021.auto.programs.ExampleAutoProgram;
+import org.wildstang.year2021.auto.programs.Deploys;
+import org.wildstang.year2021.auto.programs.PathTestProgram;
+import org.wildstang.year2021.auto.programs.GetFuelMabye;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the IterativeRobot
@@ -55,6 +60,7 @@ public class Robot extends TimedRobot {
         AutoManager.getInstance().addProgram(new Deploys());
         AutoManager.getInstance().addProgram(new PathTestProgram());
         AutoManager.getInstance().addProgram(new AutoPath1());
+        AutoManager.getInstance().addProgram(new GetFuelMabye());
         
     }
 

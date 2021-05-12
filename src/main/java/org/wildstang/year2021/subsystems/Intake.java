@@ -49,9 +49,9 @@ public class Intake implements Subsystem {
     // initializes the subsystem
     public void init() {
         // register button and attach input listener with WS Input
-        out = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_LEFT.getName());
+        //out = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_LEFT.getName());
         in = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_RIGHT.getName());
-        out.addInputListener(this);
+        //out.addInputListener(this);
         in.addInputListener(this);
 
         manipOut = (AnalogInput) Core.getInputManager().getInput(WSInputs.MANIPULATOR_TRIGGER_LEFT.getName());
@@ -84,7 +84,7 @@ public class Intake implements Subsystem {
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if ((signal == out && out.getValue() >0.25) || (signal == manipOut && manipOut.getValue() >0.25)) {
+        if (signal == manipOut && manipOut.getValue() >0.25) {
             speed = -maxSpeed;
             hopperSpeed = 0;
         }else if((signal == in && in.getValue() < -0.25) || (signal == manipIn && manipIn.getValue() < -0.25)){

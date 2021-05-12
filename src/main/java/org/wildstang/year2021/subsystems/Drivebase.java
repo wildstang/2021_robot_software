@@ -34,6 +34,7 @@ public class Drivebase implements Subsystem {
     /** Input to control forward-backward movement */
     private AnalogInput throttleInput;
     private AnalogInput rotateInput;
+    private AnalogInput speedUp;
 
     private AnalogInput countClockInput;
     private AnalogInput clockInput;
@@ -53,11 +54,13 @@ public class Drivebase implements Subsystem {
     // states
     private double speed;
     private double offset = 0.017;
+    private double newMax = 0;
     private final double horizontalOffset = -0.15;
 
     private ShuffleboardTab driveTab;
     private NetworkTableEntry driveOffset;
     private NetworkTableEntry maxSpeed;
+    
 
 
     // initializes the subsystem
@@ -71,6 +74,11 @@ public class Drivebase implements Subsystem {
 
         rotateInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_X.getName());
         rotateInput.addInputListener(this);
+
+        speedUp = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_TRIGGER_LEFT.getName());
+        speedUp.addInputListener(this);
+
+
 
 
         // create motor controller object with CAN Constant
@@ -100,7 +108,7 @@ public class Drivebase implements Subsystem {
         
         hypot = Math.sqrt(hypot);
         
-        hypot *= maxSpeed.getDouble(1.0);
+        hypot *= newMax;
        // System.out.println(hypot);
 
         double thetaX = Math.asin(commandThrottle/hypot);
@@ -188,6 +196,12 @@ public class Drivebase implements Subsystem {
             setHeading(headingInput.getValue());
         } else if(source == rotateInput ){
            setRotation(rotateInput.getValue());
+        }
+
+        if(source == speedUp && speedUp.getValue()>0.5){
+            newMax = 1;
+        }else if(source == speedUp){
+            newMax = maxSpeed.getDouble(1.0);
         }
         //System.out.println("Clock Input:" + clockInput.getValue());
         //System.out.println("Count Clock Input:" + countClockInput.getValue());

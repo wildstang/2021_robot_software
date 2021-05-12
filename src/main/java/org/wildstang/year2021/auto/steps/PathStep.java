@@ -27,7 +27,7 @@ public class PathStep extends AutoStep {
     public double AcceptableRadius =  0.1; 
     public double AcceptableHeadingError =  PI/32; //5.625 degrees
     public double RobotWidth =  1.34733441667; //ish
-    public double WheelRadius = 1/6; //Fix this value
+    public double WheelRadius = 1.0/6.0; //Fix this value
     
     public double SpeedConstant;
     
@@ -69,7 +69,7 @@ public class PathStep extends AutoStep {
 
     @Override
     public void initialize() {
-        ExDt = 0.01; //???
+        ExDt = 0.02; //???
         Driver.leftSpeed = 0;
         Driver.rightSpeed = 0;
         timer.start();

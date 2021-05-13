@@ -17,7 +17,7 @@ public class HatchOpen extends AutoStep {
 
     public void initialize() {
         Hatch = (Ballpath) Core.getSubsystemManager().getSubsystem(WSSubsystems.BALLPATH.getName());
-        Hatch.turnOnBallpath();
+        Hatch.openHatch();
         setFinished(true);
     }
 

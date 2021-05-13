@@ -29,7 +29,7 @@ public class Intake implements Subsystem {
 
     // variables
     private double speed = 0.0;
-    private double maxSpeed = 0.32;
+    private double maxSpeed = 0.4;
     private int intakeStatus = 0; // 0 - off; 1 - forwards; 2 - backwards
 
     // initializes the subsystem
@@ -57,7 +57,7 @@ public class Intake implements Subsystem {
 
     // respond to input updates
     public void inputUpdate(Input signal) {
-        if (signal == rightShoulder) {
+        if (signal == rightShoulder && rightShoulder.getValue()) {
             if (intakeStatus == 1) {
                 intakeStatus = 0;
             }
@@ -65,7 +65,7 @@ public class Intake implements Subsystem {
                 intakeStatus = 1;
             }
         }
-        if (signal == leftShoulder) {
+        if (signal == leftShoulder && leftShoulder.getValue()) {
             if (intakeStatus == 2) {
                 intakeStatus = 0;
             }

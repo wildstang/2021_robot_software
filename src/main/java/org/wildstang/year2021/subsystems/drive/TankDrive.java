@@ -80,6 +80,7 @@ public class TankDrive implements Subsystem {
     public void update() {
         SmartDashboard.putNumber("leftSpeed", leftSpeed);
         SmartDashboard.putNumber("rightSpeed", rightSpeed);
+        SmartDashboard.putBoolean("isArcade", isArcade);
 
         leftFrontMotor.set(ControlMode.PercentOutput, leftSpeed*maxSpeed*-1.0);
         leftBackMotor.set(ControlMode.PercentOutput, leftSpeed*maxSpeed*-1.0);
@@ -89,9 +90,9 @@ public class TankDrive implements Subsystem {
 
     // respond to input updates
     public void inputUpdate(Input signal) {
-        if (signal == switchButton) {
+        // switch drive mode
+        if (signal == switchButton && switchButton.getValue()) {
             isArcade = !isArcade;
-            System.out.println("isArcade = " + isArcade);
         }
 
         // tank drive
@@ -114,8 +115,8 @@ public class TankDrive implements Subsystem {
         // arcade drive
         else {
             if (!turboButton.getValue()) {
-                leftSpeed = (1.0 - rightJoystickX.getValue());
-                rightSpeed = (1.0 + rightJoystickX.getValue());
+                leftSpeed = (1.0 + rightJoystickX.getValue());
+                rightSpeed = (1.0 - rightJoystickX.getValue());
             }
             else {
                 leftSpeed = (rightJoystickX.getValue());

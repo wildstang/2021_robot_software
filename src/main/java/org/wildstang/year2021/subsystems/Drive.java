@@ -39,7 +39,9 @@ public class Drive implements Subsystem {
     // outputs
     private TalonSRX leftMotor; 
     private TalonSRX rightMotor;
- 
+
+
+    private double testing;
     // states
     public double leftSpeed;
     public double rightSpeed;
@@ -49,6 +51,7 @@ public class Drive implements Subsystem {
     public double DeadBand = 0.04;
     // initializes the subsystem
     public void init() {
+        testing = 0;
         // create motor controller object with CAN Constant
         leftMotor = new TalonSRX(CANConstants.DRIVE_LEFT);
         rightMotor = new TalonSRX(CANConstants.DRIVE_RIGHT);
@@ -78,7 +81,7 @@ public class Drive implements Subsystem {
     public void update() {
         leftMotor.set(ControlMode.PercentOutput, leftSpeed);
         rightMotor.set(ControlMode.PercentOutput, -rightSpeed);
-
+        SmartDashboard.putNumber("RightTrigger", testing);
         SmartDashboard.putNumber("left speed", leftSpeed);
         SmartDashboard.putNumber("right speed", rightSpeed);
         //SmartDashboard.putNumber("gyro reading", gyro.getValue());
@@ -102,32 +105,29 @@ public class Drive implements Subsystem {
                 {  rightSpeed = 0;  }
         
         } else { //throttle and steer mode
-            if (!quickButton.getValue()) {
+            
             leftSpeed = (1+rightHorizontal.getValue());
             rightSpeed = (1-rightHorizontal.getValue());
 
             if (leftSpeed>1){ leftSpeed = 1;}
             if (rightSpeed>1){ rightSpeed = 1;}
-            
-            } else { //when quickturning, pivot without moving forward
-                leftSpeed = (-1*rightHorizontal.getValue());
-                rightSpeed = (rightHorizontal.getValue());
-            }
             //double norm = 0.5*(Math.abs(leftSpeed)+Math.abs(rightSpeed));
             rightSpeed = leftJoystick.getValue()*(rightSpeed);
             leftSpeed = leftJoystick.getValue()*(leftSpeed);
             if (Math.abs(leftJoystick.getValue())<DeadBand) {
-                rightSpeed = 0;
-                leftSpeed = 0;
+                leftSpeed = (-1*rightHorizontal.getValue());
+                rightSpeed = (rightHorizontal.getValue());
             }
         }
-        if(rightTrigger.getValue()>DeadBand){
-            leftSpeed = rightTrigger.getValue();
-            rightSpeed = -1*rightTrigger.getValue();
+        testing = rightTrigger.getValue();
+        if((-1*rightTrigger.getValue()>DeadBand)&&(-1*rightTrigger.getValue()>leftTrigger.getValue())){
+            leftSpeed = -1*rightTrigger.getValue();
+            rightSpeed = rightTrigger.getValue();
         }
-        else if(leftTrigger.getValue()>DeadBand){
+        if((leftTrigger.getValue()>DeadBand)&&(leftTrigger.getValue()>-1*rightTrigger.getValue())){
             leftSpeed = -1*leftTrigger.getValue();
             rightSpeed = leftTrigger.getValue();
+
         }
     }
  

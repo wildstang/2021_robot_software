@@ -50,8 +50,8 @@ public class PathStep extends AutoStep {
     private boolean First;
     private double lastTime = 0;
     private double ExDt;
-    private double[] LastEncPos = {0,0};
-    private double MaxSpeed = 5; //avg calculated speed ft/s at max percent. TBD: Fix intial value!
+   // private double[] LastEncPos = {0,0};
+    private double MaxSpeed = 15; //avg calculated speed ft/s at max percent. TBD: Fix intial value!
     private double GyroValue; //not used yet, may be used for angle later.
     private double GyroOffset;
     public PathStep(double[] Xpts, double[] Ypts, double[] Angles,double[] Speeds){
@@ -79,12 +79,12 @@ public class PathStep extends AutoStep {
         X = Xs[0];  
         First = true; 
         lastTime = 0;
-        LastEncPos[0] = Driver.GetLeftEncoder();
-        LastEncPos[1] = Driver.GetRightEncoder();
+       // LastEncPos[0] = Driver.GetLeftEncoder();
+        //LastEncPos[1] = Driver.GetRightEncoder();
     }
     private void UpdatePosAndHeading(double Dt){ //use circles and change in time to update position and heading
-        double RightArcL = 2*PI*WheelRadius*((Driver.GetRightEncoder()- LastEncPos[1])/1024);
-        double LeftArcL = 2*PI*WheelRadius*((Driver.GetRightEncoder()- LastEncPos[0])/1024);
+        double RightArcL = Driver.rightSpeed*Dt*MaxSpeed;
+        double LeftArcL = Driver.leftSpeed*Dt*MaxSpeed;
         
         MaxSpeed = ((MaxSpeed*9) +(((RightArcL/(Dt*Driver.rightSpeed))+(LeftArcL/(Dt*Driver.leftSpeed)))/2))/10;
 
@@ -179,8 +179,8 @@ public class PathStep extends AutoStep {
         SpeedConstant = Vs[Counter];
         OutputUpdate(ExDt);
         }
-        LastEncPos[0] = Driver.GetLeftEncoder();
-        LastEncPos[1] = Driver.GetRightEncoder();
+        //LastEncPos[0] = Driver.GetLeftEncoder();
+       // LastEncPos[1] = Driver.GetRightEncoder();
         SmartDashboard.putNumber("Point Number",Counter);
         SmartDashboard.putNumber("current X coord",X);
         SmartDashboard.putNumber("current Y coord",Y);

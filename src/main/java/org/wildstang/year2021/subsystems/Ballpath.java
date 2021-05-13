@@ -134,18 +134,19 @@ public class Ballpath implements Subsystem {
         if (hatchCalabration) { //while you hold left dpad
             outputMotorSpeed = HATCH_OPEN_SPEED; //lift 
             running = true;
+            currentCommand = commands.IDLE;
         } else if (running && !hatchCalabration) { //auto reset
             outputMotorSpeed = HATCH_CLOSE_SPEED;
             if (calStatus == false) {
                 calTimer.reset();
                 calTimer.start();
                 calStatus = true;
+                currentCommand = commands.IDLE;
             } else if (calTimer.hasPeriodPassed(RESET_TIME)) {
                 running = false;
+                outputMotorSpeed = 0;
+                currentCommand = commands.RESET;
             }
-        } else {
-            outputMotorSpeed = 0;
-            running = false;
         }
     }
 

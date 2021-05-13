@@ -34,8 +34,8 @@ public class Highball implements Subsystem {
     private double highballMotorSpeed;
 
     //Constants
-    private final double LIFT_SPEED = 0.85;
-    private final double RAISE_TIME = .75;
+    private final double LIFT_SPEED = -0.85;
+    private final double RAISE_TIME = 3;
     
     //States
     private boolean timerStatus;
@@ -77,7 +77,7 @@ public class Highball implements Subsystem {
                 highballMotorSpeed = 0;
             }
         }
-        else {if (lowering){
+        else {if (false){
             if(!timerStatus){
                 timer.reset();
                 timer.start();
@@ -96,7 +96,7 @@ public class Highball implements Subsystem {
     // respond to input updates
     public void inputUpdate(Input signal) {
         // check to see which input was updated
-        if (leftButton.getValue() && raised == false && !lowering && signal == leftButton) {
+        if (leftButton.getValue() && raised == false) {
             raising = true;
         }
         if(leftButton.getValue() && raised && !raising&& signal == leftButton){

@@ -90,7 +90,8 @@ public class Drivebase implements Subsystem {
        driveTab = Shuffleboard.getTab("SmartDashboard");
        driveOffset = driveTab.add("Drive Offset", 0.017).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", -0.1, "max", 0.1)).getEntry();
        maxSpeed = driveTab.add("Max Speed", 1).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 1)).getEntry();
-        
+       newMax = maxSpeed.getDouble(1); 
+
         resetState();
     }
 
@@ -104,14 +105,13 @@ public class Drivebase implements Subsystem {
 
 
         double hypot = Math.pow(commandHeading, 2) + Math.pow(commandThrottle, 2);
-        
-        
         hypot = Math.sqrt(hypot);
-        
         hypot *= newMax;
+        
+        SmartDashboard.putNumber("new max speed", newMax);
        // System.out.println(hypot);
 
-        double thetaX = Math.asin(commandThrottle/hypot);
+        double thetaX = Math.asin(commandThrottle*newMax/hypot);
         if(commandHeading < 0){
             thetaX = Math.PI-thetaX;
         }
@@ -120,22 +120,11 @@ public class Drivebase implements Subsystem {
         }
         //System.out.println(thetaX);
 
-        double leftSpeed = commandThrottle - commandThrottle * commandHeading;
-        double rightSpeed = commandThrottle + commandThrottle * commandHeading;
-        rightSpeed = -rightSpeed;
-
-        //System.out.println(leftSpeed);
-        //System.out.println(rightSpeed);
-        double lfSpeed = leftSpeed;
-        double lbSpeed = leftSpeed;
-        double rfSpeed = rightSpeed;
-        double rbSpeed = rightSpeed;
-
         //System.out.println("Commandrotation:"+commandRotation);
-        lfSpeed = hypot * ((-Math.sin(thetaX)* (1- offset)) - (Math.cos(thetaX)* (1+ horizontalOffset))) - commandRotation;
-        rfSpeed = hypot * ((Math.sin(thetaX) * (1+offset))-(Math.cos(thetaX)* (1- horizontalOffset) )) - commandRotation;
-        lbSpeed = hypot * ((-Math.sin(thetaX) * (1-offset))+(Math.cos(thetaX)* (1+ horizontalOffset) )) - commandRotation;
-        rbSpeed = hypot * ((Math.sin(thetaX) * (1 + offset))+(Math.cos(thetaX)* (1- horizontalOffset) )) - commandRotation;
+        double lfSpeed = hypot * ((-Math.sin(thetaX)* (1- offset)) - (Math.cos(thetaX)* (1+ horizontalOffset))) - commandRotation;
+        double rfSpeed = hypot * ((Math.sin(thetaX) * (1+offset))-(Math.cos(thetaX)* (1- horizontalOffset) )) - commandRotation;
+        double lbSpeed = hypot * ((-Math.sin(thetaX) * (1-offset))+(Math.cos(thetaX)* (1+ horizontalOffset) )) - commandRotation;
+        double rbSpeed = hypot * ((Math.sin(thetaX) * (1 + offset))+(Math.cos(thetaX)* (1- horizontalOffset) )) - commandRotation;
 
         //deadzones
         if(Math.abs(lfSpeed) < 0.05){
@@ -198,7 +187,7 @@ public class Drivebase implements Subsystem {
            setRotation(rotateInput.getValue());
         }
 
-        if(source == speedUp && speedUp.getValue()>0.5){
+        if(source == speedUp && (speedUp.getValue() < -0.5 || speedUp.getValue() > 0.5)){
             newMax = 1;
         }else if(source == speedUp){
             newMax = maxSpeed.getDouble(1.0);

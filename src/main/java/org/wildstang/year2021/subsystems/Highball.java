@@ -61,7 +61,7 @@ public class Highball implements Subsystem {
         leftButton.addInputListener(this);
         
         // create motor controller object with CAN Constant
-        highballMotor = new VictorSPX(CANConstants.HIGHBALL_MOTOR);   // ADD TO CANS !!!
+        highballMotor = new VictorSPX(CANConstants.HIGHBALL_MOTOR);   
 
         timer.start();
         resetState();
@@ -123,9 +123,9 @@ public class Highball implements Subsystem {
         if (leftButton.getValue() && currentCommand == commands.IDLE) {
             currentCommand = commands.RAISING;
             }
-        if(leftButton.getValue() && currentCommand == commands.RAISED){ //DISABLED
+        //if(leftButton.getValue() && currentCommand == commands.RAISED){ //DISABLED
             //currentCommand = commands.LOWERING;
-        }
+        //}
         
     }
  

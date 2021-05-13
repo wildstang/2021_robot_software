@@ -39,11 +39,11 @@ public class Ballpath implements Subsystem {
     //Constants
     private final double FULL_SPEED = .95; //1
     private final double REVERSE_SPEED = -.95;
-    private final double HATCH_OPEN_SPEED = 0.5; //.25
+    private final double HATCH_OPEN_SPEED = 0.45; //.25
     private final double HATCH_CLOSE_SPEED = -0.4;
-    private final double CAL_CLOSE_SPEED = -0.2;
-    private final double HATCH_MOVE_TIME = .75; //1
-    private final double RESET_TIME = 1.15; //1
+    private final double CAL_CLOSE_SPEED = -0.25;
+    private final double HATCH_MOVE_TIME = .5; //1
+    private final double RESET_TIME = 1.; //1
     
 
     //Booleans
@@ -149,7 +149,10 @@ public class Ballpath implements Subsystem {
             timerStatus = false; 
             currentCommand = commands.IDLE;
         }
-
+        if (currentCommand == commands.IDLE) {
+            outputMotorSpeed = 0;
+            timerStatus = false; 
+        }
         
           
 

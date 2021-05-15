@@ -15,7 +15,7 @@ import org.wildstang.year2021.auto.steps.RunIntakeStep;
  * These programs work by defining a series of steps in the "defineSteps" functions.
  * The "toString" function defines a name for the program.
  */
-public class MainAutoProgram extends AutoProgram {
+public class CrazyAutoProgram extends AutoProgram {
 
     @Override
     protected void defineSteps() {
@@ -59,7 +59,7 @@ public class MainAutoProgram extends AutoProgram {
 
     @Override
     public String toString() {
-        return "MainAutoProgram";
+        return "CrazyAutoProgram";
     }
 
 }

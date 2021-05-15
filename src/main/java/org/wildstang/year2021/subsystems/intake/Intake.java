@@ -57,7 +57,7 @@ public class Intake implements Subsystem {
 
     // respond to input updates
     public void inputUpdate(Input signal) {
-        if (signal == rightShoulder && rightShoulder.getValue()) {
+        if (signal == rightShoulder) {
             if (intakeStatus == 1) {
                 intakeStatus = 0;
             }
@@ -65,7 +65,7 @@ public class Intake implements Subsystem {
                 intakeStatus = 1;
             }
         }
-        if (signal == leftShoulder && leftShoulder.getValue()) {
+        if (signal == leftShoulder) {
             if (intakeStatus == 2) {
                 intakeStatus = 0;
             }

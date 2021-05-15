@@ -38,17 +38,19 @@ public class CrazyAutoProgram extends AutoProgram {
         // wait for meditation ~3.5s
         addStep(new DelayStep(0.5));
         // align with black fuel cell tower ~4s
+        addStep(new ArmDownwardsStep(1.0));
         addStep(new DriveLeftBackwardsStep(0.4));
         addStep(new DelayStep(0.95));
         addStep(new DriveLeftBackwardsStep(0.0));
         addStep(new DelayStep(0.05));
+        addStep(new ArmDownwardsStep(0.0));
         // approach black fuel cell tower ~5s
         addStep(new DriveBackwardsStep(0.35));
         addStep(new DelayStep(0.75));
         addStep(new DriveBackwardsStep(0.0));
         // ~5.5s
         addStep(new ArmUpwardsStep());
-        addStep(new DelayStep(3.5));
+        addStep(new DelayStep(4.5));
         addStep(new ArmUpwardsStep(0.0));
         // wait for ball to roll down into hopper ~9s
         addStep(new DelayStep(2));

@@ -9,7 +9,7 @@ import org.wildstang.year2021.auto.steps.PathStep;
  For testing PathStep.
  - set RobotWidth and WheelRadius to reasonable values with correct units in PathStep before running.
  
- Hopefully makes the robot do doughnuts counterclockwise.
+ Hopefully makes the robot do stuff
  */
 public class OtherTestProgram extends AutoProgram {
     double PI = Math.PI;

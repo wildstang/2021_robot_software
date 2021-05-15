@@ -11,9 +11,8 @@ import org.wildstang.year2021.auto.steps.IntakeOnStep;
 import org.wildstang.year2021.auto.steps.IntakeOffStep;
 import org.wildstang.year2021.auto.steps.HatchOpen;
 import org.wildstang.year2021.auto.steps.HatchClose;
-import org.wildstang.year2021.auto.steps.HighballStay;
 
-public class GetFuelMabye extends AutoProgram {
+public class GetCenterFuel extends AutoProgram {
     double PI = Math.PI;
 
     @Override
@@ -46,7 +45,6 @@ public class GetFuelMabye extends AutoProgram {
         addStep(new IntakeDeployStep());
         addStep(new HighballDeployStep());
         addStep(new IntakeOnStep());
-        addStep(new HighballStay());
         addStep(Path);
         addStep(new IntakeOffStep());
         addStep(new HatchOpen());
@@ -58,6 +56,6 @@ public class GetFuelMabye extends AutoProgram {
 
     @Override
     public String toString() {
-        return "GetFuelMabye";
+        return "GetCenterFuel";
     }
 }

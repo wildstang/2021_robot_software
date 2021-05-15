@@ -39,7 +39,14 @@ public class AutoPath1 extends AutoProgram {
         addStep(new IntakeDeployStep());
         addStep(new DelayStep(1));
         addStep(new IntakeOffStep());
-        
+        addStep(new DriveStriaghtStep(0.01));
+        addStep(new DelayStep(1.25));
+        addStep(new DriveStopStep());
+        //turn normal
+       // addStep(new IntakeOnStep());
+       // addStep(new DriveTurnStep(.25, -.5));
+       // addStep(new DelayStep(1.25));
+       // addStep(new DriveStopStep());
         //turn pivot
         //addStep(new IntakeOnStep());
         //addStep(new DriveTurnStep(.25, .25));

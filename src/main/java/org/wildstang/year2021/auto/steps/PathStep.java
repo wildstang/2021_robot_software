@@ -51,8 +51,8 @@ public class PathStep extends AutoStep {
     private double lastTime = 0;
     private double ExDt;
    // private double[] LastEncPos = {0,0};
-    private double MaxSpeed = 15; //avg calculated speed ft/s at max percent. TBD: Fix intial value!
-    private double GyroValue; //not used yet, may be used for angle later.
+    private double MaxSpeed = 20; //speed ft/s at max percent. TBD: Fix value!
+    private double GyroValue; //not used yet, may be used for angle later. 
     private double GyroOffset;
     public PathStep(double[] Xpts, double[] Ypts, double[] Angles,double[] Speeds){
         Driver = (Drive) Core.getSubsystemManager().getSubsystem(WSSubsystems.DRIVE.getName());
@@ -86,21 +86,21 @@ public class PathStep extends AutoStep {
         double RightArcL = Driver.rightSpeed*Dt*MaxSpeed;
         double LeftArcL = Driver.leftSpeed*Dt*MaxSpeed;
         
-        MaxSpeed = ((MaxSpeed*9) +(((RightArcL/(Dt*Driver.rightSpeed))+(LeftArcL/(Dt*Driver.leftSpeed)))/2))/10;
+        //MaxSpeed = ((MaxSpeed*9) +(((RightArcL/(Dt*Driver.rightSpeed))+(LeftArcL/(Dt*Driver.leftSpeed)))/2))/10;
 
         double Dtheta = (RightArcL-LeftArcL)/RobotWidth;
         NewAngle = Angle+Dtheta ;
         double Dist = (LeftArcL) + (Dtheta*RobotWidth*0.5);
         double Theta = Angle;
         double NewTheta = NewAngle;
-        if (Dtheta != 0){ //to prevent division by zero
+        if (false){ //to prevent division by zero
             double Radius = (LeftArcL/Dtheta);
-            DeltaX = Radius*(Math.cos(NewTheta)-Math.cos(Theta));
-            DeltaY = Radius*(Math.sin(NewTheta)-Math.sin(Theta));
+            DeltaX = Radius*(Math.cos(NewTheta));
+            DeltaY = Radius*(Math.sin(NewTheta));
         }
         else{//strait line b/c no change in angle
-            DeltaX = Dist*Math.cos(NewAngle);
-            DeltaY = Dist*Math.sin(NewAngle);
+            DeltaX = Dist*Math.cos(0.5*(NewAngle+Angle));
+            DeltaY = Dist*Math.sin(0.5*(Angle+NewAngle));
         }
         X += DeltaX;
         Y += DeltaY;
@@ -128,28 +128,31 @@ public class PathStep extends AutoStep {
         double Dist = Math.sqrt(Math.pow(DiffX,2)+Math.pow(DiffY,2));
         double sign = SpeedConstant/Math.abs(SpeedConstant);
         double DDx = -1*sign*Math.cos(As[Counter])*Dist*0.5; //aim for point offset from target to get approach angle.
-        double DDy = Math.tan(As[Counter])*DDx;
+        double DDy = -1*sign*Math.sin(As[Counter])*Dist*0.5;
         DiffX += DDx;
         DiffY += DDy;
         //This rough approximation is probably wrong and/or horribly inefficient:
-        double ExDeltaX = MaxSpeed*SpeedConstant*Dt/(Math.sqrt(1+Math.pow(Math.tan(Angle),2)));
-        if((Angle)>(PI/2)&&(Angle<(1.5*PI))){
-            ExDeltaX = -1*ExDeltaX; 
-        }
-        double ExDeltaY = Math.tan(Angle)*ExDeltaX;
+        double ExDeltaX = Math.cos(Angle)*MaxSpeed*SpeedConstant*Dt;
+        //if((Angle)>(PI/2)&&(Angle<(1.5*PI))){
+        //    ExDeltaX = -1*ExDeltaX; 
+        //}
+        double ExDeltaY = Math.sin(Angle)*MaxSpeed*SpeedConstant*Dt;
      
         double Dist2Pos = Math.sqrt(Math.pow(ExDeltaX,2)+Math.pow(ExDeltaY,2));
         double Dist2Go = Math.sqrt(Math.pow(ExDeltaX-DiffX,2)+Math.pow(ExDeltaY-DiffY,2));
-        double WeightToGo = (1/Math.pow(Dist2Go,2));
+        double WeightToGo = (10/Math.pow(Dist2Go,2));
         double WeightFromPos = (1/Math.pow(Dist2Pos,2));
         double NormWeight = WeightToGo/(WeightToGo+WeightFromPos);
         double ThetaGoal = ((1-NormWeight)*Angle)+(NormWeight*Math.atan(DiffY/DiffX));
         double DeltaThetaGoal = ThetaGoal-Angle;
-        double TurnRadius = (MaxSpeed*SpeedConstant*Dt/DeltaThetaGoal)-(RobotWidth/2);
+       // double TurnRadius = (MaxSpeed*SpeedConstant*Dt/DeltaThetaGoal)-(RobotWidth/2);
 
-        double L = DeltaThetaGoal*TurnRadius/(MaxSpeed*SpeedConstant*Dt);
-        double R = DeltaThetaGoal*(TurnRadius+RobotWidth)/(MaxSpeed*SpeedConstant*Dt);
-
+        double L = SpeedConstant*(1-(DeltaThetaGoal/(2*PI)));
+        double R = SpeedConstant*(1+(DeltaThetaGoal/(2*PI)));
+        if (L>2*Math.abs(SpeedConstant)){ L = 2*SpeedConstant;}
+        if (R>2*Math.abs(SpeedConstant)){ R = 2*SpeedConstant;}
+        if (R<-2*Math.abs(SpeedConstant)){ R = -2*SpeedConstant;}
+        if (L<-2*Math.abs(SpeedConstant)){ L = -2*SpeedConstant;}
         Driver.leftSpeed = L; //move the robot :)
         Driver.rightSpeed = R;
 

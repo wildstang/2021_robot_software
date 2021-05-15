@@ -40,9 +40,9 @@ public class CrazyAutoProgram extends AutoProgram {
         addStep(new DelayStep(0.5));
         // align with black fuel cell tower ~4s
         addStep(new DriveLeftBackwardsStep(0.425));
-        addStep(new DelayStep(0.91));
+        addStep(new DelayStep(0.912));
         addStep(new DriveLeftBackwardsStep(0.0));
-        addStep(new DelayStep(0.09));
+        addStep(new DelayStep(0.088));
         // approach black fuel cell tower ~5s
         addStep(new DriveBackwardsStep(0.4));
         addStep(new DelayStep(0.5));
@@ -60,11 +60,11 @@ public class CrazyAutoProgram extends AutoProgram {
         addStep(new DriveLeftBackwardsStep(0.0));
         addStep(new DriveRightForwardsStep(0.0));
         //
-        addStep(new DriveLeftForwardsStep(0.5));
         addStep(new DriveRightBackwardsStep(0.5));
+        addStep(new DriveLeftForwardsStep(0.5));
         addStep(new DelayStep(1.0));
-        addStep(new DriveLeftForwardsStep(0.0));
         addStep(new DriveRightBackwardsStep(0.0));
+        addStep(new DriveLeftForwardsStep(0.0));
         //
         addStep(new DriveLeftBackwardsStep(0.5));
         addStep(new DriveRightForwardsStep(0.5));
@@ -72,6 +72,7 @@ public class CrazyAutoProgram extends AutoProgram {
         addStep(new DriveLeftBackwardsStep(0.0));
         addStep(new DriveRightForwardsStep(0.0));
         // move forwards a bit ~11.75s
+        addStep(new DelayStep(0.5));
         addStep(new DriveForwardsStep(0.3));
         addStep(new DelayStep(0.5));
         addStep(new DriveForwardsStep(0.0));

@@ -38,13 +38,13 @@ public class CrazyAutoProgram extends AutoProgram {
         // wait for meditation ~3.5s
         addStep(new DelayStep(0.5));
         // align with black fuel cell tower ~4s
-        addStep(new DriveLeftBackwardsStep(0.425));
-        addStep(new DelayStep(0.912));
+        addStep(new DriveLeftBackwardsStep(0.4));
+        addStep(new DelayStep(0.95));
         addStep(new DriveLeftBackwardsStep(0.0));
-        addStep(new DelayStep(0.088));
+        addStep(new DelayStep(0.05));
         // approach black fuel cell tower ~5s
-        addStep(new DriveBackwardsStep(0.4));
-        addStep(new DelayStep(0.5));
+        addStep(new DriveBackwardsStep(0.35));
+        addStep(new DelayStep(0.75));
         addStep(new DriveBackwardsStep(0.0));
         // ~5.5s
         addStep(new ArmUpwardsStep());

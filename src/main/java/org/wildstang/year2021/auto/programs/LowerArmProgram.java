@@ -16,7 +16,7 @@ public class LowerArmProgram extends AutoProgram {
     protected void defineSteps() {
         // lower arm
         addStep(new ArmDownwardsStep());
-        addStep(new DelayStep(8));
+        addStep(new DelayStep(7));
         addStep(new ArmDownwardsStep(0.0));
     }
 

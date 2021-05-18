@@ -7,9 +7,12 @@ import org.wildstang.year2021.auto.steps.IntakeDeployStep;
 import org.wildstang.year2021.auto.steps.IntakeOnStep;
 import org.wildstang.year2021.auto.steps.IntakeOffStep;
 import org.wildstang.year2021.auto.steps.HighballDeployStep;
+import org.wildstang.year2021.auto.steps.HighballStay;
 import org.wildstang.year2021.auto.steps.DriveStriaghtStep;
 import org.wildstang.year2021.auto.steps.DriveStopStep;
 import org.wildstang.year2021.auto.steps.DriveTurnStep;
+import org.wildstang.year2021.auto.steps.HatchOpen;
+import org.wildstang.year2021.auto.steps.HatchClose;
 
 /**
  * This is the framework of an Autonomous Program.
@@ -24,7 +27,31 @@ public class Deploys extends AutoProgram {
         // define a series of steps
         addStep(new IntakeDeployStep());
         addStep(new HighballDeployStep());
-        addStep(new DelayStep(1.25));
+        addStep(new DelayStep(.5));
+        addStep(new HighballStay());
+        
+        addStep(new DriveStriaghtStep(0.5));
+        addStep(new DelayStep(1.325));
+        addStep(new DriveStopStep());
+        
+        addStep(new DelayStep(0.25));
+        addStep(new DriveTurnStep(-.4, .425));
+        addStep(new DelayStep(1.85));
+        addStep(new DriveStopStep());
+
+        addStep(new DelayStep(0.25));
+        addStep(new DriveTurnStep(.4, -.425));
+        addStep(new DelayStep(1.85));
+        addStep(new DriveStopStep());
+
+        
+        //addStep(new IntakeOnStep());
+        //addStep(Path);
+        //addStep(new IntakeOffStep());
+        //addStep(new HatchOpen());
+        //addStep(new DelayStep(3));
+        //addStep(new HatchClose());
+
         //addStep(new DriveStriaghtStep(0.5));
         //addStep(new DelayStep(1.25));
         //addStep(new DriveStopStep());

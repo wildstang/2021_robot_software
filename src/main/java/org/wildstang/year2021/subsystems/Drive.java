@@ -48,7 +48,7 @@ public class Drive implements Subsystem {
 
     private boolean altControl; //is it on alternate control mode?
 
-    public double DeadBand = 0.04;
+    public double DeadBand = 0.08;
     // initializes the subsystem
     public void init() {
         testing = 0;
@@ -121,12 +121,12 @@ public class Drive implements Subsystem {
         }
         testing = rightTrigger.getValue();
         if((-1*rightTrigger.getValue()>DeadBand)&&(-1*rightTrigger.getValue()>leftTrigger.getValue())){
-            leftSpeed = -1*rightTrigger.getValue();
-            rightSpeed = rightTrigger.getValue();
+            leftSpeed = -1*rightTrigger.getValue()*.75;
+            rightSpeed = rightTrigger.getValue()*.75;
         }
         if((leftTrigger.getValue()>DeadBand)&&(leftTrigger.getValue()>-1*rightTrigger.getValue())){
-            leftSpeed = -1*leftTrigger.getValue();
-            rightSpeed = leftTrigger.getValue();
+            leftSpeed = -1*leftTrigger.getValue()*0.75;
+            rightSpeed = leftTrigger.getValue()*0.75;
 
         }
     }

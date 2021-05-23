@@ -12,6 +12,8 @@ import org.wildstang.framework.io.inputs.DigitalInput;
 import org.wildstang.framework.subsystems.Subsystem;
 import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
+import org.wildstang.year2021.subsystems.DriveConstants;
+import org.wildstang.year2021.subsystems.DriveSignal;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
@@ -25,21 +27,21 @@ import edu.wpi.first.wpilibj.util.Units;
 
 public class SwerveDrive implements Subsystem {
 
-    public static final double maxSpeed = Units.feetToMeters(14.4);//14.4 ft/s max speed
-    private static final double maxAngularSpeed = Math.toRadians(180); // 1/2PI * value rotations per second
-    private final String[] names = new String[]{"Front Left", "Front Right", "Back Left", "Back Right"};
-    private final double WIDTH = 11.5;//inches
-    private final double LENGTH = 11.5;//inches
-    private final double offset1 = -280.98;//pod 1 offset in deg
-    private final double offset2 = -313.59;
-    private final double offset3 = -199.95;
-    private final double offset4 = -52.03;
-    private final double deadband = 0.1;
-    private final double thrustFactor = 0.4;
+    // public static final double maxSpeed = Units.feetToMeters(14.4);//14.4 ft/s max speed
+    // private static final double maxAngularSpeed = Math.toRadians(180); // 1/2PI * value rotations per second
+    //private final String[] names = new String[]{"Front Left", "Front Right", "Back Left", "Back Right"};
+    // private final double WIDTH = 11.5;//inches
+    // private final double LENGTH = 11.5;//inches
+    // private final double offset1 = -280.98;//pod 1 offset in deg
+    // private final double offset2 = -313.59;
+    // private final double offset3 = -199.95;
+    // private final double offset4 = -52.03;
+    // private final double deadband = 0.1;
+    // private final double thrustFactor = 0.4;
 
-    private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(3);
-    private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(3);
-    private final SlewRateLimiter rotSpeedLimiter = new SlewRateLimiter(3);
+    private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT);
+    private final SlewRateLimiter ySpeedLimiter = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT);
+    private final SlewRateLimiter rotSpeedLimiter = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT);
 
     private AnalogInput leftStickX;
     private AnalogInput leftStickY;
@@ -69,29 +71,29 @@ public class SwerveDrive implements Subsystem {
     public enum driveType {TELEOP, AUTO};
     public driveType driveState;
 
-    private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
-        new Translation2d(Units.inchesToMeters(-LENGTH/2), Units.inchesToMeters(-WIDTH/2)),
-        new Translation2d(Units.inchesToMeters(-LENGTH/2), Units.inchesToMeters(WIDTH/2)),
-        new Translation2d(Units.inchesToMeters(LENGTH/2), Units.inchesToMeters(-WIDTH/2)),
-        new Translation2d(Units.inchesToMeters(LENGTH/2), Units.inchesToMeters(WIDTH/2))
-    );
+    // private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
+    //     new Translation2d(Units.inchesToMeters(-LENGTH/2), Units.inchesToMeters(-WIDTH/2)),
+    //     new Translation2d(Units.inchesToMeters(-LENGTH/2), Units.inchesToMeters(WIDTH/2)),
+    //     new Translation2d(Units.inchesToMeters(LENGTH/2), Units.inchesToMeters(-WIDTH/2)),
+    //     new Translation2d(Units.inchesToMeters(LENGTH/2), Units.inchesToMeters(WIDTH/2))
+    // );
 
     @Override
     public void inputUpdate(Input source) {
         // TODO Auto-generated method stub
         xSpeed = -xSpeedLimiter.calculate(leftStickY.getValue())*maxSpeed;
-        if (Math.abs(leftStickY.getValue()) < deadband) xSpeed = 0;
+        if (Math.abs(leftStickY.getValue()) < DriveConstants.DEADBAND) xSpeed = 0;
         ySpeed = ySpeedLimiter.calculate(leftStickX.getValue())*maxSpeed;
-        if (Math.abs(leftStickX.getValue()) < deadband) ySpeed = 0;
+        if (Math.abs(leftStickX.getValue()) < DriveConstants.DEADBAND) ySpeed = 0;
         //rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
         rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue())*maxAngularSpeed;
-        if (Math.abs(rightStickX.getValue()) < deadband) rotSpeed = 0;
+        if (Math.abs(rightStickX.getValue()) < DriveConstants.DEADBAND) rotSpeed = 0;
         SmartDashboard.putNumber("Rotation joystick", rightStickX.getValue());
         SmartDashboard.putNumber("Rotation", rotSpeed);
-        if (Math.abs(rightStickX.getValue()) < deadband) rotSpeed = 0;
+        if (Math.abs(rightStickX.getValue()) < DriveConstants.DEADBAND) rotSpeed = 0;
         if (source == select && select.getValue()) gyro.reset();
         //if (source == leftBumper && leftBumper.getValue()) gyro.reset();
-        thrustValue = 1 - thrustFactor + thrustFactor * Math.abs(rightTrigger.getValue());
+        thrustValue = 1 - DriveConstants.DRIVE_THRUST + DriveConstants.DRIVE_THRUST * Math.abs(rightTrigger.getValue());
     }
     public void setPathData(double [][] argument ){
         this.pathData = argument;

@@ -22,6 +22,13 @@ public class SwerveModule {
     private CANPIDController angleController;
     private CANCoder canCoder;
 
+    /** Class: SwerveModule
+     *  controls a single swerve pod, featuring two motors and one offboard sensor
+     * @param driveMotor canSparkMax of the drive motor
+     * @param angleMotor canSparkMax of the angle motor
+     * @param canCoder canCoder offboard encoder
+     * @param offset double value of cancoder when module is facing forward
+     */
     public SwerveModule(CANSparkMax driveMotor, CANSparkMax angleMotor, CANCoder canCoder, double offset){
         this.driveMotor = driveMotor;
         this.angleMotor = angleMotor;
@@ -46,18 +53,22 @@ public class SwerveModule {
         canCoder.configAllSettings(canCoderConfiguration);
 
     }
+    /** return double for cancoder position */
     public double getAngle(){
         return canCoder.getAbsolutePosition();
     }
+    /** displays module information, needs the module name from super */
     public void displayNumbers(String name){
         SmartDashboard.putNumber(name + " CANCoder", canCoder.getAbsolutePosition());
         SmartDashboard.putNumber(name + " NEO angle encoder", angleMotor.getEncoder().getPosition());
         SmartDashboard.putNumber(name + " NEO angle target", target);
         SmartDashboard.putNumber(name + " NEO drive power", drivePower);
     }
+    /** resets drive encoder */
     public void resetDriveEncoders(){
         driveMotor.getEncoder().setPosition(0.0);
     }
+    /**sets drive to brake mode if true, coast if false */
     public void setDriveBrake(boolean isBrake){
         if(isBrake){
             driveMotor.setIdleMode(IdleMode.kBrake); 
@@ -65,6 +76,7 @@ public class SwerveModule {
             driveMotor.setIdleMode(IdleMode.kCoast);
         }
     }
+    /** runs module at double power [0,1] and robot centric bearing degrees angle */
     public void run(double power, double angle){
         if (getDirection(angle)){
             runAtPower(power);
@@ -74,7 +86,8 @@ public class SwerveModule {
             runAtAngle((angle+180.0)%360);
         }
     }
-    public void runAtAngle(double angle){
+    /**runs at specified robot centric bearing degrees angle */
+    private void runAtAngle(double angle){
         double currentRotation = getAngle();
 
         if (currentRotation > 180 && angle+180<currentRotation){
@@ -87,14 +100,16 @@ public class SwerveModule {
         double deltaTicks = deltaRotation/360 * DriveConstants.TICKS_PER_REV * DriveConstants.ANGLE_RATIO;
         double currentTicks = angleMotor.getEncoder().getPosition();
         angleController.setReference(currentTicks + deltaTicks, ControlType.kPosition);
-        //angleMotor.set(ControlMode.Position, angle);
     }
-    public void runAtPower(double power){
+    /**runs module drive at specified power [-1, 1] */
+    private void runAtPower(double power){
         driveMotor.set(power);
     }
+    /** returns drive encoder distance in inches */
     public double getPosition(){
         return driveMotor.getEncoder().getPosition() * DriveConstants.WHEEL_DIAMETER * Math.PI / DriveConstants.DRIVE_RATIO;
     }
+    /**determines if it is faster to travel towards angle at positive power (true), or away from angle with negative power (false) */
     public boolean getDirection(double angle){
         if (angle > getAngle()){
             if (angle - getAngle() < 90) return true;

@@ -20,6 +20,11 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/**Class: SwerveDrive
+ * inputs: driver left joystick x/y, right joystick x, right trigger&bumper, select, face buttons all, gyro
+ * outputs: four swerveModule objects
+ * description: controls a swerve drive for four swerveModules through autonomous and teleoperated control
+ */
 public class SwerveDrive implements Subsystem {
 
     private final SlewRateLimiter xSpeedLimiter = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT);
@@ -32,10 +37,10 @@ public class SwerveDrive implements Subsystem {
     private AnalogInput rightTrigger;//thrust
     private DigitalInput rightBumper;//defense mode, aka cross
     private DigitalInput select;//gyro reset
-    private DigitalInput faceUp;
-    private DigitalInput faceRight;
-    private DigitalInput faceLeft;
-    private DigitalInput faceDown;
+    private DigitalInput faceUp;//rotation lock 0 degrees
+    private DigitalInput faceRight;//rotation lock 90 degrees
+    private DigitalInput faceLeft;//rotation lock 270 degrees
+    private DigitalInput faceDown;//rotation lock 180 degrees
 
     private double xSpeed;
     private double ySpeed;
@@ -62,11 +67,13 @@ public class SwerveDrive implements Subsystem {
 
     @Override
     public void inputUpdate(Input source) {
+        //determine if we are in cross or teleop
         if (driveState != driveType.AUTO && rightBumper.getValue()){
             driveState = driveType.CROSS;
         } else if (driveState != driveType.AUTO){
             driveState = driveType.TELEOP;
         }
+        //get x and y speeds
         xSpeed = -xSpeedLimiter.calculate(leftStickY.getValue());
         if (Math.abs(leftStickY.getValue()) < DriveConstants.DEADBAND) xSpeed = 0;
         ySpeed = ySpeedLimiter.calculate(leftStickX.getValue());
@@ -75,6 +82,7 @@ public class SwerveDrive implements Subsystem {
         if (source == select && select.getValue()) gyro.reset();
         thrustValue = 1 - DriveConstants.DRIVE_THRUST + DriveConstants.DRIVE_THRUST * Math.abs(rightTrigger.getValue());
 
+        //update auto trackign values
         if (faceUp.getValue()){
             rotTarget = 0.0;
             rotLocked = true;
@@ -88,8 +96,10 @@ public class SwerveDrive implements Subsystem {
             rotTarget = 180.0;
             rotLocked = true;
         }
+        //get rotational joystick
         rotSpeed = -rotSpeedLimiter.calculate(rightStickX.getValue());
         if (Math.abs(rightStickX.getValue()) < DriveConstants.DEADBAND) rotSpeed = 0;
+        //if the rotational joystick is being used, the robot should not be auto tracking heading
         if (rotSpeed != 0) rotLocked = false;
     }
  
@@ -126,6 +136,7 @@ public class SwerveDrive implements Subsystem {
     }
 
     public void initOutputs(){
+        //create four swerve modules
         modules = new SwerveModule[]{
             new SwerveModule(new CANSparkMax(CANConstants.DRIVE1, MotorType.kBrushless), 
                 new CANSparkMax(CANConstants.ANGLE1, MotorType.kBrushless), new CANCoder(CANConstants.ENC1), DriveConstants.FRONT_LEFT_OFFSET),
@@ -136,6 +147,7 @@ public class SwerveDrive implements Subsystem {
             new SwerveModule(new CANSparkMax(CANConstants.DRIVE4, MotorType.kBrushless), 
                 new CANSparkMax(CANConstants.ANGLE4, MotorType.kBrushless), new CANCoder(CANConstants.ENC4), DriveConstants.REAR_RIGHT_OFFSET)
         };
+        //create default driveSignal
         driveSignal = new DriveSignal(new double[]{0.0, 0.0, 0.0, 0.0}, new double[]{0.0, 0.0, 0.0, 0.0});
     }
     
@@ -148,23 +160,28 @@ public class SwerveDrive implements Subsystem {
     public void update() {
         switch (driveState) {
         case CROSS:
+            //if not translating, then set to cross
             if (xSpeed == 0 && ySpeed == 0){
                 driveSignal = swerveHelper.setCross();
                 drive();
             } else {
+                //if translating, set to crab
                 driveSignal = swerveHelper.setCrab(xSpeed, ySpeed, gyro.getAngle());
                 drive();
             }
         case TELEOP:
             if (rotLocked){
+                //if rotation tracking, replace rotational joystick value with controller generated one
                 rotSpeed = swerveHelper.getRotControl(rotTarget, gyro.getAngle());
             }
             driveSignal = swerveHelper.setDrive(xSpeed, ySpeed, rotSpeed, gyro.getAngle());
             drive();
         case AUTO:
-
+            //get controller generated rotation value
             rotSpeed = swerveHelper.getRotControl(pathTarget, gyro.getAngle());
+            //ensure rotation is never more than 0.2 to prevent normalization of translation from occuring
             if (Math.abs(rotSpeed) > 0.2) rotSpeed /= (Math.abs(rotSpeed * 0.2));
+            //update where the robot is, to determine error in path
             updateAutoDistance();
             driveSignal = swerveHelper.setAuto(swerveHelper.getAutoPower(pathPos, pathVel, autoTravelled), pathHeading, rotSpeed, gyro.getAngle());
             drive();
@@ -197,39 +214,47 @@ public class SwerveDrive implements Subsystem {
         // TODO Auto-generated method stub
         return "Swerve Drive";
     }
+    /** resets the drive encoders on each module */
     public void resetDriveEncoders(){
         for (int i = 0; i < modules.length; i++){
             modules[i].resetDriveEncoders();
         }
     }
+    /** sets the drive to teleop/cross, and sets drive motors to coast */
     public void setToTeleop(){
         driveState = driveType.TELEOP;
         for (int i = 0; i < modules.length; i++){
             modules[i].setDriveBrake(false);
         }
     }
+    /**sets the drive to autonomous */
     public void setToAuto(){
         driveState = driveType.AUTO;
     }
+    /**stops the robot from moving */
     public void stopMoving(){
         driveSignal = swerveHelper.setCrab(0.0, 0.0, gyro.getAngle());
         drive();
     }
+    /**drives the robot at the current driveSignal, and displays information for each swerve module */
     private void drive(){
         for (int i = 0; i < modules.length; i++){
             modules[i].run(driveSignal.getSpeed(i), driveSignal.getSpeed(i));
             modules[i].displayNumbers(DriveConstants.POD_NAMES[i]);
         }
     }
+    /**sets autonomous values from the path data file */
     public void setAutoValues(double position, double velocity, double heading){
         pathPos = position;
         pathVel = velocity;
         pathHeading = heading;
         autoTravelled = 0;
     }
+    /**sets the autonomous heading controller to a new target */
     public void setAutoHeading(double headingTarget){
         pathTarget = headingTarget;
     }
+    /**updates distance travelled in autonomous, to determine error in path following */
     private void updateAutoDistance(){
         for (int i = 0; i < modules.length; i++){
             autoTempX += modules[i].getPosition() * Math.cos(Math.toRadians(modules[i].getAngle()));

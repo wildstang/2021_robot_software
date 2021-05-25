@@ -19,6 +19,10 @@ public class PathFollowerStep extends AutoStep {
 
     private int counter;
 
+    /** Sets the robot to track a new path
+     * finishes after all values have been read to robot
+     * @param pathData double[][] that contains path, should be from \frc\paths
+     */
     public PathFollowerStep(double[][] pathData) {
         this.pathData = pathData;
         m_drive = (SwerveDrive) Core.getSubsystemManager().getSubsystem(WSSubsystems.SwerveDrive.getName());
@@ -27,7 +31,6 @@ public class PathFollowerStep extends AutoStep {
     @Override
     public void initialize() {
         //start path
-        //m_drive.setPathData(pathData);
         counter = 0;
         m_drive.resetDriveEncoders();
     }
@@ -39,7 +42,8 @@ public class PathFollowerStep extends AutoStep {
             m_drive.stopMoving();
             setFinished(true);
         } else {
-           m_drive.setAutoValues(pathData[counter][positionP]*ftToIn, pathData[counter][velocityP]*ftToIn, Math.toDegrees(pathData[counter][headingP]));
+            //update values the robot is tracking to
+            m_drive.setAutoValues(pathData[counter][positionP]*ftToIn, pathData[counter][velocityP]*ftToIn, Math.toDegrees(pathData[counter][headingP]));
             counter++;
         }
     }

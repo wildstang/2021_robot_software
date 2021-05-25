@@ -1,19 +1,13 @@
 package org.wildstang.year2021.auto.steps;
 
-import java.io.File;
-
 import org.wildstang.framework.auto.steps.AutoStep;
 import org.wildstang.framework.core.Core;
 import org.wildstang.year2021.robot.WSSubsystems;
 import org.wildstang.year2021.subsystems.SwerveDrive;
 
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 public class PathFollowerStep extends AutoStep {
 
     private static final double ftToIn = 12;
-    private static final double radToDeg = 180/Math.PI;
     private static final int positionP = 7;
     private static final int velocityP = 8;
     private static final int headingP = 15;
@@ -23,7 +17,7 @@ public class PathFollowerStep extends AutoStep {
     private SwerveDrive m_drive;
     private double[][] pathData;
 
-    private int counter = 0;
+    private int counter;
 
     public PathFollowerStep(double[][] pathData) {
         this.pathData = pathData;
@@ -33,21 +27,19 @@ public class PathFollowerStep extends AutoStep {
     @Override
     public void initialize() {
         //start path
-        m_drive.setPathData(pathData);
-        m_drive.isRunningTrue();
-        //tell the swerve to run a path
-        //give it pathData
+        //m_drive.setPathData(pathData);
+        counter = 0;
+        m_drive.resetDriveEncoders();
     }
 
     @Override
     public void update() {
-        if (m_drive.counterGetVal() >= pathData.length){
+        if (counter >= pathData.length){
             //end path
             m_drive.stopMoving();
             setFinished(true);
         } else {
-           //update from pathData[counter][either positionP, velocityP, or headingP]
-           //
+           m_drive.setAutoValues(pathData[counter][positionP]*ftToIn, pathData[counter][velocityP]*ftToIn, Math.toDegrees(pathData[counter][headingP]));
             counter++;
         }
     }

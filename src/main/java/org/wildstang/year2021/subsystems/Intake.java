@@ -45,7 +45,7 @@ public class Intake implements Subsystem {
     public void init() {
         // create motor controller object with CAN Constant
         motor = new CANSparkMax(CANConstants.INTAKE_VICTOR, MotorType.kBrushless);
-        button = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_SHOULDER_LEFT);    
+        button = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_LEFT_SHOULDER);    
         button.addInputListener(this);
         reverseButton = (DigitalInput) Core.getInputManager().getInput(WSInputs.DRIVER_DPAD_DOWN);
         reverseButton.addInputListener(this);

@@ -1,5 +1,7 @@
 package org.wildstang.year2021.subsystems;
 
+import org.wildstang.year2021.subsystems.DriveConstants;
+
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.revrobotics.CANPIDController;
@@ -7,25 +9,9 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Units;
 
 public class SwerveModule {
-
-    private static final double driveP = 0.02;
-    private static final double driveI = 0.01;
-    private static final double driveD = 0.1;
-    private static final double driveF = 0.0068845;//0.00581
-    private static final double angleP = 0.5;
-    private static final double angleI = 0.0;
-    private static final double angleD = 0.0;
-
-    private double encoderTicksPerRot = 1;//for neo integrated encoder
-    private double gearRatio = 12.8;//15:32 and 10:60 gear ratio for angle motor
-    private double driveGearRatio = 6.86;//MK3 fast gearing
-    private double wheelDiameter = 4.0;//inches
 
     private double target;
     private double drivePower;
@@ -36,7 +22,7 @@ public class SwerveModule {
     private CANPIDController angleController;
     private CANCoder canCoder;
 
-    public SwerveModule(CANSparkMax driveMotor, CANSparkMax angleMotor, CANCoder canCoder, Rotation2d offset){
+    public SwerveModule(CANSparkMax driveMotor, CANSparkMax angleMotor, CANCoder canCoder, double offset){
         this.driveMotor = driveMotor;
         this.angleMotor = angleMotor;
         this.canCoder = canCoder;
@@ -46,37 +32,22 @@ public class SwerveModule {
         //set up angle and drive with pid and kpid respectively
         driveController = driveMotor.getPIDController();
         angleController = angleMotor.getPIDController();
-        driveController.setP(driveP);
-        driveController.setI(driveI);
-        driveController.setD(driveD);
-        driveController.setFF(driveF);
-        angleController.setP(angleP);
-        angleController.setI(angleI);
-        angleController.setD(angleD);
+        driveController.setP(DriveConstants.DRIVE_P);
+        driveController.setI(DriveConstants.DRIVE_I);
+        driveController.setD(DriveConstants.DRIVE_D);
+        driveController.setFF(DriveConstants.DRIVE_F);
+        angleController.setP(DriveConstants.ANGLE_P);
+        angleController.setI(DriveConstants.ANGLE_I);
+        angleController.setD(DriveConstants.ANGLE_D);
         
 
         CANCoderConfiguration canCoderConfiguration = new CANCoderConfiguration();
-        canCoderConfiguration.magnetOffsetDegrees = offset.getDegrees();
+        canCoderConfiguration.magnetOffsetDegrees = offset;
         canCoder.configAllSettings(canCoderConfiguration);
 
     }
-    public Rotation2d getAngle(){
-        return Rotation2d.fromDegrees(canCoder.getAbsolutePosition());
-    }
-    public void setDesiredState(SwerveModuleState desiredState, double thrust){
-        Rotation2d currentRotation = getAngle();
-        SwerveModuleState state = SwerveModuleState.optimize(desiredState, currentRotation);
-        Rotation2d rotationDelta = state.angle.minus(currentRotation);//rotation to complete move
-        double deltaTicks = (rotationDelta.getDegrees()/360)*encoderTicksPerRot*gearRatio;//finds rotations of neo motor encoder needed
-        //double currentTicks = canCoder.getPosition() / canCoder.configGetFeedbackCoefficient();//for cancoder
-        double currentTicks = angleMotor.getEncoder().getPosition();//finds delta of neo motor encoder
-        double desiredTicks = currentTicks + deltaTicks;//neo motor encoder target ticks for position loop
-        
-        //set angle motor to track to desiredTicks
-        angleController.setReference(desiredTicks, ControlType.kPosition); target = desiredTicks;
-
-        double feetPerSecond = Units.metersToFeet(state.speedMetersPerSecond);
-        driveMotor.set(thrust * feetPerSecond / SwerveDrive.maxSpeed/3.2); drivePower = thrust * feetPerSecond/SwerveDrive.maxSpeed/3.2;
+    public double getAngle(){
+        return canCoder.getAbsolutePosition();
     }
     public void displayNumbers(String name){
         SmartDashboard.putNumber(name + " CANCoder", canCoder.getAbsolutePosition());
@@ -94,8 +65,17 @@ public class SwerveModule {
             driveMotor.setIdleMode(IdleMode.kCoast);
         }
     }
+    public void run(double power, double angle){
+        if (getDirection(angle)){
+            runAtPower(power);
+            runAtAngle(angle);
+        } else {
+            runAtPower(-power);
+            runAtAngle((angle+180.0)%360);
+        }
+    }
     public void runAtAngle(double angle){
-        double currentRotation = getAngle().getDegrees();
+        double currentRotation = getAngle();
 
         if (currentRotation > 180 && angle+180<currentRotation){
             currentRotation-=360.0;
@@ -104,7 +84,7 @@ public class SwerveModule {
         }
         
         double deltaRotation = -currentRotation + angle;
-        double deltaTicks = deltaRotation/360 * encoderTicksPerRot * gearRatio;
+        double deltaTicks = deltaRotation/360 * DriveConstants.TICKS_PER_REV * DriveConstants.ANGLE_RATIO;
         double currentTicks = angleMotor.getEncoder().getPosition();
         angleController.setReference(currentTicks + deltaTicks, ControlType.kPosition);
         //angleMotor.set(ControlMode.Position, angle);
@@ -112,13 +92,17 @@ public class SwerveModule {
     public void runAtPower(double power){
         driveMotor.set(power);
     }
-    public double getDriveF(){
-        return driveF;
-    }
-    public double getDriveP(){
-        return driveP;
-    }
     public double getPosition(){
-        return driveMotor.getEncoder().getPosition() * wheelDiameter * Math.PI / driveGearRatio;
+        return driveMotor.getEncoder().getPosition() * DriveConstants.WHEEL_DIAMETER * Math.PI / DriveConstants.DRIVE_RATIO;
+    }
+    public boolean getDirection(double angle){
+        if (angle > getAngle()){
+            if (angle - getAngle() < 90) return true;
+            if (angle - getAngle() > 270) return true;
+        } else {
+            if (getAngle() - angle < 90) return true;
+            if (getAngle() - angle > 270) return true;
+        }
+        return false;
     }
 }

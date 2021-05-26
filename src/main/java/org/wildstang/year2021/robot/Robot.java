@@ -28,17 +28,7 @@ import org.wildstang.year2021.auto.programs.ExampleAutoProgram;
 import org.wildstang.year2021.auto.programs.StraightPath;
 import org.wildstang.year2021.auto.programs.TestPath;
 import org.wildstang.year2021.auto.programs.TurnPath;
-import org.wildstang.year2021.auto.programs.BouncePath;
-import org.wildstang.year2021.auto.programs.BarrelPath;
-import org.wildstang.year2021.auto.programs.SlalomPath;
-import org.wildstang.year2021.auto.programs.SearchAPath;
-import org.wildstang.year2021.auto.programs.SearchBPath;
-import org.wildstang.year2021.auto.programs.SearchABPath;
-import org.wildstang.year2021.auto.programs.SearchBBPath;
-import org.wildstang.year2021.auto.programs.BounceAPath;
-import org.wildstang.year2021.auto.programs.BounceBPath;
-import org.wildstang.year2021.auto.programs.BounceCPath;
-import org.wildstang.year2021.auto.programs.BounceDPath;
+import org.wildstang.year2021.auto.programs.MultiTurn;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -69,17 +59,7 @@ public class Robot extends TimedRobot {
         AutoManager.getInstance().addProgram(new TestPath());
         AutoManager.getInstance().addProgram(new StraightPath());
         AutoManager.getInstance().addProgram(new TurnPath());
-        AutoManager.getInstance().addProgram(new BarrelPath());
-        AutoManager.getInstance().addProgram(new SlalomPath());
-        //AutoManager.getInstance().addProgram(new BouncePath());
-        //AutoManager.getInstance().addProgram(new SearchAPath());
-        //AutoManager.getInstance().addProgram(new SearchBPath());
-        //AutoManager.getInstance().addProgram(new SearchABPath());
-        //AutoManager.getInstance().addProgram(new SearchBBPath());
-        AutoManager.getInstance().addProgram(new BounceAPath());
-        // AutoManager.getInstance().addProgram(new BounceBPath());
-        // AutoManager.getInstance().addProgram(new BounceCPath());
-        // AutoManager.getInstance().addProgram(new BounceDPath());
+        AutoManager.getInstance().addProgram(new MultiTurn());
         
     }
 

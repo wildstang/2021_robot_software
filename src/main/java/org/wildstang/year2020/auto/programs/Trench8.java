@@ -12,19 +12,19 @@ import org.wildstang.year2020.auto.steps.DelayStep;
 import org.wildstang.year2020.auto.steps.IntakeOnStep;
 import org.wildstang.year2020.auto.programs.PathNameConstants;
 
-public class Trench10 extends AutoProgram {
+public class Trench8 extends AutoProgram {
 
     @Override
     protected void defineSteps() {
         AutoParallelStepGroup initial = new AutoParallelStepGroup();
         initial.addStep(new IntakeOnStep(true));
-        initial.addStep(new PathFollowerStep(PathNameConstants.TRENCH10A,true,true));
+        initial.addStep(new PathFollowerStep(PathNameConstants.TRENCH8A,true,true));
         initial.addStep(new SetTurretStep(-29400));
         addStep(initial);
 
         //make this step aim when it's nearly done
         AutoParallelStepGroup second = new AutoParallelStepGroup();
-        second.addStep(new PathFollowerStep(PathNameConstants.TRENCH10AA,true,false));
+        second.addStep(new PathFollowerStep(PathNameConstants.TRENCH8B,true,false));
         AutoSerialStepGroup secondA = new AutoSerialStepGroup();
         secondA.addStep(new DelayStep(1.0));
         secondA.addStep(new AutoAimStep(true));
@@ -36,18 +36,9 @@ public class Trench10 extends AutoProgram {
         addStep(new DelayStep(2.0));
         addStep(new FeedOffStep());
 
-        AutoParallelStepGroup third = new AutoParallelStepGroup();
-        third.addStep(new AutoAimStep(false));
-        third.addStep(new PathFollowerStep(PathNameConstants.TRENCH10B, true, true));
-        addStep(third);
+        addStep(new PathFollowerStep(PathNameConstants.TRENCH8C, true, true));
 
-        AutoParallelStepGroup fourth = new AutoParallelStepGroup();
-        fourth.addStep(new PathFollowerStep(PathNameConstants.TRENCH10C,true,false));
-        AutoSerialStepGroup fourthA = new AutoSerialStepGroup();
-        fourthA.addStep(new DelayStep(2.0));
-        fourthA.addStep(new AutoAimStep(true));
-        fourth.addStep(fourthA);
-        addStep(fourth);
+        addStep(new PathFollowerStep(PathNameConstants.TRENCH8D,true,false));
         
         addStep(new FeedOnStep());
     }
@@ -55,7 +46,7 @@ public class Trench10 extends AutoProgram {
     @Override
     public String toString() {
         //give it a name
-        return "Trench10";
+        return "Trench8";
     }
 
 }

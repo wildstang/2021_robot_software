@@ -40,8 +40,8 @@ public class PathFollowerStep extends AutoStep {
         SmartDashboard.putBoolean("Checkpoint 2002 yay", true);
         m_path = new Path();
         
-        File leftFile = new File(m_filePath + "_left.csv");
-        File rightFile = new File(m_filePath + "_right.csv");
+        File leftFile = new File(m_filePath + ".left.csv");
+        File rightFile = new File(m_filePath + ".right.csv");
         if (!isForwards || !isLeft){ // TODO In the event of flipped robot movement, switch which file each side reads
             File holder = rightFile;
             rightFile = leftFile;

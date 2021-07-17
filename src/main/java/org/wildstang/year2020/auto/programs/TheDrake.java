@@ -23,8 +23,7 @@ public class TheDrake extends AutoProgram {
         addStep(new DelayStep(2.5));
         addStep(new FeedOffStep());
         //addStep(new AutoAimStep(false));
-        addStep(new PathFollowerStep(PathNameConstants.TEST120, true, true));
-        addStep(new PathFollowerStep(PathNameConstants.TEST120, true, false));
+        addStep(new PathFollowerStep(PathNameConstants.DRAKE, true, true));
         addStep(new FeedOnStep());
 
     }

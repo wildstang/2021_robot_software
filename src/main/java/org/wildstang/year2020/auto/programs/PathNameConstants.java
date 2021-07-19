@@ -9,6 +9,10 @@ public class PathNameConstants {
     public static final String TRENCH8B = "Trench8B";
     public static final String TRENCH8C = "Trench8C";
     public static final String TRENCH8D = "Trench8D";
+
+    public static final String STEAL10A = "Steal10A";
+    public static final String STEAL10B = "Steal10B";
+    public static final String STEAL10C = "Steal10C";
     
     
     

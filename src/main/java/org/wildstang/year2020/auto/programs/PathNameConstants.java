@@ -16,6 +16,11 @@ public class PathNameConstants {
 
     public static final String STEAL7A = "Steal7A";
     public static final String STEAL7B = "Steal7B";
+
+    public static final String MIDDLE8A = "Middle8A";
+    public static final String MIDDLE8B = "Middle8B";
+    public static final String MIDDLE8C = "Middle8C";
+    public static final String MIDDLE8D = "Middle8D";
     
     
     

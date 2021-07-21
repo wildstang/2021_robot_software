@@ -28,6 +28,7 @@ import java.lang.management.GarbageCollectorMXBean;
 import org.wildstang.year2020.auto.programs.TheDrake;
 import org.wildstang.year2020.auto.programs.Trench8;
 import org.wildstang.year2020.auto.programs.Steal10;
+import org.wildstang.year2020.auto.programs.Steal7;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -57,6 +58,7 @@ public class Robot extends TimedRobot {
         AutoManager.getInstance().addProgram(new TheDrake());
         AutoManager.getInstance().addProgram(new Trench8());
         AutoManager.getInstance().addProgram(new Steal10());
+        AutoManager.getInstance().addProgram(new Steal7());
         
     }
 

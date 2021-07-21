@@ -13,6 +13,9 @@ public class PathNameConstants {
     public static final String STEAL10A = "Steal10A";
     public static final String STEAL10B = "Steal10B";
     public static final String STEAL10C = "Steal10C";
+
+    public static final String STEAL7A = "Steal7A";
+    public static final String STEAL7B = "Steal7B";
     
     
     

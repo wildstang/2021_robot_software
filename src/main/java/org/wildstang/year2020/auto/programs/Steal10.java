@@ -23,7 +23,7 @@ public class Steal10 extends AutoProgram{
 
         //make this step aim when it's nearly done
         AutoParallelStepGroup second = new AutoParallelStepGroup();
-        second.addStep(new PathFollowerStep(PathNameConstants.STEAL10B,true,true));
+        second.addStep(new PathFollowerStep(PathNameConstants.STEAL10B,true,false));
         AutoSerialStepGroup secondA = new AutoSerialStepGroup();
         secondA.addStep(new DelayStep(1.0));
         secondA.addStep(new AutoAimStep(true));

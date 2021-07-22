@@ -23,7 +23,7 @@ public class Steal7 extends AutoProgram{
 
         //make this step aim when it's nearly done
         AutoParallelStepGroup second = new AutoParallelStepGroup();
-        second.addStep(new PathFollowerStep(PathNameConstants.STEAL10B,true,true));
+        second.addStep(new PathFollowerStep(PathNameConstants.STEAL10B,true,false));
         AutoSerialStepGroup secondA = new AutoSerialStepGroup();
         secondA.addStep(new DelayStep(1.0));
         secondA.addStep(new AutoAimStep(true));
@@ -38,7 +38,7 @@ public class Steal7 extends AutoProgram{
 
 
         AutoParallelStepGroup third = new AutoParallelStepGroup();
-        third.addStep(new PathFollowerStep(PathNameConstants.STEAL7B,true,true));
+        third.addStep(new PathFollowerStep(PathNameConstants.STEAL7B,true,false));
         AutoSerialStepGroup thirdA = new AutoSerialStepGroup();
         thirdA.addStep(new DelayStep(1.5));
         thirdA.addStep(new AutoAimStep(true));

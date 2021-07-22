@@ -21,7 +21,7 @@ public class Middle8 extends AutoProgram {
         addStep(new PathFollowerStep(PathNameConstants.MIDDLE8A, true, true));
 
         AutoParallelStepGroup first = new AutoParallelStepGroup();
-        first.addStep(new PathFollowerStep(PathNameConstants.MIDDLE8B, true, true));
+        first.addStep(new PathFollowerStep(PathNameConstants.MIDDLE8B, true, false));
         AutoSerialStepGroup firstA = new AutoSerialStepGroup();
         firstA.addStep(new DelayStep(1.5));
         firstA.addStep(new AutoAimStep(true));
@@ -32,7 +32,7 @@ public class Middle8 extends AutoProgram {
         addStep(new DelayStep(2.0));
         addStep(new FeedOffStep());
         addStep(new PathFollowerStep(PathNameConstants.MIDDLE8C, true, true));
-        addStep(new PathFollowerStep(PathNameConstants.MIDDLE8D, true, true));
+        addStep(new PathFollowerStep(PathNameConstants.MIDDLE8D, true, false));
         addStep(new FeedOnStep());
 
     }

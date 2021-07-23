@@ -440,9 +440,11 @@ public class Drive implements Subsystem {
     private void initFollower(int side, TalonFX follower) {
         TalonFX master = masters[side];
         if (side == LEFT) {
-            follower.setInverted(DriveConstants.LEFT_DRIVE_INVERTED);
+            //follower.setInverted(DriveConstants.LEFT_DRIVE_INVERTED);
+            follower.setInverted(TalonFXInvertType.Clockwise);
         } else {
-            follower.setInverted(DriveConstants.RIGHT_DRIVE_INVERTED);
+            //follower.setInverted(DriveConstants.RIGHT_DRIVE_INVERTED);
+            follower.setInverted(TalonFXInvertType.CounterClockwise);
         }
         follower.follow(master);
         follower.setNeutralMode(NeutralMode.Coast);

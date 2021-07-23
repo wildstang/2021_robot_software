@@ -20,6 +20,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.SensorCollection;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -400,17 +402,19 @@ public class Drive implements Subsystem {
      * @param master The WSTalonSRX object to set up
      */
     private void initMaster(int side, TalonFX master)  {
-        master.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, TIMEOUT);
+        master.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice(), 0, TIMEOUT);
         master.enableVoltageCompensation(true);
         //master.configContinuousCurrentLimit(50);
         //master.configPeakCurrentLimit(100);
         master.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, 50, 100, 1.0));
         if (side == LEFT) {
-            master.setInverted(DriveConstants.LEFT_DRIVE_INVERTED);
-            master.setSensorPhase(DriveConstants.LEFT_DRIVE_SENSOR_PHASE);
+            master.setInverted(TalonFXInvertType.Clockwise);
+            //master.setInverted(DriveConstants.LEFT_DRIVE_INVERTED);
+            //master.setSensorPhase(DriveConstants.LEFT_DRIVE_SENSOR_PHASE);
         } else {
-            master.setInverted(DriveConstants.RIGHT_DRIVE_INVERTED);
-            master.setSensorPhase(DriveConstants.RIGHT_DRIVE_SENSOR_PHASE);
+            master.setInverted(TalonFXInvertType.CounterClockwise);
+            //master.setInverted(DriveConstants.RIGHT_DRIVE_INVERTED);
+            //master.setSensorPhase(DriveConstants.RIGHT_DRIVE_SENSOR_PHASE);
         }
         // Configure output to range from full-forward to full-reverse.
         /* CoreUtils.checkCTRE */master.configNominalOutputForward(0, TIMEOUT);

@@ -11,6 +11,10 @@ import org.wildstang.framework.io.inputs.RemoteAnalogInput;
 import org.wildstang.framework.timer.WsTimer;
 import org.wildstang.hardware.crio.RoboRIOInputFactory;
 import org.wildstang.hardware.crio.RoboRIOOutputFactory;
+import org.wildstang.year2021.auto.programs.Deploys;
+import org.wildstang.year2021.auto.programs.AutoPath1;
+import org.wildstang.year2021.auto.programs.ExampleAutoProgram;
+import org.wildstang.year2021.auto.programs.PathTestProgram;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.AnalogInput;
@@ -23,6 +27,12 @@ import java.util.List;
 import java.lang.management.GarbageCollectorMXBean;
 
 import org.wildstang.year2021.auto.programs.ExampleAutoProgram;
+import org.wildstang.year2021.auto.programs.Deploys;
+import org.wildstang.year2021.auto.programs.PathTestProgram;
+import org.wildstang.year2021.auto.programs.GetFuelMabye;
+import org.wildstang.year2021.auto.programs.FourFeet;
+import org.wildstang.year2021.auto.programs.GetLeftHighFuel;
+import org.wildstang.year2021.auto.programs.GetCenterFuel;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -50,6 +60,13 @@ public class Robot extends TimedRobot {
         core.createSubsystems(WSSubsystems.values());
 
         AutoManager.getInstance().addProgram(new ExampleAutoProgram());
+        AutoManager.getInstance().addProgram(new Deploys());
+        AutoManager.getInstance().addProgram(new PathTestProgram());
+        AutoManager.getInstance().addProgram(new AutoPath1());
+        AutoManager.getInstance().addProgram(new GetFuelMabye());
+        AutoManager.getInstance().addProgram(new GetLeftHighFuel());
+        AutoManager.getInstance().addProgram(new GetCenterFuel());
+        AutoManager.getInstance().addProgram(new FourFeet());
         
     }
 

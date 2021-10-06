@@ -52,12 +52,13 @@ public class AutoManager {
         }
     }
 
-    public void startCurrentProgram() {
-        if (lockinChooser.getSelected()) {
-            runningProgram = chooser.getSelected();
-        } else {
-            runningProgram = programs.get(0);
-        }
+    public void startCurrentProgram(AutoProgram inputValue) {
+        // if (lockinChooser.getSelected()) {
+        //     runningProgram = chooser.getSelected();
+        // } else {
+        //     runningProgram = programs.get(0);
+        // }
+        runningProgram = inputValue;
         // runningProgram = programs.get(1);
         
         SmartDashboard.putBoolean("Checkpoint 606 yay", true);

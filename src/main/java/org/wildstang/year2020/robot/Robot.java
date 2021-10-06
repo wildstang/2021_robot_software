@@ -91,7 +91,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putBoolean("Checkpoint 707 yay", true);
 
         core.setAutoManager(AutoManager.getInstance());
-        AutoManager.getInstance().startCurrentProgram();
+        AutoManager.getInstance().startCurrentProgram(new TheDrake());
     }
 
     @Override

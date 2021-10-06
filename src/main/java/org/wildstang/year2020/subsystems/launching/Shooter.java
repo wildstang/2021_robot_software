@@ -349,7 +349,7 @@ public class Shooter implements Subsystem {
         hoodEncoderResetPressed = false;
         hoodEncoderResetTimestamp = Long.MAX_VALUE;
 
-        hoodRegAdjustmentCount = 0;
+        hoodRegAdjustmentCount = 10;
 
         hoodMotor.getSensorCollection().setAnalogPosition(0, -1);
 

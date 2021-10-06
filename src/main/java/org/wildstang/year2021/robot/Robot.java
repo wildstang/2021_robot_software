@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
         Core.getSubsystemManager().resetState();
 
         core.setAutoManager(AutoManager.getInstance());
-        AutoManager.getInstance().startCurrentProgram();
+        //AutoManager.getInstance().startCurrentProgram();
     }
 
     @Override

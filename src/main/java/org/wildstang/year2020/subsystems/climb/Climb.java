@@ -27,7 +27,7 @@ public class Climb implements Subsystem {
     private CANSparkMax climbMotor2;
 
     // Variables
-    private final double MOTOR_SPEED = 0.8;
+    private final double MOTOR_SPEED = 1.0;
     private final double RESET_SPEED = -0.2;
     private final double LIFT_HEIGHT = 55;
     private final double LIFT_LOCKED = 70;
@@ -159,10 +159,10 @@ public class Climb implements Subsystem {
         currentCommand = commands.INACTIVE;
         climbMotor1.getEncoder().setPosition(0.0);
         //climbMotor1.restoreFactoryDefaults();
-        climbMotor1.setSmartCurrentLimit(80);
+        climbMotor1.setSmartCurrentLimit(100);
         climbMotor1.burnFlash();
         //climbMotor2.restoreFactoryDefaults();
-        climbMotor2.setSmartCurrentLimit(80);
+        climbMotor2.setSmartCurrentLimit(100);
         climbMotor2.burnFlash();
     }
 

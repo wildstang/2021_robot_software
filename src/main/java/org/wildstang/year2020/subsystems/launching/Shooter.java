@@ -356,7 +356,7 @@ public class Shooter implements Subsystem {
         hoodEncoderOffset = 940.0;
 
         running = false;
-        shooterOn = true;
+        shooterOn = false;
         timer.start();
         //autoMode = false;
     }

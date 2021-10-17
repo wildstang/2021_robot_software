@@ -1,6 +1,6 @@
 package org.wildstang.year2020.robot;
 
-import org.wildstang.year2020.subsystems.drive.Drive;
+import org.wildstang.year2020.subsystems.drive.SimpleDrive;
 import org.wildstang.year2020.subsystems.climb.Climb;
 import org.wildstang.year2020.subsystems.launching.Shooter;
 import org.wildstang.year2020.subsystems.launching.Limelight;
@@ -16,7 +16,7 @@ import org.wildstang.framework.core.Subsystems;
  * initialize all subsystems.
  **/
 public enum WSSubsystems implements Subsystems {
-    DRIVEBASE("Drive Base", Drive.class),
+    SIMPLEDRIVE("SimpleDrive", SimpleDrive.class),
     CLIMB("Climb", Climb.class),
     BALLPATH("Ballpath", Ballpath.class),
     LIMELIGHT("Limelight", Limelight.class),

@@ -56,10 +56,10 @@ public class PathFollowerStep extends AutoStep {
         m_path.setLeft(leftTrajectory);
         m_path.setRight(rightTrajectory);
 
-        m_drive = (Drive) Core.getSubsystemManager()
-                .getSubsystem(WSSubsystems.DRIVEBASE.getName());
+        // m_drive = (Drive) Core.getSubsystemManager()
+        //         .getSubsystem(WSSubsystems.DRIVEBASE.getName());
 
-        m_drive.setBrakeMode(true);
+        // m_drive.setBrakeMode(true);
         
     }
 
@@ -67,7 +67,7 @@ public class PathFollowerStep extends AutoStep {
     public void update() {
         if (Drive.autoEStopActivated == true) {
             setFinished(true);
-            m_drive.pathCleanup();
+            //m_drive.pathCleanup();
         }
 
         SmartDashboard.putBoolean("Checkpoint 505 yay", true);
@@ -76,14 +76,14 @@ public class PathFollowerStep extends AutoStep {
             SmartDashboard.putBoolean("Checkpoint 404 yay", true);
             if (!m_started) {
                 // TODO: Can next 3 lines be moved to init() ??
-                m_drive.setPathFollowingMode();
-                m_drive.setPath(m_path, isForwards);
+               // m_drive.setPathFollowingMode();
+                //m_drive.setPath(m_path, isForwards);
                 m_pathFollower = m_drive.getPathFollower();
 
                SmartDashboard.putBoolean("Checkpoint 101 yay", true);
 
-                m_drive.startFollowingPath();
-                m_drive.resetEncoders();
+                //m_drive.startFollowingPath();
+                //m_drive.resetEncoders();
                 m_started = true;
 
                 //m_pathFollower.start();
@@ -93,7 +93,7 @@ public class PathFollowerStep extends AutoStep {
 
                     SmartDashboard.putBoolean("Checkpoint 202 yay", true);
                 } else {
-                    m_drive.pathCleanup();
+                    //m_drive.pathCleanup();
                     setFinished(true);
 
                     SmartDashboard.putBoolean("Checkpoint 303 yay", true);

@@ -3,8 +3,8 @@ package org.wildstang.year2020.robot;
 
 
 public final class CANConstants {
-    public static final int LEFT_DRIVE_TALON = 32;
-    public static final int RIGHT_DRIVE_TALON = 34;
+    public static final int LEFT_DRIVE_TALON = 132;
+    public static final int RIGHT_DRIVE_TALON = 134;
 
     //For FalconDrive
     public static final int[] LEFT_DRIVE_TALON_FOLLOWER = {31};

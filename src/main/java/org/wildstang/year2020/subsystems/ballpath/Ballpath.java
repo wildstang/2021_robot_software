@@ -112,7 +112,7 @@ public class Ballpath implements Subsystem{
         feedMotor.set(ControlMode.PercentOutput, feedMotorSpeed);
         hopperMotor.set(ControlMode.PercentOutput, 0.6*feedMotorSpeed);
         intakeMotor.set(ControlMode.PercentOutput, -intakeMotorSpeed);
-        kickerMotor.set(ControlMode.PercentOutput, FULL_SPEED * KICKER_MOTOR_CONSTANT);   
+        kickerMotor.set(ControlMode.PercentOutput, feedMotorSpeed * KICKER_MOTOR_CONSTANT);   
     }
 
     @Override

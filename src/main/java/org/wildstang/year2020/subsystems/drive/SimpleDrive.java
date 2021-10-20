@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import org.wildstang.framework.core.Core;
 import org.wildstang.framework.io.Input;
@@ -12,8 +13,8 @@ import org.wildstang.framework.subsystems.Subsystem;
 import org.wildstang.year2020.robot.WSInputs;
 
 public class SimpleDrive implements Subsystem {
-    TalonFX left;
-    TalonFX right;
+    TalonSRX left;
+    TalonSRX right;
     AnalogInput headingInput;
     AnalogInput throttleInput;
     double heading;
@@ -23,23 +24,29 @@ public class SimpleDrive implements Subsystem {
 
     @Override
     public void inputUpdate(Input source) {
-        if (source == throttleInput){
+        if (source == throttleInput && Math.abs(throttleInput.getValue()) > 0.1){
             throttle = -throttleInput.getValue();
         } 
-        if (source == headingInput){
+        if (Math.abs(throttleInput.getValue()) <= 0.1){
+            throttle = 0;
+        }
+        if (source == headingInput && Math.abs(headingInput.getValue()) > 0.1){
             heading = -headingInput.getValue();
+        }
+        if (Math.abs(headingInput.getValue()) <= 0.1){
+            heading = 0;
         }
 
     }
 
     @Override
     public void init() {
-        left = new TalonFX(32);
-        right = new TalonFX(33);
+        left = new TalonSRX(32);
+        right = new TalonSRX(33);
         left.enableVoltageCompensation(true);
         right.enableVoltageCompensation(true);
-        left.setInverted(TalonFXInvertType.Clockwise);
-        right.setInverted(TalonFXInvertType.CounterClockwise);
+        left.setInverted(true);
+        right.setInverted(false);
         left.setNeutralMode(NeutralMode.Coast);
         right.setNeutralMode(NeutralMode.Coast);
         headingInput = (AnalogInput) Core.getInputManager().getInput(WSInputs.DRIVER_RIGHT_JOYSTICK_X);

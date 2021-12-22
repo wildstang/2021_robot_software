@@ -1,13 +1,13 @@
 package org.wildstang.year2021.subsystems;
 
-import org.wildstang.year2021.subsystems.DriveSignal;
+import org.wildstang.year2021.subsystems.SwerveSignal;
 import org.wildstang.year2021.subsystems.DriveConstants;
 
 public class WSSwerveHelper {
 
     private double magnitude;
     private double direction;
-    private DriveSignal driveSignal;
+    private SwerveSignal swerveSignal;
     private double rotMag;
     private double baseV;
     private double[] xCoords = new double[]{0.0, 0.0, 0.0, 0.0};
@@ -19,8 +19,8 @@ public class WSSwerveHelper {
      * 
      * @return driveSignal for cross, with 0 magnitude and crossed directions
      */
-    public DriveSignal setCross(){
-        return new DriveSignal(new double[]{0.0, 0.0, 0.0, 0.0}, new double[]{135.0, 45.0, 45.0, 135.0});
+    public SwerveSignal setCross(){
+        return new SwerveSignal(new double[]{0.0, 0.0, 0.0, 0.0}, new double[]{135.0, 45.0, 45.0, 135.0});
     }
 
     /** sets the robot in the mobile defensive "crab" mode, where all modules are aligned
@@ -29,12 +29,12 @@ public class WSSwerveHelper {
      * @param i_gyro the gyro value, field centric, in bearing degrees
      * @return driveSignal for crab, where all modules are the same direction/power
      */
-    public DriveSignal setCrab(double i_tx, double i_ty, double i_gyro){
+    public SwerveSignal setCrab(double i_tx, double i_ty, double i_gyro){
         magnitude = getMagnitude(i_tx, i_ty);
         direction = getDirection(i_tx, i_ty, i_gyro);
-        driveSignal = new DriveSignal(new double[]{magnitude, magnitude, magnitude, magnitude}, new double[]{direction, direction, direction, direction});
-        driveSignal.normalize();
-        return driveSignal;
+        swerveSignal = new SwerveSignal(new double[]{magnitude, magnitude, magnitude, magnitude}, new double[]{direction, direction, direction, direction});
+        swerveSignal.normalize();
+        return swerveSignal;
     }
 
     /**sets the robot to drive normally as a swerve
@@ -45,7 +45,7 @@ public class WSSwerveHelper {
      * @param i_gyro the gyro value, field centric, in bearing degrees
      * @return driveSignal for normal driving, normalized
      */
-    public DriveSignal setDrive(double i_tx, double i_ty, double i_rot, double i_gyro){
+    public SwerveSignal setDrive(double i_tx, double i_ty, double i_rot, double i_gyro){
         //magnitude of rotation vector
         rotMag = i_rot * DriveConstants.ROTATION_SPEED;
         //angle of front left rotation vector
@@ -57,10 +57,10 @@ public class WSSwerveHelper {
         yCoords = new double[]{i_ty + rotMag*Math.sin(baseV), i_ty - rotMag*Math.cos(baseV), i_ty - rotMag*Math.sin(baseV), i_ty + rotMag*Math.cos(baseV)};
 
         //create drivesignal, with magnitudes and directions of x and y
-        driveSignal = new DriveSignal(new double[]{getMagnitude(xCoords[0], yCoords[0]), getMagnitude(xCoords[1], yCoords[1]), getMagnitude(xCoords[2], yCoords[2]), getMagnitude(xCoords[3], yCoords[3])}, 
+        swerveSignal = new SwerveSignal(new double[]{getMagnitude(xCoords[0], yCoords[0]), getMagnitude(xCoords[1], yCoords[1]), getMagnitude(xCoords[2], yCoords[2]), getMagnitude(xCoords[3], yCoords[3])}, 
             new double[]{getDirection(xCoords[0], yCoords[0], i_gyro), getDirection(xCoords[1], yCoords[1], i_gyro), getDirection(xCoords[2], yCoords[2], i_gyro), getDirection(xCoords[3], yCoords[3], i_gyro)});
-        driveSignal.normalize();
-        return driveSignal;
+        swerveSignal.normalize();
+        return swerveSignal;
     }
 
     /**sets the robot to move in autonomous
@@ -71,7 +71,7 @@ public class WSSwerveHelper {
      * @param i_gyro the gyro value, field centric, in bearing degrees
      * @return
      */
-    public DriveSignal setAuto(double i_power, double i_heading, double i_rot, double i_gyro){
+    public SwerveSignal setAuto(double i_power, double i_heading, double i_rot, double i_gyro){
         return setDrive(i_power * Math.cos(Math.toRadians(i_heading)), i_power * Math.sin(Math.toRadians(i_heading)), i_rot, i_gyro);
     }
 
@@ -84,13 +84,13 @@ public class WSSwerveHelper {
     public double getRotControl(double i_target, double i_gyro){
         rotDelta = i_target - i_gyro;
         if (rotDelta > 180){
-            rotPID = -rotDelta/360.0;
+            rotPID = (rotDelta-360)/180;
         } else if (Math.abs(rotDelta) <= 180.0){
-            rotPID = -rotDelta/360.0;
+            rotPID = rotDelta/180.0;
         } else {
-            rotPID = -1 -rotDelta/360.0;
+            rotPID = (rotDelta+360)/180;
         } 
-        return rotPID*DriveConstants.ROTATION_SPEED;
+        return rotPID;
     }
 
     /**determines the translational magnitude of the robot in autonomous

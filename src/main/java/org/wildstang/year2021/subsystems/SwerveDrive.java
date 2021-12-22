@@ -13,7 +13,7 @@ import org.wildstang.framework.subsystems.Subsystem;
 import org.wildstang.year2021.robot.CANConstants;
 import org.wildstang.year2021.robot.WSInputs;
 import org.wildstang.year2021.subsystems.DriveConstants;
-import org.wildstang.year2021.subsystems.DriveSignal;
+import org.wildstang.year2021.subsystems.SwerveSignal;
 import org.wildstang.year2021.subsystems.WSSwerveHelper;
 
 import edu.wpi.first.wpilibj.I2C;
@@ -59,7 +59,7 @@ public class SwerveDrive implements Subsystem {
 
     private final AHRS gyro = new AHRS(I2C.Port.kOnboard);
     private SwerveModule[] modules;
-    private DriveSignal driveSignal;
+    private SwerveSignal swerveSignal;
     private WSSwerveHelper swerveHelper = new WSSwerveHelper();
 
     public enum driveType {TELEOP, AUTO, CROSS};
@@ -147,8 +147,8 @@ public class SwerveDrive implements Subsystem {
             new SwerveModule(new CANSparkMax(CANConstants.DRIVE4, MotorType.kBrushless), 
                 new CANSparkMax(CANConstants.ANGLE4, MotorType.kBrushless), new CANCoder(CANConstants.ENC4), DriveConstants.REAR_RIGHT_OFFSET)
         };
-        //create default driveSignal
-        driveSignal = new DriveSignal(new double[]{0.0, 0.0, 0.0, 0.0}, new double[]{0.0, 0.0, 0.0, 0.0});
+        //create default swerveSignal
+        swerveSignal = new SwerveSignal(new double[]{0.0, 0.0, 0.0, 0.0}, new double[]{0.0, 0.0, 0.0, 0.0});
     }
     
     @Override
@@ -162,11 +162,11 @@ public class SwerveDrive implements Subsystem {
         case CROSS:
             //if not translating, then set to cross
             if (xSpeed == 0 && ySpeed == 0){
-                driveSignal = swerveHelper.setCross();
+                swerveSignal = swerveHelper.setCross();
                 drive();
             } else {
                 //if translating, set to crab
-                driveSignal = swerveHelper.setCrab(xSpeed, ySpeed, gyro.getAngle());
+                swerveSignal = swerveHelper.setCrab(xSpeed, ySpeed, gyro.getAngle());
                 drive();
             }
         case TELEOP:
@@ -174,16 +174,16 @@ public class SwerveDrive implements Subsystem {
                 //if rotation tracking, replace rotational joystick value with controller generated one
                 rotSpeed = swerveHelper.getRotControl(rotTarget, gyro.getAngle());
             }
-            driveSignal = swerveHelper.setDrive(xSpeed, ySpeed, rotSpeed, gyro.getAngle());
+            swerveSignal = swerveHelper.setDrive(xSpeed, ySpeed, rotSpeed, gyro.getAngle());
             drive();
         case AUTO:
             //get controller generated rotation value
             rotSpeed = swerveHelper.getRotControl(pathTarget, gyro.getAngle());
             //ensure rotation is never more than 0.2 to prevent normalization of translation from occuring
-            if (Math.abs(rotSpeed) > 0.2) rotSpeed /= (Math.abs(rotSpeed * 0.2));
+            if (Math.abs(rotSpeed) > 0.2) rotSpeed /= (Math.abs(rotSpeed * 5));
             //update where the robot is, to determine error in path
             updateAutoDistance();
-            driveSignal = swerveHelper.setAuto(swerveHelper.getAutoPower(pathPos, pathVel, autoTravelled), pathHeading, rotSpeed, gyro.getAngle());
+            swerveSignal = swerveHelper.setAuto(swerveHelper.getAutoPower(pathPos, pathVel, autoTravelled), pathHeading, rotSpeed, gyro.getAngle());
             drive();
 
         
@@ -219,6 +219,7 @@ public class SwerveDrive implements Subsystem {
         for (int i = 0; i < modules.length; i++){
             modules[i].resetDriveEncoders();
         }
+        autoTravelled = 0.0;
     }
     /** sets the drive to teleop/cross, and sets drive motors to coast */
     public void setToTeleop(){
@@ -233,13 +234,13 @@ public class SwerveDrive implements Subsystem {
     }
     /**stops the robot from moving */
     public void stopMoving(){
-        driveSignal = swerveHelper.setCrab(0.0, 0.0, gyro.getAngle());
+        swerveSignal = swerveHelper.setCrab(0.0, 0.0, gyro.getAngle());
         drive();
     }
-    /**drives the robot at the current driveSignal, and displays information for each swerve module */
+    /**drives the robot at the current swerveSignal, and displays information for each swerve module */
     private void drive(){
         for (int i = 0; i < modules.length; i++){
-            modules[i].run(driveSignal.getSpeed(i), driveSignal.getSpeed(i));
+            modules[i].run(swerveSignal.getSpeed(i), swerveSignal.getSpeed(i));
             modules[i].displayNumbers(DriveConstants.POD_NAMES[i]);
         }
     }
@@ -248,7 +249,6 @@ public class SwerveDrive implements Subsystem {
         pathPos = position;
         pathVel = velocity;
         pathHeading = heading;
-        autoTravelled = 0;
     }
     /**sets the autonomous heading controller to a new target */
     public void setAutoHeading(double headingTarget){

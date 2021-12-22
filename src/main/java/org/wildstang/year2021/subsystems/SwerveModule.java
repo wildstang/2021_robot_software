@@ -111,13 +111,7 @@ public class SwerveModule {
     }
     /**determines if it is faster to travel towards angle at positive power (true), or away from angle with negative power (false) */
     public boolean getDirection(double angle){
-        if (angle > getAngle()){
-            if (angle - getAngle() < 90) return true;
-            if (angle - getAngle() > 270) return true;
-        } else {
-            if (getAngle() - angle < 90) return true;
-            if (getAngle() - angle > 270) return true;
-        }
+        if (Math.abs(angle - getAngle()) < 90 || Math.abs(angle - getAngle()) > 270) return true;
         return false;
     }
 }

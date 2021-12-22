@@ -1,6 +1,6 @@
 package org.wildstang.year2021.subsystems;
 
-public class DriveSignal {
+public class SwerveSignal {
 
     private double[] speed;
     private double[] angle;
@@ -10,7 +10,7 @@ public class DriveSignal {
      * @param i_speed double[] for the speed of each module, in [0,1] signal
      * @param i_angle double[] for the angle of the module, in robot centric bearing degrees
     */
-    public DriveSignal(double[] i_speed, double[] i_angle){
+    public SwerveSignal(double[] i_speed, double[] i_angle){
         this.speed = i_speed;
         this.angle = i_angle;
     }
